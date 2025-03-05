@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<?php include "includes/head.php" ?>
+<?php
+session_start();
+if (!isset($_SESSION["id"])) {
+  header("Location: login.php");
+} else {
+    include "includes/head.php";
+    include "../includes/connection.php";
+}?>
 
 <body>
 
     <!-- Spinner Start -->
-<?php include "includes/spinner.php" ?>
+    <?php include "includes/spinner.php" ?>
     <!-- Spinner End -->
 
     <!-- Navbar & Hero Start -->
@@ -14,7 +20,7 @@
     <!-- Navbar & Hero End -->
 
     <!-- Modal Search Start -->
-<?php include "includes/modal_search.php" ?>
+    <?php include "includes/modal_search.php" ?>
     <!-- Modal Search End -->
 
 
@@ -62,7 +68,7 @@
                             <div class="text-sm-center text-md-end">
                                 <h5 class="text-white text-uppercase fw-bold mb-4">Welcome To Tyler Madison Consulting.
                                     LLC</h5>
-                                <h1 class="display-1 text-white mb-4">Your Reliable Partner in Technical Staffing
+                                <h1 class="display-3 text-white mb-4">Your Reliable Partner in Technical Staffing
                                     Excellence</h1>
                                 <p class="mb-5 fs-5">Delivering specialized staffing solutions designed to meet the
                                     unique needs of the pharmaceutical industry.

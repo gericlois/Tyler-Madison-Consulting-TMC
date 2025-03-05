@@ -1,0 +1,26 @@
+{
+  "name": "tmc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.php",
+"scripts": {  
+  "dev": "C:\\xampp2\\php\\php.exe -S localhost:8000 -t .",
+  "test": "echo \"Error: no test specified\" && exit 1",
+   "watch": "browser-sync start --proxy localhost:8000 --files '**/*.php, **/*.html, **/*.css, **/*.js'"
+  
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gericlois/Tyler-Madison-Consulting-TMC.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gericlois/Tyler-Madison-Consulting-TMC/issues"
+  },
+  "homepage": "https://github.com/gericlois/Tyler-Madison-Consulting-TMC#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.3"
+  }
+}
