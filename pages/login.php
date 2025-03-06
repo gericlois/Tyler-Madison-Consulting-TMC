@@ -85,8 +85,7 @@ session_start();
             </div>
         </div>
     </div>
-
-    <!-- Contact End -->
+    <!-- Login End -->
 
     <!-- Footer Start -->
     <?php include "includes/footer.php" ?>

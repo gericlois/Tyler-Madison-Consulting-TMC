@@ -36,14 +36,21 @@ if (!isset($_SESSION["admin_id"])) {
                                 if ($_GET["success"] == "JobAdded") {
                                     echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                        <b>A new job posting has been added! Review the details of the posted job.</b>
+                                                            <b>A new job posting has been added! Review the details of the posted job.</b>
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
                                 }
-                                if ($_GET["success"] == "IncorrectPassword") {
+                                if ($_GET["success"] == "JobUpdated") {
                                     echo '
-                                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                        <b>The password is incorrect. Before logging in, make sure your password is correct.</b>
+                                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                            <b>The job posting has been successfully updated!</b> Review the updated details to ensure accuracy.
+                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </div>';
+                                }
+                                if ($_GET["success"] == "StatusUpdated") {
+                                    echo '
+                                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                            <b>The job posting has been successfully updated!</b> Review the updated details to ensure accuracy.
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
                                 }
@@ -75,7 +82,7 @@ if (!isset($_SESSION["admin_id"])) {
                                         <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
                                         <th data-type="date" data-format="YYYY/DD/MM">Deadline</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -97,24 +104,33 @@ if (!isset($_SESSION["admin_id"])) {
                                                 $status_class = "bg-danger";
                                             } elseif ($row['status'] == "Pending") {
                                                 $status_class = "bg-warning";
+                                            } elseif ($row['status'] == "Inactive") {
+                                                $status_class = "bg-dark";
                                             }
 
                                             echo "<tr>
-                                                    <td>{$row['job_id']}</td>
-                                                    <td>{$row['title']}</td>
-                                                    <td>{$row['description']}</td>
-                                                    <td>{$row['location']}</td>
-                                                    <td>$" . number_format($row['salary'], 2) . "</td>
-                                                    <td>{$row['posted_by_name']}</td>
-                                                    <td>{$row['posted_at']}</td>
-                                                    <td>{$row['end_at']}</td>
-                                                    <td><span class='badge $status_class'>{$row['status']}</span></td>
-                                                    <td>
-                                                        <a href='edit-job.php?id={$row['job_id']}' class='btn btn-sm btn-success'>View</a>
-                                                        <a href='edit-job.php?id={$row['job_id']}' class='btn btn-sm btn-warning'>Edit</a>
-                                                        <a href='delete-job.php?id={$row['job_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure?\")'>Delete</a>
-                                                    </td>
-                                                </tr>";
+                                                <td>{$row['job_id']}</td>
+                                                <td>{$row['title']}</td>
+                                                <td>{$row['description']}</td>
+                                                <td>{$row['location']}</td>
+                                                <td>$" . number_format($row['salary'], 2) . "</td>
+                                                <td>{$row['posted_by_name']}</td>
+                                                <td>{$row['end_at']}</td>
+                                                <td>{$row['posted_at']}</td>
+                                                <td><span class='badge $status_class'>{$row['status']}</span></td>
+                                                <td>
+                                                    <a href='edit-job.php?id={$row['job_id']}' class='btn btn-sm btn-success'>View</a>
+                                                    <a href='jobs-edit.php?id={$row['job_id']}' class='btn btn-sm btn-warning'>Edit</a>
+                                                    <a href='delete-job.php?id={$row['job_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
+                                            
+                                            if ($row['status'] == "Active") {
+                                                echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=Inactive' class='btn btn-sm btn-dark'>Inactive</a>";
+                                            }
+                                            else if ($row['status'] == "Inactive") {
+                                                echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=Active' class='btn btn-sm btn-primary'>Active</a>";
+                                            }
+
+                                            echo "</td></tr>";
                                         }
                                     } else {
                                         echo "<tr><td colspan='10' class='text-center'>No jobs found</td></tr>";
@@ -123,6 +139,7 @@ if (!isset($_SESSION["admin_id"])) {
                                     ?>
                                 </tbody>
                             </table>
+
 
 
                             <!-- End Table with stripped rows -->

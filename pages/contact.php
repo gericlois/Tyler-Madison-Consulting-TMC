@@ -43,7 +43,7 @@
                 <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
                     <div class="contact-img d-flex justify-content-center">
                         <div class="contact-img-inner">
-                            <img src="img/contact-img.png" class="img-fluid w-100" alt="Image">
+                            <img src="../includes/img/contact-img.png" class="img-fluid w-100" alt="Image">
                         </div>
                     </div>
                 </div>

@@ -2,12 +2,9 @@
 <html lang="en">
 <?php
 session_start();
-if (!isset($_SESSION["id"])) {
-  header("Location: login.php");
-} else {
     include "includes/head.php";
-    include "../includes/connection.php";
-}?>
+    include "includes/connection.php";
+?>
 
 <body>
 
