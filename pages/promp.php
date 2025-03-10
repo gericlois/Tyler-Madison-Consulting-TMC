@@ -40,12 +40,12 @@ session_start();
                                 <p class="mb-4">Your account has been successfully created! You can now log in.</p>
                                 <a class="btn btn-primary rounded-pill py-3 px-5" href="login.php">Login Now</a>';
                                 }
-                                if ($_GET["success"] == "emailtaken") {
+                                if ($_GET["success"] == "ApplicationSubmitted") {
                                     echo '
-                                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                        <b>Email has been taken, select another email!</b>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>';
+                                <i class="fa fa-check text-primary display-1 text-primary mb-4" style="width: 80px; height: 80px;"></i>
+                                <h1 class="display-1">Application Succesful!</h1>
+                                <p class="mb-4">Great! Your job application has been sent successfully!🎉 <br>Check your email and notifications for any updates.</p>
+                                <a class="btn btn-primary rounded-pill py-3 px-5" href="jobs.php">APPLY FOR ANOTHER JOB!</a>';
                                 }
                             }
                             ?>

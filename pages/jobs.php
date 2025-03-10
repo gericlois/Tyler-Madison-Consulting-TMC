@@ -44,41 +44,38 @@ $result = $conn->query($query);
 
     <!-- Jobs Start -->
     <div class="container-fluid service py-5">
-    <div class="container py-5">
-        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-            <h4 class="text-primary">Active Job Listings</h4>
-            <h1 class="display-4 mb-4">Explore Job Opportunities</h1>
-            <p class="mb-0">Find the best job opportunities that match your skills and expertise.</p>
-        </div>
-        <div class="row g-4 justify-content-center">
-            <?php while ($row = $result->fetch_assoc()): ?>
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <h4 class="text-primary">Active Job Listings</h4>
+                <h1 class="display-4 mb-4">Explore Job Opportunities</h1>
+                <p class="mb-0">Find the best job opportunities that match your skills and expertise.</p>
+            </div>
+            <div class="row g-4 mb-4 justify-content-center">
+                <?php while ($row = $result->fetch_assoc()): ?>
                 <div class="col-md-12 col-lg-12 col-xl-6 wow fadeInUp" data-wow-delay="0.2s">
                     <div class="service-item">
-                        
-                            <div class="service-img">
-                                <div class="service-icon p-3">
-                                </div>
+                        <div class="service-content p-4">
+                            <div class="service-content-inner">
+                                <h4 class="mb-0"><?= htmlspecialchars($row['title']); ?>
+                                    <button type="button"
+                                        class="btn btn-outline-primary btn-sm"><?= htmlspecialchars($row['job_type']); ?></button>
+                                </h4>
+                                <p class="mb-0"><i>Posted on <?= htmlspecialchars($row['posted_at']); ?></i></p>
+                                <p class="mb-0">$<?= htmlspecialchars($row['salary']); ?></p>
+                                <p class="mb-4"><?= substr(htmlspecialchars($row['description']), 0, 100); ?>...</p>
+                                <a class="btn btn-primary rounded-pill py-2 px-4"
+                                    href="jobs_details.php?id=<?= $row['job_id']; ?>">See More</a>
                             </div>
-                            <div class="service-content p-4">
-                                <div class="service-content-inner">
-                                    <h4 class="mb-0"><?= htmlspecialchars($row['title']); ?> 
-                                    <button type="button" class="btn btn-outline-primary btn-sm"><?= htmlspecialchars($row['job_type']); ?></button> </h4>
-                                    <p class="mb-0"><i>Posted on <?= htmlspecialchars($row['posted_at']); ?></i></p>
-                                    <p class="mb-0">$<?= htmlspecialchars($row['salary']); ?></p>
-                                    <p class="mb-4"><?= substr(htmlspecialchars($row['description']), 0, 100); ?>...</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="job_details.php?id=<?= $row['job_id']; ?>">See More</a>
-                                </div>
-                            </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
-            <?php endwhile; ?>
-        </div>
-        <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
-            <a class="btn btn-primary rounded-pill py-3 px-5" href="all_jobs.php">More Jobs</a>
+                <?php endwhile; ?>
+            </div>
+            <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
+                <a class="btn btn-primary rounded-pill py-3 px-5" href="all_jobs.php">More Jobs</a>
+            </div>
         </div>
     </div>
-</div>
     <!-- Jobs End -->
 
     <!-- Footer Start -->

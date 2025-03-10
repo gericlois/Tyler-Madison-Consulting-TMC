@@ -27,7 +27,7 @@ if (!isset($_SESSION["admin_id"])) {
             </h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                     <li class="breadcrumb-item active">Jobs</li>
                 </ol>
             </nav>
@@ -75,20 +75,21 @@ if (!isset($_SESSION["admin_id"])) {
                                     <tr>
                                         <th>Job ID</th>
                                         <th>Title</th>
-                                        <th>Description</th>
                                         <th>Location</th>
                                         <th>Salary</th>
                                         <th>Posted By</th>
                                         <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
                                         <th data-type="date" data-format="YYYY/DD/MM">Deadline</th>
                                         <th>Status</th>
+                                        <th>Applicants</th> <!-- Added Applicants Column -->
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $sql = "SELECT jp.job_id, jp.title, jp.description, jp.location, jp.salary, jp.end_at, jp.status,
-                                            u.username AS posted_by_name, jp.posted_at 
+                                                u.username AS posted_by_name, jp.posted_at,
+                                                (SELECT COUNT(*) FROM jobapplications ja WHERE ja.job_id = jp.job_id) AS applicant_count
                                             FROM jobpostings jp
                                             LEFT JOIN users u ON jp.posted_by = u.user_id 
                                             ORDER BY jp.job_id DESC";
@@ -111,23 +112,21 @@ if (!isset($_SESSION["admin_id"])) {
                                             echo "<tr>
                                                 <td>{$row['job_id']}</td>
                                                 <td>{$row['title']}</td>
-                                                <td>{$row['description']}</td>
                                                 <td>{$row['location']}</td>
                                                 <td>$" . number_format($row['salary'], 2) . "</td>
                                                 <td>{$row['posted_by_name']}</td>
                                                 <td>{$row['end_at']}</td>
                                                 <td>{$row['posted_at']}</td>
                                                 <td><span class='badge $status_class'>{$row['status']}</span></td>
+                                                <td>{$row['applicant_count']}</td> <!-- Display applicant count -->
                                                 <td>
-                                                    <a href='edit-job.php?id={$row['job_id']}' class='btn btn-sm btn-success'>View</a>
-                                                    <a href='jobs-edit.php?id={$row['job_id']}' class='btn btn-sm btn-warning'>Edit</a>
-                                                    <a href='delete-job.php?id={$row['job_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
-                                            
+                                                    <a href='jobs-profile.php?id={$row['job_id']}' class='btn btn-sm btn-success'>View</a>
+                                                    <a href='jobs-edit.php?id={$row['job_id']}' class='btn btn-sm btn-warning'>Edit</a>";
+
                                             if ($row['status'] == "Active") {
-                                                echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=Inactive' class='btn btn-sm btn-dark'>Inactive</a>";
-                                            }
-                                            else if ($row['status'] == "Inactive") {
-                                                echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=Active' class='btn btn-sm btn-primary'>Active</a>";
+                                                echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=Inactive' class='btn btn-sm btn-dark' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Inactive</a>";
+                                            } else if ($row['status'] == "Inactive") {
+                                                echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=Active' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Active</a>";
                                             }
 
                                             echo "</td></tr>";
@@ -139,8 +138,6 @@ if (!isset($_SESSION["admin_id"])) {
                                     ?>
                                 </tbody>
                             </table>
-
-
 
                             <!-- End Table with stripped rows -->
 
