@@ -20,8 +20,8 @@
                       </a>
                   </li>
                   <li>
-                      <a href="components-accordion.html">
-                          <i class="bi bi-circle"></i><span>Accordion</span>
+                      <a href="">
+                          <i class="bi bi-circle"></i><span>Jobs Inactive</span>
                       </a>
                   </li>
               </ul>
@@ -33,8 +33,8 @@
               </a>
               <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                   <li>
-                      <a href="forms-elements.html">
-                          <i class="bi bi-circle"></i><span>Form Elements</span>
+                      <a href="employees.php">
+                          <i class="bi bi-circle"></i><span>Employees</span>
                       </a>
                   </li>
                   <li>

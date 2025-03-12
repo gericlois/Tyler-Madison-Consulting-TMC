@@ -3,8 +3,9 @@
     <meta charset="utf-8">
     <title>Tyler Madison Consulting. LLC</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <meta content="" name="Tyler Madison Consulting, LLC">
+    <meta content="" name="Tyler Madison Consulting, LLC, we bridge the gap between businesses and top-tier professionals, delivering tailored staffing solutions that drive innovation, efficiency, and success.">
+    <link rel="icon" type="image/png" href="../../includes/img/tmc.ico"> 
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

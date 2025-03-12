@@ -2,7 +2,7 @@
 <html lang="en">
 <?php
 session_start();
-if (!isset($_SESSION["user_id"])) { // Ensure session is active
+if (!isset($_SESSION["admin_id"])) { // Ensure session is active
     header("Location: login.php");
     exit();
 }
@@ -18,7 +18,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $job_id = intval($_GET['id']); // Sanitize input
 
 // Fetch job details
-$stmt = $conn->prepare("SELECT * FROM jobpostings WHERE job_id = ?");
+$stmt = $conn->prepare("SELECT * FROM jobpostings j left join users u ON j.posted_by= u.user_id WHERE j.job_id = ?");
 $stmt->bind_param("i", $job_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -55,26 +55,8 @@ $stmt->close();
 
         <section class="section profile">
             <div class="row">
-                <div class="col-xl-4">
 
-                    <div class="card">
-                        <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                            <h2><?php echo htmlspecialchars($job['title']); ?></h2>
-                            <p>
-                                <?php
-                                if ($job['status'] == "Active") {
-                                    echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
-                                } else if ($job['status'] == "Inactive") {
-                                    echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
-                                }
-                            ?>
-                            </p>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="col-xl-8">
+                <div class="col-xl-12">
 
                     <div class="card">
                         <div class="card-body pt-3">
@@ -95,6 +77,17 @@ $stmt->close();
                             <div class="tab-content pt-2">
 
                                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                    <h2><?php echo htmlspecialchars($job['title']); ?></h2>
+                                    <p>
+                                        <?php
+                                            if ($job['status'] == "Active") {
+                                                echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
+                                            } else if ($job['status'] == "Inactive") {
+                                                echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
+                                            }
+                                        ?>
+                                    </p>
+
                                     <h5 class="card-title">Description:</h5>
                                     <p class="small"><?php echo htmlspecialchars($job['description']); ?></p>
 
@@ -108,7 +101,7 @@ $stmt->close();
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Salary:</div>
-                                        <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['salary']); ?>
+                                        <div class="col-lg-9 col-md-8"> $<?php echo htmlspecialchars($job['salary']); ?>
                                         </div>
                                     </div>
 
@@ -130,6 +123,26 @@ $stmt->close();
                                         </div>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Date Posted:</div>
+                                        <div class="col-lg-9 col-md-8">
+                                            <?php echo htmlspecialchars($job['posted_at']); ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Deadline:</div>
+                                        <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['end_at']); ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Posted By:</div>
+                                        <div class="col-lg-9 col-md-8">
+                                            <?php echo htmlspecialchars($job['first_name']); ?> <?php echo htmlspecialchars($job['last_name']); ?>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 <div class="tab-pane fade profile-edit pt-3" id="applicants">
@@ -145,7 +158,7 @@ $stmt->close();
                                             </tr>
                                         </thead>
                                         <tbody>
-                                                    <?php
+                                            <?php
                                                     $sql = "SELECT ja.jobapplication_id AS application_id, ja.created_at AS applied_at, 
                                                         u.user_id AS employee_id, u.first_name, u.last_name, u.email, u.phone
                                                     FROM jobapplications ja
