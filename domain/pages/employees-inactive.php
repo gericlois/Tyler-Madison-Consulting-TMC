@@ -20,12 +20,12 @@ if (!isset($_SESSION["admin_id"])) {
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Employees
+            <h1>Inactive Employees
             </h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Employees</li>
+                    <li class="breadcrumb-item active">Inactive Employees</li>
                 </ol>
             </nav>
             <?php
@@ -55,7 +55,7 @@ if (!isset($_SESSION["admin_id"])) {
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Employees</h5>
+                            <h5 class="card-title">Inactive Employees</h5>
                             <p>Manage and view all employees in a structured table format. This section allows you to
                                 track employee details, including names, contact information, positions, and hire dates.
                             </p>
@@ -79,7 +79,7 @@ if (!isset($_SESSION["admin_id"])) {
                                         $sql = "SELECT e.employee_id, u.first_name, u.last_name, u.email, u.phone, u.address, e.position, e.created_at, e.status 
                                                 FROM employees e
                                                 LEFT JOIN users u ON e.user_id = u.user_id
-                                                WHERE e.status = 1
+                                                WHERE e.status = 2
                                                 ORDER BY e.employee_id DESC";
 
                                         $result = $conn->query($sql);
@@ -97,12 +97,12 @@ if (!isset($_SESSION["admin_id"])) {
                                                     <td>
                                                         <a href='employees-profile.php?id={$row['employee_id']}' class='btn btn-sm btn-success'>View</a>
                                                         <a href='employees-edit.php?id={$row['employee_id']}' class='btn btn-sm btn-warning'>Edit</a>
-                                                        <a href='scripts/employees-inactive.php?id={$row['employee_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the employees account inactive?\")'>Inactive</a>
+                                                        <a href='scripts/employees-delete.php?id={$row['employee_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this employee?\")'>Delete</a>
                                                     </td>
                                                 </tr>";
                                             }
                                         } else {
-                                            echo "<tr><td colspan='8' class='text-center'>No Employees found</td></tr>";
+                                            echo "<tr><td colspan='8' class='text-center'>No Inactive Employees found</td></tr>";
                                         }
                                         $conn->close();
                                         ?>

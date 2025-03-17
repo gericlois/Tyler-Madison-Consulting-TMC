@@ -5,6 +5,8 @@
     <title>TMC ADMIN</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
+    <link rel="icon" type="image/png" href="../../includes/img/tmc.ico"> 
+
 
     <!-- Favicons -->
     <link href="../assets/img/favicon.png" rel="icon">

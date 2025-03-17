@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Prepare and execute query
-    $stmt = $conn->prepare("SELECT user_id, username, password_hash, first_name, last_name, role FROM users WHERE username = ? AND role = 'admin'");
+    $stmt = $conn->prepare("SELECT user_id, username, password_hash, first_name, last_name, role FROM users WHERE username = ? AND role IN ('admin', 'superadmin')");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $stmt->store_result();

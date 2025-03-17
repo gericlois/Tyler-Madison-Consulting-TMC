@@ -20,12 +20,12 @@ if (!isset($_SESSION["admin_id"])) {
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Blank</h1>
+            <h1>Add Job Posting</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                    <li class="breadcrumb-item">Jobs</li>
-                    <li class="breadcrumb-item active">Job Add</li>
+                    <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="jobs.php">Jobs</a></li>
+                    <li class="breadcrumb-item active">Jobs Add Posting</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -101,6 +101,27 @@ if (!isset($_SESSION["admin_id"])) {
                                     <label for="deadline" class="col-sm-2 col-form-label">Application Deadline</label>
                                     <div class="col-sm-10">
                                         <input type="datetime-local" class="form-control" id="deadline" name="deadline">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="employer_id" class="col-sm-2 col-form-label">Employer</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" id="employer_id" name="employer_id" required>
+                                            <option value="">Select Employer</option>
+                                            <?php
+                                            // Fetch employers from the database
+                                            $query = "SELECT employer_id, name FROM employers ORDER BY name ASC";
+                                            $result = $conn->query($query);
+                                            if ($result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    echo "<option value='" . $row['employer_id'] . "'>" . $row['name'] . "</option>";
+                                                }
+                                            } else {
+                                                echo "<option value=''>No Employers Available</option>";
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
 

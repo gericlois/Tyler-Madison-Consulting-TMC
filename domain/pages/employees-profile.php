@@ -21,7 +21,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $employee_id = intval($_GET['id']); // Ensure ID is an integer
 
 // Fetch employee details
-$sql = "SELECT *, e.resume_path, e.employee_id, u.first_name, u.last_name, u.email, 
+$sql = "SELECT *, e.resume_path, e.employee_id, u.first_name, u.last_name, u.email, e.employee_id,
                u.phone, u.address, e.position, e.created_at
         FROM employees e
         LEFT JOIN users u ON e.user_id = u.user_id 
@@ -54,12 +54,12 @@ $stmt->close();
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Profile</h1>
+            <h1>Employee's Profile</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item">Users</li>
-                    <li class="breadcrumb-item active">Profile</li>
+                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                    <li class="breadcrumb-item"><a href="employees.php">Employee</a></li>
+                    <li class="breadcrumb-item active">Employee's Profile</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -71,7 +71,9 @@ $stmt->close();
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-                            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                          
+                        <img src="../../pages/<?php echo htmlspecialchars(string: $employee['profile_picture']); ?>" alt="Profile Picture"
+                            class="rounded-circle img-fluid my-3" width="150" height="150">
                             <h2><?php echo htmlspecialchars($employee['first_name']); ?>
                                 <?php echo htmlspecialchars($employee['last_name']); ?></h2>
                             <h3><?php
@@ -104,11 +106,6 @@ $stmt->close();
                                 <li class="nav-item">
                                     <button class="nav-link active" data-bs-toggle="tab"
                                         data-bs-target="#profile-overview">Overview</button>
-                                </li>
-
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
-                                        Profile</button>
                                 </li>
 
                             </ul>
@@ -174,7 +171,6 @@ $stmt->close();
                                                         </div>
                                                         <div class="modal-body"
                                                             style="max-height: 80vh; overflow-y: auto;">
-                                                            <p><?php echo htmlspecialchars($resume_path); ?></p>
                                                             <iframe src="/<?php echo htmlspecialchars($employee['resume_path']); ?>"
                                                                 width="100%" height="1000px"
                                                                 style="border: none;"></iframe>
@@ -242,44 +238,6 @@ $stmt->close();
                                             <button type="submit" class="btn btn-primary">Save Changes</button>
                                         </div>
                                     </form><!-- End settings Form -->
-
-                                </div>
-
-                                <div class="tab-pane fade pt-3" id="profile-change-password">
-                                    <!-- Change Password Form -->
-                                    <form>
-
-                                        <div class="row mb-3">
-                                            <label for="currentPassword"
-                                                class="col-md-4 col-lg-3 col-form-label">Current Password</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="password" type="password" class="form-control"
-                                                    id="currentPassword">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New
-                                                Password</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="newpassword" type="password" class="form-control"
-                                                    id="newPassword">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter
-                                                New Password</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="renewpassword" type="password" class="form-control"
-                                                    id="renewPassword">
-                                            </div>
-                                        </div>
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Change Password</button>
-                                        </div>
-                                    </form><!-- End Change Password Form -->
 
                                 </div>
 

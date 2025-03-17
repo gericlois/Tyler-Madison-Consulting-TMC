@@ -34,14 +34,16 @@
                 ?>
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                <i class="bi bi-person-circle fs-4"></i> <!-- User Icon -->
+                    <i class="bi bi-person-circle fs-4"></i> <!-- User Icon -->
                     <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $adminName; ?></span>
-                </a><!-- End Profile Image Icon --> 
+                </a><!-- End Profile Image Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
                         <h6><?php echo $adminName; ?></h6>
-                        <span>Administrator</span>
+                        <span>
+                            <?php echo ($_SESSION['role']  == 'superadmin') ? 'Super Administrator' : 'Administrator'; ?>
+                        </span>
                     </li>
                     <li>
                         <hr class="dropdown-divider">

@@ -20,37 +20,37 @@ if (!isset($_SESSION["admin_id"])) {
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Jobs
-                <a href="jobs-add.php" class="btn btn-primary rounded-pill">
-                    <i class="bi bi-plus-circle me-1"></i> Add Job
+            <h1>Inactive Employer
+                <a href="employers-add.php" class="btn btn-primary rounded-pill">
+                    <i class="bi bi-plus-circle me-1"></i> Add Employer
                 </a>
             </h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Jobs</li>
+                    <li class="breadcrumb-item active">Inactive Employer</li>
                 </ol>
             </nav>
             <?php
                             if (isset($_GET['success'])) {
-                                if ($_GET["success"] == "JobAdded") {
+                                if ($_GET["success"] == "EmployerAdded") {
                                     echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                            <b>A new job posting has been added! Review the details of the posted job.</b>
+                                                            <b>A new employer has been added! Review the details of the posted employer.</b>
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
                                 }
-                                if ($_GET["success"] == "JobUpdated") {
+                                if ($_GET["success"] == "employerUpdated") {
                                     echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                            <b>The job posting has been successfully updated!</b> Review the updated details to ensure accuracy.
+                                                            <b>The employer has been successfully updated!</b> Review the updated details to ensure accuracy.
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
                                 }
                                 if ($_GET["success"] == "StatusUpdated") {
                                     echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                            <b>The job posting has been successfully updated!</b> Review the updated details to ensure accuracy.
+                                                            <b>The employer has been successfully updated!</b> Review the updated details to ensure accuracy.
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
                                 }
@@ -64,37 +64,28 @@ if (!isset($_SESSION["admin_id"])) {
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Job Postings</h5>
-                            <p>Manage and view all job postings in a structured table format. This section allows you to
-                                track job listings, including titles, descriptions, locations, salaries, and posting
+                            <h5 class="card-title">Inactive Employer</h5>
+                            <p>Manage and view all employer in a structured table format. This section allows you to
+                                track employer listings, including titles, descriptions, locations, salaries, and 
                                 dates. </p>
 
                             <!-- Table with stripped rows -->
                             <table class="table datatable">
                                 <thead>
                                     <tr>
-                                        <th>Job ID</th>
-                                        <th>Title</th>
+                                        <th>Employer ID</th>
+                                        <th>Name</th>
                                         <th>Location</th>
-                                        <th>Salary</th>
-                                        <th>Employer</th>
-                                        <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
-                                        <th data-type="date" data-format="YYYY/DD/MM">Deadline</th>
                                         <th>Status</th>
-                                        <th>Applicants</th> <!-- Added Applicants Column -->
+                                        <th>Date Created</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT jp.job_id, jp.title, jp.description, jp.location, jp.salary, jp.end_at, jp.status, 
-                                                u.username AS posted_by_name, jp.posted_at, e.name as employer_name, e.employer_id,
-                                                (SELECT COUNT(*) FROM jobapplications ja WHERE ja.job_id = jp.job_id) AS applicant_count
-                                            FROM jobpostings jp
-                                            LEFT JOIN users u ON jp.posted_by = u.user_id 
-                                            LEFT JOIN employers e ON jp.employer_id = e.employer_id
-                                            WHERE jp.status = 1
-                                            ORDER BY jp.job_id DESC";
+                                    $sql = "SELECT * FROM `employers`
+                                            WHERE status = 2
+                                            ORDER BY employer_id DESC";
 
                                     $result = $conn->query($sql);
 
@@ -112,38 +103,31 @@ if (!isset($_SESSION["admin_id"])) {
                                             if ($row['status'] == "Active") {
                                                 $status_class = "bg-primary";
                                             } elseif ($row['status'] == "Inactive") {
-                                                $status_class = "bg-danger";
+                                                $status_class = "bg-dark";
                                             }
+                                        
+                
 
                                             echo "<tr>
-                                            <td>{$row['job_id']}</td>
-                                            <td>{$row['title']}</td>
-                                            <td>{$row['location']}</td>
-                                            <td>$" . number_format($row['salary'], 2) . "</td>
-                                            <td>
-                                                <a href='employers-profile.php?employer_id=" . $row['employer_id'] . "'>
-                                                    " . htmlspecialchars($row['employer_name']) . "
-                                                </a>
-                                            </td>
-                                            <td>{$row['posted_at']}</td>
-                                            <td>{$row['end_at']}</td>
-                                            <td><span class='badge $status_class'>{$row['status']}</span></td>
-                                            <td>{$row['applicant_count']}</td> <!-- Display applicant count -->
-                                            <td>
-                                                <a href='jobs-profile.php?id={$row['job_id']}' class='btn btn-sm btn-success'>View</a>
-                                                <a href='jobs-edit.php?id={$row['job_id']}' class='btn btn-sm btn-warning'>Edit</a>";
-                                    
-                                    if ($row['status'] == "Active") {
-                                        echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Inactive</a>";
-                                    } else if ($row['status'] == "Inactive") {
-                                        echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Active</a>";
-                                    }
-                                    
-                                    echo "</td></tr>";
-                                    
+                                                <td>{$row['employer_id']}</td>
+                                                <td>{$row['name']}</td>
+                                                <td>{$row['location']}</td>
+                                                <td><span class='badge $status_class'>{$row['status']}</span></td>
+                                                <td>{$row['created_at']}</td>
+                                                <td>
+                                                    <a href='employers-profile.php?id={$row['employer_id']}' class='btn btn-sm btn-success'>View</a>
+                                                    <a href='employers-edit.php?id={$row['employer_id']}' class='btn btn-sm btn-warning'>Edit</a>";
+
+                                            if ($row['status'] == "Active") {
+                                                echo " <a href='scripts/employer-update.php?id={$row['employer_id']}&status=2' class='btn btn-sm btn-dark' onclick='return confirm(\"Are you sure you want to make the employer  Inactive?\")'>Inactive</a>";
+                                            } else if ($row['status'] == "Inactive") {
+                                                echo " <a href='scripts/employer-update.php?id={$row['employer_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the employer  Active?\")'>Active</a>";
+                                            }
+
+                                            echo "</td></tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='10' class='text-center'>No jobs found</td></tr>";
+                                        echo "<tr><td colspan='10' class='text-center'>No Inactive Employer Found</td></tr>";
                                     }
                                     $conn->close();
                                     ?>

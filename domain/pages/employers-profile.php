@@ -2,82 +2,97 @@
 <html lang="en">
 <?php
 session_start();
+
+// Check if admin is logged in
 if (!isset($_SESSION["admin_id"])) {
-  header("Location: login.php");
-} else {
-    include "includes/head.php";
-    include "../../pages/includes/connection.php";
-}?>
+    header("Location: login.php");
+    exit();
+}
+
+include "includes/head.php";
+include "../../pages/includes/connection.php";
+
+// Validate employer ID
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    echo "<p style='color:red;'>Invalid employer account.</p>";
+    exit();
+}
+
+$employer_id = intval($_GET['id']); // Ensure ID is an integer
+
+// Fetch employer details
+$sql = "SELECT * FROM employers WHERE employer_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $employer_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    echo "<p style='color:red;'>Employer not found.</p>";
+    exit();
+}
+
+$employer = $result->fetch_assoc(); // Now, $employer is properly set
+$stmt->close();
+?>
 
 <body>
 
-    <!-- ======= Header ======= -->
+    <!-- Header -->
     <?php include "includes/header.php" ?>
 
-    <!-- ======= Sidebar ======= -->
+    <!-- Sidebar -->
     <?php include "includes/sidebar.php" ?>
 
     <main id="main" class="main">
-
         <div class="pagetitle">
-            <h1>Jobs
-                <a href="jobs-add.php" class="btn btn-primary rounded-pill">
-                    <i class="bi bi-plus-circle me-1"></i> Add Job
-                </a>
-            </h1>
+            <h1>Employer Profile</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Jobs</li>
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item">Employers</li>
+                    <li class="breadcrumb-item active">Profile</li>
                 </ol>
             </nav>
-            <?php
-                            if (isset($_GET['success'])) {
-                                if ($_GET["success"] == "JobAdded") {
-                                    echo '
-                                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                            <b>A new job posting has been added! Review the details of the posted job.</b>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>';
-                                }
-                                if ($_GET["success"] == "JobUpdated") {
-                                    echo '
-                                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                            <b>The job posting has been successfully updated!</b> Review the updated details to ensure accuracy.
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>';
-                                }
-                                if ($_GET["success"] == "StatusUpdated") {
-                                    echo '
-                                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                            <b>The job posting has been successfully updated!</b> Review the updated details to ensure accuracy.
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>';
-                                }
-                            }
-                            ?>
-        </div><!-- End Page Title -->
+        </div>
 
-        <section class="section">
+        <section class="section profile">
             <div class="row">
-                <div class="col-lg-12">
-
+                <div class="col-xl-4">
                     <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Job Postings</h5>
-                            <p>Manage and view all job postings in a structured table format. This section allows you to
-                                track job listings, including titles, descriptions, locations, salaries, and posting
-                                dates. </p>
+                        <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                            <h2><?php echo htmlspecialchars($employer['name']); ?></h2>
+                            <span><?php echo nl2br(htmlspecialchars($employer['description'])); ?></span>
+                            <span><strong>Location:</strong><?php echo nl2br(htmlspecialchars($employer['location'])); ?></span>
+                            <div class="social-links mt-2">
+                                <a href="<?php echo htmlspecialchars($employer['link_facebook']); ?>"
+                                    class="facebook"><i class="bi bi-facebook"></i></a>
+                                <a href="<?php echo htmlspecialchars($employer['link_instagram']); ?>"
+                                    class="instagram"><i class="bi bi-instagram"></i></a>
+                                <a href="<?php echo htmlspecialchars($employer['link_linkedin']); ?>"
+                                    class="linkedin"><i class="bi bi-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                            <!-- Table with stripped rows -->
-                            <table class="table datatable">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body pt-3">
+                            <ul class="nav nav-tabs nav-tabs-bordered">
+                                <li class="nav-item">
+                                    <button class="nav-link active" data-bs-toggle="tab"
+                                        data-bs-target="#profile-overview">Jobs</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content pt-2">
+                                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                <table class="table datatable">
                                 <thead>
                                     <tr>
                                         <th>Job ID</th>
                                         <th>Title</th>
-                                        <th>Location</th>
                                         <th>Salary</th>
-                                        <th>Employer</th>
                                         <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
                                         <th data-type="date" data-format="YYYY/DD/MM">Deadline</th>
                                         <th>Status</th>
@@ -93,7 +108,7 @@ if (!isset($_SESSION["admin_id"])) {
                                             FROM jobpostings jp
                                             LEFT JOIN users u ON jp.posted_by = u.user_id 
                                             LEFT JOIN employers e ON jp.employer_id = e.employer_id
-                                            WHERE jp.status = 1
+                                            WHERE e.employer_id = $employer_id
                                             ORDER BY jp.job_id DESC";
 
                                     $result = $conn->query($sql);
@@ -118,13 +133,7 @@ if (!isset($_SESSION["admin_id"])) {
                                             echo "<tr>
                                             <td>{$row['job_id']}</td>
                                             <td>{$row['title']}</td>
-                                            <td>{$row['location']}</td>
                                             <td>$" . number_format($row['salary'], 2) . "</td>
-                                            <td>
-                                                <a href='employers-profile.php?employer_id=" . $row['employer_id'] . "'>
-                                                    " . htmlspecialchars($row['employer_name']) . "
-                                                </a>
-                                            </td>
                                             <td>{$row['posted_at']}</td>
                                             <td>{$row['end_at']}</td>
                                             <td><span class='badge $status_class'>{$row['status']}</span></td>
@@ -149,24 +158,17 @@ if (!isset($_SESSION["admin_id"])) {
                                     ?>
                                 </tbody>
                             </table>
-
-                            <!-- End Table with stripped rows -->
-
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
+    </main>
 
-    </main><!-- End #main -->
-
-    <!-- ======= Footer ======= -->
     <?php include "includes/footer.php" ?>
-
-    <!-- Vendor JS Files -->
     <?php include "includes/scripts.php" ?>
-
 </body>
 
 </html>

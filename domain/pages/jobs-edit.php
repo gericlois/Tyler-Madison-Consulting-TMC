@@ -42,7 +42,7 @@ $stmt->close();
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Blank</h1>
+            <h1>Job Edit</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>

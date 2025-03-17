@@ -20,7 +20,7 @@ if (!isset($_SESSION["admin_id"])) {
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Jobs
+            <h1>Inactive Jobs
                 <a href="jobs-add.php" class="btn btn-primary rounded-pill">
                     <i class="bi bi-plus-circle me-1"></i> Add Job
                 </a>
@@ -28,7 +28,7 @@ if (!isset($_SESSION["admin_id"])) {
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Jobs</li>
+                    <li class="breadcrumb-item active">Inactive Jobs</li>
                 </ol>
             </nav>
             <?php
@@ -64,7 +64,7 @@ if (!isset($_SESSION["admin_id"])) {
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Job Postings</h5>
+                            <h5 class="card-title">Inactive Job Postings</h5>
                             <p>Manage and view all job postings in a structured table format. This section allows you to
                                 track job listings, including titles, descriptions, locations, salaries, and posting
                                 dates. </p>
@@ -93,7 +93,7 @@ if (!isset($_SESSION["admin_id"])) {
                                             FROM jobpostings jp
                                             LEFT JOIN users u ON jp.posted_by = u.user_id 
                                             LEFT JOIN employers e ON jp.employer_id = e.employer_id
-                                            WHERE jp.status = 1
+                                            WHERE jp.status = 2
                                             ORDER BY jp.job_id DESC";
 
                                     $result = $conn->query($sql);
@@ -143,7 +143,7 @@ if (!isset($_SESSION["admin_id"])) {
                                     
                                         }
                                     } else {
-                                        echo "<tr><td colspan='10' class='text-center'>No jobs found</td></tr>";
+                                        echo "<tr><td colspan='10' class='text-center'>No Inactive Jobs found</td></tr>";
                                     }
                                     $conn->close();
                                     ?>

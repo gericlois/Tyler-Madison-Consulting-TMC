@@ -77,14 +77,18 @@ $stmt->close();
                             <div class="tab-content pt-2">
 
                                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                    <h2><?php echo htmlspecialchars($job['title']); ?></h2>
+                                    <h2><?php echo htmlspecialchars($job['title']); ?>
+                                        <a href='jobs-edit.php?id=<?= $job_id ?>' class='btn btn-warning rounded-pill'>
+                                            <i class="bi bi-plus-circle me-1"></i>Edit
+                                        </a>
+                                    </h2>
                                     <p>
                                         <?php
-                                            if ($job['status'] == "Active") {
-                                                echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
-                                            } else if ($job['status'] == "Inactive") {
-                                                echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
-                                            }
+                                        if ($job['status'] == "Active") {
+                                            echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
+                                        } else if ($job['status'] == "Inactive") {
+                                            echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
+                                        }
                                         ?>
                                     </p>
 
@@ -159,31 +163,31 @@ $stmt->close();
                                         </thead>
                                         <tbody>
                                             <?php
-                                                    $sql = "SELECT ja.jobapplication_id AS application_id, ja.created_at AS applied_at, 
+                                            $sql = "SELECT ja.jobapplication_id AS application_id, ja.created_at AS applied_at, 
                                                         u.user_id AS employee_id, u.first_name, u.last_name, u.email, u.phone
                                                     FROM jobapplications ja
                                                     INNER JOIN users u ON ja.employee_id = u.user_id
                                                     WHERE ja.job_id = $job_id
                                                     ORDER BY ja.created_at DESC";
 
-                                                    $result = $conn->query($sql);
-                                                    if ($result->num_rows > 0) {
-                                                        while ($row = $result->fetch_assoc()) {
-                                                            echo "<tr>
+                                            $result = $conn->query($sql);
+                                            if ($result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    echo "<tr>
                                                                 <td>{$row['first_name']} {$row['last_name']}</td>
                                                                 <td>{$row['email']}</td>
                                                                 <td>{$row['phone']}</td>
                                                                 <td>{$row['applied_at']}</td>
                                                                 <td>
-                                                                    <a href='employee-profile.php?id={$row['employee_id']}' class='btn btn-sm btn-success'>View Profile</a>
+                                                                    <a href='employees-profile.php?id={$row['employee_id']}' class='btn btn-sm btn-success'>View Profile</a>
                                                                     <a href='scripts/remove-application.php?app_id={$row['application_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to remove this application?\")'>Remove</a>
                                                                 </td>
                                                             </tr>";
-                                                        }
-                                                    } else {
-                                                        echo "<tr><td colspan='6' class='text-center'>No employees have applied for this job yet.</td></tr>";
-                                                    }
-                                                    ?>
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='6' class='text-center'>No employees have applied for this job yet.</td></tr>";
+                                            }
+                                            ?>
                                         </tbody>
                                     </table>
 
