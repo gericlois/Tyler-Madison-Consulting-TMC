@@ -21,11 +21,11 @@ $page = max($page, 1); // Ensure it's at least 1
 $offset = ($page - 1) * $jobs_per_page;
 
 // Fetch active job postings with pagination
-$query = "SELECT * FROM jobpostings WHERE status = 'active' ORDER BY posted_at DESC LIMIT $jobs_per_page OFFSET $offset";
+$query = "SELECT * FROM jobpostings WHERE status = '1' ORDER BY posted_at DESC LIMIT $jobs_per_page OFFSET $offset";
 $result = $conn->query($query);
 
 // Get total job count for pagination
-$total_jobs = $conn->query("SELECT COUNT(*) AS total FROM jobpostings WHERE status = 'active'")->fetch_assoc()['total'];
+$total_jobs = $conn->query("SELECT COUNT(*) AS total FROM jobpostings WHERE status = '1'")->fetch_assoc()['total'];
 $total_pages = ceil($total_jobs / $jobs_per_page);
 ?>
 
@@ -91,6 +91,7 @@ $total_pages = ceil($total_jobs / $jobs_per_page);
                 </div>
                 <?php endwhile; ?>
             </div>
+
             <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
                 <?php if ($total_pages > 1): ?>
                 <nav>
@@ -123,6 +124,7 @@ $total_pages = ceil($total_jobs / $jobs_per_page);
                 </nav>
                 <?php endif; ?>
             </div>
+
         </div>
     </div>
     <!-- Jobs End -->

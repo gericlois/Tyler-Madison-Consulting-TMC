@@ -126,9 +126,9 @@ if (isset($_GET['user_id']) && is_numeric($_GET['user_id'])) {
                                     rows="4"><?php echo htmlspecialchars($employee['cover_letter']); ?></textarea>
                             </div>
                             <!-- Submit Button -->
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                            <a href="employee_profile.php?employee_id=<?php echo $employee_id; ?>"
-                                class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Save Changes</button>
+                            <a href="profile.php"
+                                class="btn btn-secondary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Cancel</a>
                         </form>
                     </div>
                 </div>

@@ -2,8 +2,8 @@
 <html lang="en">
 <?php
 session_start();
-  include "includes/head.php";
-  include "includes/connection.php";
+include "includes/head.php";
+include "includes/connection.php";
 ?>
 
 <body>
@@ -46,23 +46,23 @@ session_start();
                     <p class="text-muted">Access your personalized dashboard now</p>
 
                     <?php
-                            if (isset($_GET['error'])) {
-                                if ($_GET["error"] == "Accountnotfound") {
-                                    echo '
+                    if (isset($_GET['error'])) {
+                        if ($_GET["error"] == "Accountnotfound") {
+                            echo '
                                                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                                         <b>There is no account registered! First, create an account! <a class="text-primary fw-bold" href="signup.php">SIGN UP NOW!</a></b>
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
-                                }
-                                if ($_GET["error"] == "IncorrectPassword") {
-                                    echo '
+                        }
+                        if ($_GET["error"] == "IncorrectPassword") {
+                            echo '
                                                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                                         <b>The password is incorrect. Before logging in, make sure your password is correct.</b>
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
-                                }
-                            }
-                            ?>
+                        }
+                    }
+                    ?>
                     <hr>
                     <form action="includes/scripts/login.php" method="POST">
                         <div class="form-floating mb-3">

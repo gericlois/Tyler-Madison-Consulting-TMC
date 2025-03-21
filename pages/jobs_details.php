@@ -39,7 +39,7 @@ if ($employee_id) {
     $stmt->bind_param("ii", $job_id, $employee_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows > 0) {
         $applied = true;
     }
@@ -87,9 +87,17 @@ $conn->close(); // Now close connection after all queries are done
         <div class="container py-2">
             <div class="text-center mx-auto pb-3 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 1200px;">
                 <h4 class="text-primary">
-                <span class="badge bg-primary"><?= htmlspecialchars($job['status']); ?></span>
+                    <?php
+                    if ($job['status'] == 1) {
+                        echo '<span class="badge bg-primary">Active</span>';
+                    } elseif ($job['status'] == 2) {
+                        echo '<span class="badge bg-danger">Inactive</span>';
+                    } else {
+                        echo '<span class="badge bg-warning">Pending</span>';
+                    }
+                    ?>
                     <?php if ($applied): ?>
-                    <span class="badge bg-success">Applied</span>
+                        <span class="badge bg-success">Applied</span>
                     <?php endif; ?>
                 </h4>
                 <h1 class="display-4 mb-0">
@@ -116,8 +124,8 @@ $conn->close(); // Now close connection after all queries are done
 
                 <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
                     <?php if (!$applied): ?>
-                    <a class="btn btn-primary rounded-pill py-3 px-5"
-                        href="includes/scripts/jobsapplication.php?id=<?= $job['job_id']; ?>&status=1">Apply Now</a>
+                        <a class="btn btn-primary rounded-pill py-3 px-5"
+                            href="includes/scripts/jobsapplication.php?id=<?= $job['job_id']; ?>&status=1">Apply Now</a>
                     <?php endif; ?>
                     <a href="javascript:history.back()" class="btn btn-success rounded-pill py-3 px-5">Back to
                         Job Listing</a>

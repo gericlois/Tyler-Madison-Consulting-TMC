@@ -1,9 +1,9 @@
-<div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
-        <div class="container py-5">
-            <div class="row g-5">
+<div class="container-fluid footer py-3 wow fadeIn" data-wow-delay="0.2s">
+        <div class="container py-3">
+            <div class="row g-3">
                 <div class="col-xl-9">
-                    <div class="mb-5">
-                        <div class="row g-4">
+                    <div class="mb-3">
+                        <div class="row g-3">
                             <div class="col-md-6 col-lg-6 col-xl-5">
                                 <div class="footer-item">
                                     <a href="index.html" class="p-0">
