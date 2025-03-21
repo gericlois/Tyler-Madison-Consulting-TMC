@@ -34,7 +34,7 @@ if (!isset($_SESSION["admin_id"])) {
         <div class="pagetitle">
             <h1>Admin Accounts
                 <?php if ($user_role == 'superadmin') : ?>
-                <a href="admin-add.php" class="btn btn-primary rounded-pill">
+                <a href="users-add.php" class="btn btn-primary rounded-pill">
                     <i class="bi bi-plus-circle me-1"></i> Add New Admin</a>
                 <?php endif; ?>
             </h1>
@@ -115,6 +115,7 @@ if (!isset($_SESSION["admin_id"])) {
                                                     <td>";
 
                                             if ($user_role == 'superadmin') {
+                                                echo "<a href='users-profile.php?id={$row['user_id']}' class='btn btn-sm btn-success'>View</a> ";
                                                 echo "<a href='users-edit.php?id={$row['user_id']}' class='btn btn-sm btn-warning'>Edit</a> ";
                                                
                                                 echo "<a href='scripts/user-edit.php?user_id={$row['user_id']}&status=2' 
