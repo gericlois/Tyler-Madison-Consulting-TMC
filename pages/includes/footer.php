@@ -7,7 +7,7 @@
                             <div class="col-md-6 col-lg-6 col-xl-5">
                                 <div class="footer-item">
                                     <a href="index.html" class="p-0">
-                                        <img src="../includes/img/tmclogo2.png " style="width:350px;height:auto;" alt="Logo"> 
+                                        <img src="../includes/img/TMClogo2.png " style="width:350px;height:auto;" alt="Logo"> 
                                     </a>
                                     <p class="text-white mb-4">Dolor amet sit justo amet elitr clita ipsum elitr
                                         est.Lorem ipsum dolor sit amet, consectetur adipiscing...</p>
