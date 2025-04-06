@@ -75,7 +75,10 @@ $stmt->close();
                         <img src="../../pages/<?php echo htmlspecialchars(string: $employee['profile_picture']); ?>" alt="Profile Picture"
                             class="rounded-circle img-fluid my-3" width="150" height="150">
                             <h2><?php echo htmlspecialchars($employee['first_name']); ?>
-                                <?php echo htmlspecialchars($employee['last_name']); ?></h2>
+                                <?php echo htmlspecialchars($employee['last_name']); ?>
+                            
+                                                   
+                                <a href='employees-edit.php?id=<?php echo htmlspecialchars($employee['employee_id']); ?>' class='btn btn-sm btn-warning'>Edit</a></h2>
                             <h3><?php
                                             if ($employee['status'] == "1") {
                                                 echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';

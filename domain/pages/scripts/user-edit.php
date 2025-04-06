@@ -22,6 +22,17 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("si", $status, $user_id);
 
 if ($stmt->execute()) {
+    $admin_id = $_SESSION['admin_id']; // Assuming admin ID is stored in session
+    $action = "User Status Updated";
+    $activity_description = "Updated User Status: ID {$user_id}, status '{$status}'.";
+
+    $activity_stmt = $conn->prepare("INSERT INTO activity (user_id, action, description) VALUES (?, ?, ?)");
+    $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
+    $activity_stmt->execute();
+    $activity_stmt->close();
+}
+
+if ($stmt->execute()) {
     header("Location: ../users.php?success=StatusUpdated");
 } else {
     header("Location: ../users.php?error=UpdateFailed");

@@ -88,16 +88,15 @@ if (!isset($_SESSION["admin_id"])) {
                                             while ($row = $result->fetch_assoc()) {
                                                 echo "<tr>
                                                     <td>{$row['employee_id']}</td>
-                                                    <td>{$row['first_name']} {$row['last_name']}</td>
+                                                    <td><a href='employees-profile.php?id={$row['employee_id']}' class='text-primary fw-bold'>{$row['first_name']} {$row['last_name']}</a></td>
                                                     <td>{$row['email']}</td>
                                                     <td>{$row['phone']}</td>
                                                     <td>{$row['address']}</td>
                                                     <td>{$row['position']}</td>
                                                     <td>{$row['created_at']}</td>
                                                     <td>
-                                                        <a href='employees-profile.php?id={$row['employee_id']}' class='btn btn-sm btn-success'>View</a>
-                                                        <a href='employees-edit.php?id={$row['employee_id']}' class='btn btn-sm btn-warning'>Edit</a>
                                                         <a href='scripts/employees-delete.php?id={$row['employee_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this employee?\")'>Delete</a>
+                                                        <a href='scripts/employee-update.php?id={$row['employee_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the employee's account active?\")'>Activate</a>
                                                     </td>
                                                 </tr>";
                                             }

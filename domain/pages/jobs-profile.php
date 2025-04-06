@@ -32,6 +32,7 @@ $stmt->close();
 
 ?>
 
+
 <body>
 
     <!-- ======= Header ======= -->
@@ -60,147 +61,230 @@ $stmt->close();
 
                     <div class="card">
                         <div class="card-body pt-3">
-                            <!-- Bordered Tabs -->
-                            <ul class="nav nav-tabs nav-tabs-bordered">
 
-                                <li class="nav-item">
-                                    <button class="nav-link active" data-bs-toggle="tab"
-                                        data-bs-target="#profile-overview">Overview</button>
-                                </li>
+                            <h2><?php echo htmlspecialchars($job['title']); ?>
+                                <a href='jobs-edit.php?id=<?= $job_id ?>' class='btn btn-warning rounded-pill'>
+                                    <i class="bi bi-plus-circle me-1"></i>Edit
+                                </a>
+                            </h2>
+                            <p>
+                                <?php
+                                if ($job['status'] == "Active") {
+                                    echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
+                                } else if ($job['status'] == "Inactive") {
+                                    echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
+                                }
+                                ?>
+                            </p>
 
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#applicants">
-                                        Applicants</button>
-                                </li>
+                            <h5 class="card-title">Description:</h5>
+                            <p class="small"><?php echo htmlspecialchars($job['description']); ?></p>
 
-                            </ul>
-                            <div class="tab-content pt-2">
+                            <h5 class="card-title">Job Posting Details</h5>
 
-                                <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                    <h2><?php echo htmlspecialchars($job['title']); ?>
-                                        <a href='jobs-edit.php?id=<?= $job_id ?>' class='btn btn-warning rounded-pill'>
-                                            <i class="bi bi-plus-circle me-1"></i>Edit
-                                        </a>
-                                    </h2>
-                                    <p>
-                                        <?php
-                                        if ($job['status'] == "Active") {
-                                            echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
-                                        } else if ($job['status'] == "Inactive") {
-                                            echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
-                                        }
-                                        ?>
-                                    </p>
-
-                                    <h5 class="card-title">Description:</h5>
-                                    <p class="small"><?php echo htmlspecialchars($job['description']); ?></p>
-
-                                    <h5 class="card-title">Job Posting Details</h5>
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label ">Job Type:</div>
-                                        <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['job_type']); ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Salary:</div>
-                                        <div class="col-lg-9 col-md-8"> $<?php echo htmlspecialchars($job['salary']); ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Schedule:</div>
-                                        <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['schedule']); ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Location:</div>
-                                        <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['location']); ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Skills:</div>
-                                        <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['skills']); ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Date Posted:</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <?php echo htmlspecialchars($job['posted_at']); ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Deadline:</div>
-                                        <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['end_at']); ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Posted By:</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <?php echo htmlspecialchars($job['first_name']); ?> <?php echo htmlspecialchars($job['last_name']); ?>
-                                        </div>
-                                    </div>
-
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label "><b>Job Type:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['job_type']); ?>
                                 </div>
+                            </div>
 
-                                <div class="tab-pane fade profile-edit pt-3" id="applicants">
-
-                                    <table class="table datatable">
-                                        <thead>
-                                            <tr>
-                                                <th>Employee Name</th>
-                                                <th>Email</th>
-                                                <th>Phone</th>
-                                                <th>Applied Date</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $sql = "SELECT ja.jobapplication_id AS application_id, ja.created_at AS applied_at, 
-                                                        u.user_id AS employee_id, u.first_name, u.last_name, u.email, u.phone
-                                                    FROM jobapplications ja
-                                                    INNER JOIN users u ON ja.employee_id = u.user_id
-                                                    WHERE ja.job_id = $job_id
-                                                    ORDER BY ja.created_at DESC";
-
-                                            $result = $conn->query($sql);
-                                            if ($result->num_rows > 0) {
-                                                while ($row = $result->fetch_assoc()) {
-                                                    echo "<tr>
-                                                                <td>{$row['first_name']} {$row['last_name']}</td>
-                                                                <td>{$row['email']}</td>
-                                                                <td>{$row['phone']}</td>
-                                                                <td>{$row['applied_at']}</td>
-                                                                <td>
-                                                                    <a href='employees-profile.php?id={$row['employee_id']}' class='btn btn-sm btn-success'>View Profile</a>
-                                                                    <a href='scripts/remove-application.php?app_id={$row['application_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to remove this application?\")'>Remove</a>
-                                                                </td>
-                                                            </tr>";
-                                                }
-                                            } else {
-                                                echo "<tr><td colspan='6' class='text-center'>No employees have applied for this job yet.</td></tr>";
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
-
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b>Salary:</b></div>
+                                <div class="col-lg-9 col-md-8"> $<?php echo htmlspecialchars($job['salary']); ?>
                                 </div>
+                            </div>
 
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b></b>Schedule:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['schedule']); ?>
+                                </div>
+                            </div>
 
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b></b>Location:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['location']); ?>
+                                </div>
+                            </div>
 
-                            </div><!-- End Bordered Tabs -->
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b></b>Skills:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['skills']); ?>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b></b>Date Posted:</b></div>
+                                <div class="col-lg-9 col-md-8">
+                                    <?php echo htmlspecialchars($job['posted_at']); ?>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b></b>Deadline:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['end_at']); ?>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b></b>Posted By:</b></div>
+                                <div class="col-lg-9 col-md-8">
+                                    <?php echo htmlspecialchars($job['first_name']); ?>
+                                    <?php echo htmlspecialchars($job['last_name']); ?>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
 
                 </div>
+
+
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body pt-3">
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Employee Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Applied Date</th>
+                                        <th>Progress</th>
+                                        <th>Comments</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql = "SELECT ja.jobapplication_id AS application_id, ja.created_at AS applied_at, 
+                            u.user_id AS employee_id, u.first_name, u.last_name, u.email, u.phone, ja.progress
+                        FROM jobapplications ja
+                        INNER JOIN users u ON ja.employee_id = u.user_id
+                        WHERE ja.job_id = $job_id
+                        ORDER BY ja.created_at DESC";
+
+                                    $result = $conn->query($sql);
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            $progress_options = [
+                                                0 => "Applied",
+                                                1 => "First Interview",
+                                                2 => "Second Interview",
+                                                3 => "Final Interview",
+                                                4 => "Hired",
+                                                5 => "Declined"
+                                            ];
+
+                                            $comment_sql = "SELECT comment, created_at FROM comments WHERE job_id = ? AND employee_id = ?";
+                                            $comment_stmt = $conn->prepare($comment_sql);
+                                            $comment_stmt->bind_param("ii", $job_id, $row['employee_id']);
+                                            $comment_stmt->execute();
+                                            $comment_result = $comment_stmt->get_result();
+                                            $comments = [];
+                                            while ($comment_row = $comment_result->fetch_assoc()) {
+                                                $comments[] = $comment_row; // Store each comment and its date
+                                            }
+                                            $comment_stmt->close();
+
+                                            // Display employee's information
+                                            echo "<tr>
+                                <td>{$row['first_name']} {$row['last_name']}</td>
+                                <td>{$row['email']}</td>
+                                <td>{$row['phone']}</td>
+                                <td>{$row['applied_at']}</td>
+                                <td>
+                                    <select class='form-select progress-dropdown' data-app-id='{$row['application_id']}'>";
+                                            foreach ($progress_options as $key => $value) {
+                                                $selected = ($row['progress'] == $key) ? "selected" : "";
+                                                echo "<option value='$key' $selected>$value</option>";
+                                            }
+                                            echo "</select>
+                                </td>
+                                
+                                <td>";
+
+                                            // If comments exist, show them
+                                            if (!empty($comments)) {
+                                                echo "<button type='button' class='btn btn-sm btn-info' data-bs-toggle='modal' data-bs-target='#viewCommentsModal{$row['employee_id']}'>View Comments</button>
+                                      <button type='button' class='btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#commentModal{$row['employee_id']}'>Add Comment</button>";
+                                            } else {
+                                                // If no comments, show Add Comment button
+                                                echo "<button type='button' class='btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#commentModal{$row['employee_id']}'>Add Comment</button>";
+                                            }
+
+                                            echo "</td>
+                                <td>
+                                    <a href='employees-profile.php?id={$row['employee_id']}' class='btn btn-sm btn-success'>View Profile</a>
+                                    <a href='scripts/remove-application.php?app_id={$row['application_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to remove this application?\")'>Remove</a>
+                                </td>
+                            </tr>";
+
+                                            // View Comments Modal
+                                            if (!empty($comments)) {
+                                                echo "<div class='modal fade' id='viewCommentsModal{$row['employee_id']}' tabindex='-1' aria-labelledby='viewCommentsModalLabel{$row['employee_id']}' aria-hidden='true'>
+                                        <div class='modal-dialog'>
+                                            <div class='modal-content'>
+                                                <div class='modal-header'>
+                                                    <h5 class='modal-title' id='viewCommentsModalLabel{$row['employee_id']}'>View Comments</h5>
+                                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                </div>
+                                                <div class='modal-body'>";
+                                                foreach ($comments as $comment) {
+                                                    echo "<ul><li>" . htmlspecialchars($comment['comment']) . " | <small>" . htmlspecialchars($comment['created_at']) . "</small></li></ul>";
+                                                }
+                                                echo "</div>
+                                            <div class='modal-footer'>
+                                                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>";
+                                            }
+
+
+                                            // Add/Edit Comment Modal
+                                            echo "<div class='modal fade' id='commentModal{$row['employee_id']}' tabindex='-1' aria-labelledby='commentModalLabel{$row['employee_id']}' aria-hidden='true'>
+                                    <div class='modal-dialog'>
+                                        <div class='modal-content'>
+                                            <div class='modal-header'>
+                                                <h5 class='modal-title' id='commentModalLabel{$row['employee_id']}'>Add/Edit Comment</h5>
+                                                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                            </div>
+                                            <div class='modal-body'>
+                                                <form method='POST' action='scripts/save-comment.php'>
+                                                    <input type='hidden' name='job_id' value='{$job_id}'>
+                                                    <input type='hidden' name='employee_id' value='{$row['employee_id']}'>
+                                                    <textarea name='comment' class='form-control'></textarea>
+                                                    <button type='submit' class='btn btn-primary mt-2'>Save Comment</button>
+                                                </form>
+                                            </div>
+                                            <div class='modal-footer'>
+                                                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='7' class='text-center'>No employees have applied for this job yet.</td></tr>";
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div><!-- End Bordered Tabs -->
+
+            </div>
+            </div>
+
+            </div>
             </div>
         </section>
 

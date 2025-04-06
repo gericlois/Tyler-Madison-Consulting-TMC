@@ -260,7 +260,7 @@ $stmt->close();
                         $stmtCount->close();
 
                         // Fetch jobs with limit for pagination
-                        $query = "SELECT j.job_id, j.jobapplication_id, jp.title, jp.job_type, jp.schedule, jp.location, jp.salary, j.status, j.created_at
+                        $query = "SELECT j.job_id, j.jobapplication_id, jp.title, jp.job_type, jp.schedule, jp.location, jp.salary, j.status, j.created_at, j.progress
                       FROM jobapplications j
                       JOIN jobpostings jp ON j.job_id = jp.job_id
                       WHERE j.employee_id = ? 
@@ -275,12 +275,12 @@ $stmt->close();
                         <table class="table table-bordered" id="jobsTable">
                             <thead>
                                 <tr>
-                                    <th>#</th>
                                     <th>Job Title</th>
                                     <th>Type</th>
                                     <th>Schedule</th>
                                     <th>Location</th>
                                     <th>Salary</th>
+                                    <th>Progress</th>
                                     <th>Status</th>
                                     <th>Applied Date</th>
                                 </tr>
@@ -289,12 +289,30 @@ $stmt->close();
                                 <?php if ($result->num_rows > 0): ?>
                                     <?php while ($row = $result->fetch_assoc()): ?>
                                         <tr>
-                                            <td><?= $row['jobapplication_id']; ?></td>
                                             <td><a href="jobs_details.php?id=<?= $row['job_id']; ?>"><?= htmlspecialchars($row['title']); ?></a></td>
                                             <td><?= htmlspecialchars($row['job_type']); ?></td>
                                             <td><?= htmlspecialchars($row['schedule']); ?></td>
                                             <td><?= htmlspecialchars($row['location'] ?? 'N/A'); ?></td>
                                             <td><?= $row['salary'] ? '$' . number_format($row['salary'], 2) : 'N/A'; ?></td>
+                                            <td>
+                                                <?php
+                                                if ($row['progress'] == 0) {
+                                                    echo '<span class="badge bg-primary">Applied</span>';
+                                                } elseif ($row['progress'] == 1) {
+                                                    echo '<span class="badge bg-warning">First Interview</span>';
+                                                } elseif ($row['progress'] == 2) {
+                                                    echo '<span class="badge bg-warning">Second Interview</span>';
+                                                } elseif ($row['progress'] == 3) {
+                                                    echo '<span class="badge bg-warning">Final Interview</span>';
+                                                } elseif ($row['progress'] == 4) {
+                                                    echo '<span class="badge bg-success">Hired</span>';
+                                                } elseif ($row['progress'] == 5) {
+                                                    echo '<span class="badge bg-danger">Decline</span>';
+                                                } else {
+                                                    echo '<span class="badge bg-warning">Pending</span>';
+                                                }
+                                                ?>
+                                            </td>
                                             <td>
                                                 <?php
                                                 if ($row['status'] == 1) {

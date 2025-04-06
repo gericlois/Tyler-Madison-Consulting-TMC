@@ -30,10 +30,10 @@
         </li><!-- End Jobs Nav -->
 
         <li class="nav-item">
-            <a class="nav-link <?= ($current_page == 'employees.php' || $current_page == 'employees-inactive.php') ? '' : 'collapsed' ?>" data-bs-target="#employee-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link <?= ($current_page == 'employees.php' || $current_page == 'employees-inactive.php' || $current_page == 'employees-blocked.php') ? '' : 'collapsed' ?>" data-bs-target="#employee-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-person-check-fill"></i><span>Employees</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="employee-nav" class="nav-content collapse <?= ($current_page == 'employees.php' || $current_page == 'employees-inactive.php') ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
+            <ul id="employee-nav" class="nav-content collapse <?= ($current_page == 'employees.php' || $current_page == 'employees-inactive.php' | $current_page == 'employees-blocked.php') ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="employees.php" class="<?= ($current_page == 'employees.php') ? 'active' : '' ?>">
                         <i class="bi bi-circle"></i><span>Employees</span>
@@ -44,11 +44,16 @@
                         <i class="bi bi-circle"></i><span>Inactive Employees</span>
                     </a>
                 </li>
+                <li>
+                    <a href="employees-blocked.php" class="<?= ($current_page == 'employees-blocked.php') ? 'active' : '' ?>">
+                        <i class="bi bi-circle"></i><span>Blocked Employees</span>
+                    </a>
+                </li>
             </ul>
         </li><!-- End Employees Nav -->
 
         <li class="nav-item">
-            <a class="nav-link <?= ($current_page == 'employers.php' || $current_page == 'employers-inactive.php') ? '' : 'collapsed' ?>" data-bs-target="#employer-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link <?= ($current_page == 'employers.php' || $current_page == 'employers-inactive.php' ) ? '' : 'collapsed' ?>" data-bs-target="#employer-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-person-badge-fill"></i><span>Employer</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="employer-nav" class="nav-content collapse <?= ($current_page == 'employers.php' || $current_page == 'employers-inactive.php') ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
@@ -86,7 +91,7 @@
         <li class="nav-heading">Pages</li>
 
         <li class="nav-item">
-            <a class="nav-link <?= ($current_page == 'users-profile.html') ? '' : 'collapsed' ?>" href="users-profile.html">
+            <a class="nav-link <?= ($current_page == 'settings.php') ? '' : 'collapsed' ?>" href="settings.php">
                 <i class="bi bi-gear"></i>
                 <span>Settings</span>
             </a>

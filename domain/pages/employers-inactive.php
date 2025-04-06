@@ -110,13 +110,11 @@ if (!isset($_SESSION["admin_id"])) {
 
                                             echo "<tr>
                                                 <td>{$row['employer_id']}</td>
-                                                <td>{$row['name']}</td>
+                                                <td><a href='employers-profile.php?id={$row['employer_id']}' class='text-primary fw-bold'>{$row['name']}</a></td>
                                                 <td>{$row['location']}</td>
                                                 <td><span class='badge $status_class'>{$row['status']}</span></td>
                                                 <td>{$row['created_at']}</td>
-                                                <td>
-                                                    <a href='employers-profile.php?id={$row['employer_id']}' class='btn btn-sm btn-success'>View</a>
-                                                    <a href='employers-edit.php?id={$row['employer_id']}' class='btn btn-sm btn-warning'>Edit</a>";
+                                                <td>";
 
                                             if ($row['status'] == "Active") {
                                                 echo " <a href='scripts/employer-update.php?id={$row['employer_id']}&status=2' class='btn btn-sm btn-dark' onclick='return confirm(\"Are you sure you want to make the employer  Inactive?\")'>Inactive</a>";

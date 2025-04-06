@@ -20,12 +20,12 @@ if (!isset($_SESSION["admin_id"])) {
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Employees
+            <h1>Inactive Employees
             </h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Employees</li>
+                    <li class="breadcrumb-item active">Inactive Employees</li>
                 </ol>
             </nav>
             <?php
@@ -55,7 +55,7 @@ if (!isset($_SESSION["admin_id"])) {
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Employees</h5>
+                            <h5 class="card-title">Inactive Employees</h5>
                             <p>Manage and view all employees in a structured table format. This section allows you to
                                 track employee details, including names, contact information, positions, and hire dates.
                             </p>
@@ -79,7 +79,7 @@ if (!isset($_SESSION["admin_id"])) {
                                     $sql = "SELECT e.employee_id, u.first_name, u.last_name, u.email, u.phone, u.address, e.position, e.created_at, e.status 
                                     FROM employees e
                                     LEFT JOIN users u ON e.user_id = u.user_id
-                                    WHERE e.status = 1
+                                    WHERE e.status = 3
                                     ORDER BY e.employee_id DESC";
 
                                                             $result = $conn->query($sql);
@@ -95,20 +95,13 @@ if (!isset($_SESSION["admin_id"])) {
                                         <td>{$row['position']}</td>
                                         <td>{$row['created_at']}</td>
                                         <td>
-                                           <a href='scripts/employee-update.php?id={$row['employee_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the employee's account inactive?\")'>Inactive</a>
-
-                                            <a href='#' 
-                                            class='btn btn-sm btn-warning' 
-                                            data-bs-toggle='modal' 
-                                            data-bs-target='#blockModal' 
-                                            data-employee-id='{$row['employee_id']}'>
-                                            Block
-                                            </a>
+                                            <a href='scripts/employees-update.php?id={$row['employee_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this employee?\")'>Delete</a>
+                                            <a href='scripts/employee-update.php?id={$row['employee_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to unblock this employee?\")'>Unblock</a>
                                         </td>
                                     </tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='8' class='text-center'>No Employees found</td></tr>";
+                                        echo "<tr><td colspan='8' class='text-center'>No Inactive Employees found</td></tr>";
                                     }
                                     $conn->close();
                                     ?>
@@ -116,48 +109,7 @@ if (!isset($_SESSION["admin_id"])) {
 
                             </table>
 
-                            <!-- Block Modal -->
-                            <div class="modal fade" id="blockModal" tabindex="-1" aria-labelledby="blockModalLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <form action="scripts/employee-block.php" method="POST">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="blockModalLabel">Block Employee</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <input type="hidden" name="employee_id" id="blockEmployeeId">
-                                                <div class="mb-3">
-                                                    <label for="blockReason" class="form-label">Reason for
-                                                        Blocking</label>
-                                                    <textarea class="form-control" name="reason" id="blockReason"
-                                                        rows="4" required></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-danger">Block Employee</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-
                             <!-- End Table with stripped rows -->
-
-                            <script>
-                            document.addEventListener("DOMContentLoaded", function() {
-                                var blockModal = document.getElementById('blockModal');
-                                blockModal.addEventListener('show.bs.modal', function(event) {
-                                    var button = event.relatedTarget;
-                                    var employeeId = button.getAttribute('data-employee-id');
-                                    blockModal.querySelector('#blockEmployeeId').value = employeeId;
-                                });
-                            });
-                            </script>
 
                         </div>
                     </div>

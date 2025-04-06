@@ -61,7 +61,7 @@ $stmt->close();
                 <div class="col-xl-4">
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                            <h2><?php echo htmlspecialchars($employer['name']); ?></h2>
+                            <h2><?php echo htmlspecialchars($employer['name']); ?> <a href='employers-edit.php?id=<?php echo htmlspecialchars($employer['employer_id']); ?>' class='btn btn-sm btn-warning'>Edit</a></h2>
                             <span><?php echo nl2br(htmlspecialchars($employer['description'])); ?></span>
                             <span><strong>Location:</strong><?php echo nl2br(htmlspecialchars($employer['location'])); ?></span>
                             <div class="social-links mt-2">

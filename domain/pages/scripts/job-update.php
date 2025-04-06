@@ -11,6 +11,17 @@ if (isset($_GET['id']) && isset($_GET['status'])) {
     $stmt->bind_param("si", $status, $job_id);
 
     if ($stmt->execute()) {
+        $admin_id = $_SESSION['admin_id']; // Assuming admin ID is stored in session
+        $action = "Job Posting Status Updated";
+        $activity_description = "Updated job posting ID {$job_id}, status '{$status}'.";
+
+        $activity_stmt = $conn->prepare("INSERT INTO activity (user_id, action, description) VALUES (?, ?, ?)");
+        $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
+        $activity_stmt->execute();
+        $activity_stmt->close();
+    }
+
+    if ($stmt->execute()) {
         header("Location: ../jobs.php?success=StatusUpdated"); 
     } else {
         header("Location: ../jobs.php?error=UpdateFailed"); 

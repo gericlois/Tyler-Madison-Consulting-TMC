@@ -3,11 +3,11 @@
 <?php
 session_start();
 if (!isset($_SESSION["admin_id"])) {
-  header("Location: login.php");
+    header("Location: login.php");
 } else {
     include "includes/head.php";
     include "../../pages/includes/connection.php";
-}?>
+} ?>
 
 <body>
 
@@ -32,30 +32,30 @@ if (!isset($_SESSION["admin_id"])) {
                 </ol>
             </nav>
             <?php
-                            if (isset($_GET['success'])) {
-                                if ($_GET["success"] == "JobAdded") {
-                                    echo '
+            if (isset($_GET['success'])) {
+                if ($_GET["success"] == "JobAdded") {
+                    echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                             <b>A new job posting has been added! Review the details of the posted job.</b>
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
-                                }
-                                if ($_GET["success"] == "JobUpdated") {
-                                    echo '
+                }
+                if ($_GET["success"] == "JobUpdated") {
+                    echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                             <b>The job posting has been successfully updated!</b> Review the updated details to ensure accuracy.
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
-                                }
-                                if ($_GET["success"] == "StatusUpdated") {
-                                    echo '
+                }
+                if ($_GET["success"] == "StatusUpdated") {
+                    echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                             <b>The job posting has been successfully updated!</b> Review the updated details to ensure accuracy.
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
-                                }
-                            }
-                            ?>
+                }
+            }
+            ?>
         </div><!-- End Page Title -->
 
         <section class="section">
@@ -88,66 +88,59 @@ if (!isset($_SESSION["admin_id"])) {
                                 <tbody>
                                     <?php
                                     $sql = "SELECT jp.job_id, jp.title, jp.description, jp.location, jp.salary, jp.end_at, jp.status, 
-                                                u.username AS posted_by_name, jp.posted_at, e.name as employer_name, e.employer_id,
-                                                (SELECT COUNT(*) FROM jobapplications ja WHERE ja.job_id = jp.job_id) AS applicant_count
-                                            FROM jobpostings jp
-                                            LEFT JOIN users u ON jp.posted_by = u.user_id 
-                                            LEFT JOIN employers e ON jp.employer_id = e.employer_id
-                                            WHERE jp.status = 2
-                                            ORDER BY jp.job_id DESC";
+                                            u.username AS posted_by_name, jp.posted_at, e.name as employer_name, e.employer_id,
+                                            (SELECT COUNT(*) FROM jobapplications ja WHERE ja.job_id = jp.job_id) AS applicant_count
+                                        FROM jobpostings jp
+                                        LEFT JOIN users u ON jp.posted_by = u.user_id 
+                                        LEFT JOIN employers e ON jp.employer_id = e.employer_id
+                                        WHERE jp.status = 2
+                                        ORDER BY jp.job_id DESC";
 
-                                    $result = $conn->query($sql);
+                                                                $result = $conn->query($sql);
 
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            // Convert numeric status to text
-                                            if ($row['status'] == "1") {
-                                                $row['status'] = "Active";
-                                            } elseif ($row['status'] == "2") {
-                                                $row['status'] = "Inactive";
-                                            }
-                                    
-                                            // Assign class based on status
-                                            $status_class = "bg-secondary"; 
-                                            if ($row['status'] == "Active") {
-                                                $status_class = "bg-primary";
-                                            } elseif ($row['status'] == "Inactive") {
-                                                $status_class = "bg-danger";
-                                            }
+                                                                if ($result->num_rows > 0) {
+                                                                    while ($row = $result->fetch_assoc()) {
+                                                                        // Convert numeric status to text
+                                                                        $status_text = ($row['status'] == "1") ? "Active" : "Inactive";
 
-                                            echo "<tr>
+                                                                        // Assign class based on status
+                                                                        $status_class = ($row['status'] == "Active") ? "bg-primary" : "bg-danger";
+
+                                                                        echo "<tr>
                                             <td>{$row['job_id']}</td>
-                                            <td>{$row['title']}</td>
+                                            <td>
+                                                <a href='jobs-profile.php?id={$row['job_id']}' class='fw-bold text-decoration-none'>
+                                                    " . htmlspecialchars($row['title']) . "
+                                                </a>
+                                            </td>
                                             <td>{$row['location']}</td>
                                             <td>$" . number_format($row['salary'], 2) . "</td>
                                             <td>
-                                                <a href='employers-profile.php?employer_id=" . $row['employer_id'] . "'>
+                                                <a href='employers-profile.php?id=" . $row['employer_id'] . "'>
                                                     " . htmlspecialchars($row['employer_name']) . "
                                                 </a>
                                             </td>
                                             <td>{$row['posted_at']}</td>
                                             <td>{$row['end_at']}</td>
-                                            <td><span class='badge $status_class'>{$row['status']}</span></td>
-                                            <td>{$row['applicant_count']}</td> <!-- Display applicant count -->
-                                            <td>
-                                                <a href='jobs-profile.php?id={$row['job_id']}' class='btn btn-sm btn-success'>View</a>
-                                                <a href='jobs-edit.php?id={$row['job_id']}' class='btn btn-sm btn-warning'>Edit</a>";
-                                    
-                                    if ($row['status'] == "Active") {
-                                        echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Inactive</a>";
-                                    } else if ($row['status'] == "Inactive") {
-                                        echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Active</a>";
-                                    }
-                                    
-                                    echo "</td></tr>";
-                                    
+                                            <td><span class='badge $status_class'>{$status_text}</span></td>
+                                            <td>{$row['applicant_count']}</td>
+                                            <td>";
+
+                                            if ($row['status'] == "1") {
+                                                echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Inactive</a>";
+                                            } else if ($row['status'] == "2") {
+                                                echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Active</a>";
+                                            }
+
+                                            echo "</td></tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='10' class='text-center'>No Inactive Jobs found</td></tr>";
+                                        echo "<tr><td colspan='10' class='text-center'>No jobs found</td></tr>";
                                     }
                                     $conn->close();
                                     ?>
                                 </tbody>
+
                             </table>
 
                             <!-- End Table with stripped rows -->

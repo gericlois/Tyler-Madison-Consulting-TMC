@@ -3,11 +3,11 @@
 <?php
 session_start();
 if (!isset($_SESSION["admin_id"])) {
-  header("Location: login.php");
+    header("Location: login.php");
 } else {
     include "includes/head.php";
     include "../../pages/includes/connection.php";
-}?>
+} ?>
 
 <body>
 
@@ -32,30 +32,30 @@ if (!isset($_SESSION["admin_id"])) {
                 </ol>
             </nav>
             <?php
-                            if (isset($_GET['success'])) {
-                                if ($_GET["success"] == "EmployerAdded") {
-                                    echo '
+            if (isset($_GET['success'])) {
+                if ($_GET["success"] == "EmployerAdded") {
+                    echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                             <b>A new employer has been added! Review the details of the posted employer.</b>
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
-                                }
-                                if ($_GET["success"] == "employerUpdated") {
-                                    echo '
+                }
+                if ($_GET["success"] == "employerUpdated") {
+                    echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                             <b>The employer has been successfully updated!</b> Review the updated details to ensure accuracy.
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
-                                }
-                                if ($_GET["success"] == "StatusUpdated") {
-                                    echo '
+                }
+                if ($_GET["success"] == "StatusUpdated") {
+                    echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                             <b>The employer has been successfully updated!</b> Review the updated details to ensure accuracy.
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
-                                }
-                            }
-                            ?>
+                }
+            }
+            ?>
         </div><!-- End Page Title -->
 
         <section class="section">
@@ -66,7 +66,7 @@ if (!isset($_SESSION["admin_id"])) {
                         <div class="card-body">
                             <h5 class="card-title">Employer List</h5>
                             <p>Manage and view all employer in a structured table format. This section allows you to
-                                track employer listings, including titles, descriptions, locations, salaries, and 
+                                track employer listings, including titles, descriptions, locations, salaries, and
                                 dates. </p>
 
                             <!-- Table with stripped rows -->
@@ -97,26 +97,25 @@ if (!isset($_SESSION["admin_id"])) {
                                             } elseif ($row['status'] == "2") {
                                                 $row['status'] = "Inactive";
                                             }
-                                    
+
                                             // Assign class based on status
-                                            $status_class = "bg-secondary"; 
+                                            $status_class = "bg-secondary";
                                             if ($row['status'] == "Active") {
                                                 $status_class = "bg-primary";
                                             } elseif ($row['status'] == "Inactive") {
                                                 $status_class = "bg-dark";
                                             }
-                                        
-                
+
+
 
                                             echo "<tr>
                                                 <td>{$row['employer_id']}</td>
-                                                <td>{$row['name']}</td>
+                                               <td><a href='employers-profile.php?id={$row['employer_id']}' class='text-primary fw-bold'>{$row['name']}</a></td>
                                                 <td>{$row['location']}</td>
                                                 <td><span class='badge $status_class'>{$row['status']}</span></td>
                                                 <td>{$row['created_at']}</td>
                                                 <td>
-                                                    <a href='employers-profile.php?id={$row['employer_id']}' class='btn btn-sm btn-success'>View</a>
-                                                    <a href='employers-edit.php?id={$row['employer_id']}' class='btn btn-sm btn-warning'>Edit</a>";
+                                                    ";
 
                                             if ($row['status'] == "Active") {
                                                 echo " <a href='scripts/employer-update.php?id={$row['employer_id']}&status=2' class='btn btn-sm btn-dark' onclick='return confirm(\"Are you sure you want to make the employer  Inactive?\")'>Inactive</a>";

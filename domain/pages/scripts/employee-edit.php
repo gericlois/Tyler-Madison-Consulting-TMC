@@ -15,6 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $role = $_POST['role'];
     $position = $_POST['position'];
+    $admin_id = $_SESSION["admin_id"];
 
     // Database connection check
     if (!$conn) {
@@ -43,6 +44,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $updateEmployee = "UPDATE employees SET position = ? WHERE employee_id = ?";
         $stmtEmployee = mysqli_prepare($conn, $updateEmployee);
         mysqli_stmt_bind_param($stmtEmployee, "si", $position, $employee_id);
+        
+        if ($stmtEmployee->execute()) {
+            $admin_id = $_SESSION['admin_id']; // Assuming admin ID is stored in session
+            $action = "Employee Updated";
+            $activity_description = "Updated Employee ID {$employee_id}, first name '{$first_name}', last name '{$last_name}'.";
+    
+            $activity_stmt = $conn->prepare("INSERT INTO activity (user_id, action, description) VALUES (?, ?, ?)");
+            $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
+            $activity_stmt->execute();
+            $activity_stmt->close();
+        }
         
         if (mysqli_stmt_execute($stmtEmployee)) {
             // Redirect with success message

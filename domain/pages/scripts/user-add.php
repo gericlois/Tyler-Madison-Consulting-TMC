@@ -45,6 +45,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 
     if ($stmt->execute()) {
+        $admin_id = $_SESSION['admin_id']; // Assuming admin ID is stored in session
+        $action = "User Added";
+        $activity_description = "Added a new User, name '{$first_name} {$last_name}'.";
+    
+        $activity_stmt = $conn->prepare("INSERT INTO activity (user_id, action, description) VALUES (?, ?, ?)");
+        $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
+        $activity_stmt->execute();
+        $activity_stmt->close();
+    }
+    
+    if ($stmt->execute()) {
         $_SESSION['success'] = "User added successfully!";
         header("Location: ../users.php");
     } else {

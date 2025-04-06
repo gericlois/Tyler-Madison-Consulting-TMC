@@ -106,7 +106,7 @@ if (!isset($_SESSION["admin_id"])) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>
                                                     <td>{$row['user_id']}</td>
-                                                    <td>{$row['first_name']} {$row['last_name']}</td>
+                                                    <td><a href='users-profile.php?id={$row['user_id']}'>{$row['first_name']} {$row['last_name']}</a></td>
                                                     <td>{$row['email']}</td>
                                                     <td>{$row['phone']}</td>
                                                     <td>{$row['address']}</td>
@@ -115,8 +115,6 @@ if (!isset($_SESSION["admin_id"])) {
                                                     <td>";
 
                                             if ($user_role == 'superadmin') {
-                                                echo "<a href='users-profile.php?id={$row['user_id']}' class='btn btn-sm btn-success'>View</a> ";
-                                                echo "<a href='users-edit.php?id={$row['user_id']}' class='btn btn-sm btn-warning'>Edit</a> ";
                                                
                                                 echo "<a href='scripts/user-edit.php?user_id={$row['user_id']}&status=2' 
                                                 class='btn btn-sm btn-danger' 
