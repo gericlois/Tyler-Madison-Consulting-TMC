@@ -81,13 +81,11 @@ if (!isset($_SESSION["admin_id"])) {
                                     LEFT JOIN users u ON e.user_id = u.user_id
                                     WHERE e.status = 1
                                     ORDER BY e.employee_id DESC";
-
-                                                            $result = $conn->query($sql);
-
-                                                            if ($result->num_rows > 0) {
-                                                                while ($row = $result->fetch_assoc()) {
-                                                                    echo "<tr>
-                                        <td>{$row['employee_id']}</td>
+                                    $result = $conn->query($sql);
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo "<tr>
+                                        <td>200{$row['employee_id']}</td>
                                         <td><a href='employees-profile.php?id={$row['employee_id']}' class='text-primary fw-bold'>{$row['first_name']} {$row['last_name']}</a></td>
                                         <td>{$row['email']}</td>
                                         <td>{$row['phone']}</td>
@@ -95,14 +93,10 @@ if (!isset($_SESSION["admin_id"])) {
                                         <td>{$row['position']}</td>
                                         <td>{$row['created_at']}</td>
                                         <td>
-                                           <a href='scripts/employee-update.php?id={$row['employee_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the employee's account inactive?\")'>Inactive</a>
+                                           <a href='scripts/employee-update.php?id={$row['employee_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the employee's account inactive?\")'>Deactivate</a>
 
-                                            <a href='#' 
-                                            class='btn btn-sm btn-warning' 
-                                            data-bs-toggle='modal' 
-                                            data-bs-target='#blockModal' 
-                                            data-employee-id='{$row['employee_id']}'>
-                                            Block
+                                            <a href='#' class='btn btn-sm btn-warning' data-bs-toggle='modal' data-bs-target='#blockModal' 
+                                            data-employee-id='{$row['employee_id']}'> Block
                                             </a>
                                         </td>
                                     </tr>";

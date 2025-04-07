@@ -47,7 +47,7 @@ include "includes/connection.php";
 
                     <?php
                     if (isset($_GET['error'])) {
-                        if ($_GET["error"] == "Accountnotfound") {
+                        if ($_GET["error"] == "AccountNotFound") {
                             echo '
                                                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                                         <b>There is no account registered! First, create an account! <a class="text-primary fw-bold" href="signup.php">SIGN UP NOW!</a></b>

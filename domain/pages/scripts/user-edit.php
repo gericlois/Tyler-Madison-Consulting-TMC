@@ -30,9 +30,7 @@ if ($stmt->execute()) {
     $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
     $activity_stmt->execute();
     $activity_stmt->close();
-}
-
-if ($stmt->execute()) {
+    
     header("Location: ../users.php?success=StatusUpdated");
 } else {
     header("Location: ../users.php?error=UpdateFailed");

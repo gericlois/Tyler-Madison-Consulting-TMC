@@ -21,9 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["app_id"], $_POST["prog
         $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
         $activity_stmt->execute();
         $activity_stmt->close();
-    }
-
-    if ($stmt->execute()) {
+        
         echo "Success";
     } else {
         echo "Error updating progress: " . $conn->error;

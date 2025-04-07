@@ -37,11 +37,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
             $activity_stmt->execute();
             $activity_stmt->close();
-        }
 
-        if ($stmt->execute()) {
             header("Location: ../employers.php?success=EmployerAdded");  // Redirect on success ✅
-            exit();  // Ensure script stops execution after redirection
+            exit();  
 
         } else {
             echo "Error: " . $stmt->error;

@@ -20,12 +20,12 @@ if (!isset($_SESSION["admin_id"])) {
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Inactive Employees
+            <h1>Blocked Employees
             </h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Inactive Employees</li>
+                    <li class="breadcrumb-item active">Blocked Employees</li>
                 </ol>
             </nav>
             <?php
@@ -55,7 +55,7 @@ if (!isset($_SESSION["admin_id"])) {
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Inactive Employees</h5>
+                            <h5 class="card-title">Blocked Employees</h5>
                             <p>Manage and view all employees in a structured table format. This section allows you to
                                 track employee details, including names, contact information, positions, and hire dates.
                             </p>
@@ -87,7 +87,7 @@ if (!isset($_SESSION["admin_id"])) {
                                                             if ($result->num_rows > 0) {
                                                                 while ($row = $result->fetch_assoc()) {
                                                                     echo "<tr>
-                                        <td>{$row['employee_id']}</td>
+                                        <td>200{$row['employee_id']}</td>
                                         <td><a href='employees-profile.php?id={$row['employee_id']}' class='text-primary fw-bold'>{$row['first_name']} {$row['last_name']}</a></td>
                                         <td>{$row['email']}</td>
                                         <td>{$row['phone']}</td>
@@ -101,7 +101,7 @@ if (!isset($_SESSION["admin_id"])) {
                                     </tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='8' class='text-center'>No Inactive Employees found</td></tr>";
+                                        echo "<tr><td colspan='8' class='text-center'>No Blocked Employees found</td></tr>";
                                     }
                                     $conn->close();
                                     ?>

@@ -3,11 +3,11 @@
 <?php
 session_start();
 if (!isset($_SESSION["admin_id"])) {
-  header("Location: login.php");
+    header("Location: login.php");
 } else {
     include "includes/head.php";
     include "../../pages/includes/connection.php";
-}?>
+} ?>
 
 <body>
 
@@ -20,7 +20,7 @@ if (!isset($_SESSION["admin_id"])) {
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Inactive Employer
+            <h1>Blocked Employer
                 <a href="employers-add.php" class="btn btn-primary rounded-pill">
                     <i class="bi bi-plus-circle me-1"></i> Add Employer
                 </a>
@@ -28,34 +28,34 @@ if (!isset($_SESSION["admin_id"])) {
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Inactive Employer</li>
+                    <li class="breadcrumb-item active">Blocked Employer</li>
                 </ol>
             </nav>
             <?php
-                            if (isset($_GET['success'])) {
-                                if ($_GET["success"] == "EmployerAdded") {
-                                    echo '
+            if (isset($_GET['success'])) {
+                if ($_GET["success"] == "EmployerAdded") {
+                    echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                             <b>A new employer has been added! Review the details of the posted employer.</b>
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
-                                }
-                                if ($_GET["success"] == "employerUpdated") {
-                                    echo '
+                }
+                if ($_GET["success"] == "employerUpdated") {
+                    echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                             <b>The employer has been successfully updated!</b> Review the updated details to ensure accuracy.
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
-                                }
-                                if ($_GET["success"] == "StatusUpdated") {
-                                    echo '
+                }
+                if ($_GET["success"] == "StatusUpdated") {
+                    echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                             <b>The employer has been successfully updated!</b> Review the updated details to ensure accuracy.
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
-                                }
-                            }
-                            ?>
+                }
+            }
+            ?>
         </div><!-- End Page Title -->
 
         <section class="section">
@@ -64,9 +64,9 @@ if (!isset($_SESSION["admin_id"])) {
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Inactive Employer</h5>
+                            <h5 class="card-title">Blocked Employer</h5>
                             <p>Manage and view all employer in a structured table format. This section allows you to
-                                track employer listings, including titles, descriptions, locations, salaries, and 
+                                track employer listings, including titles, descriptions, locations, salaries, and
                                 dates. </p>
 
                             <!-- Table with stripped rows -->
@@ -84,7 +84,7 @@ if (!isset($_SESSION["admin_id"])) {
                                 <tbody>
                                     <?php
                                     $sql = "SELECT * FROM `employers`
-                                            WHERE status = 2
+                                            WHERE status = 3
                                             ORDER BY employer_id DESC";
 
                                     $result = $conn->query($sql);
@@ -94,19 +94,19 @@ if (!isset($_SESSION["admin_id"])) {
                                             // Convert numeric status to text
                                             if ($row['status'] == "1") {
                                                 $row['status'] = "Active";
-                                            } elseif ($row['status'] == "2") {
-                                                $row['status'] = "Inactive";
+                                            } elseif ($row['status'] == "3") {
+                                                $row['status'] = "Blocked";
                                             }
-                                    
+
                                             // Assign class based on status
-                                            $status_class = "bg-secondary"; 
+                                            $status_class = "bg-secondary";
                                             if ($row['status'] == "Active") {
                                                 $status_class = "bg-primary";
-                                            } elseif ($row['status'] == "Inactive") {
+                                            } elseif ($row['status'] == "Blocked") {
                                                 $status_class = "bg-dark";
                                             }
-                                        
-                
+
+
 
                                             echo "<tr>
                                                 <td>300{$row['employer_id']}</td>
@@ -117,15 +117,15 @@ if (!isset($_SESSION["admin_id"])) {
                                                 <td>";
 
                                             if ($row['status'] == "Active") {
-                                                echo " <a href='scripts/employer-update.php?id={$row['employer_id']}&status=2' class='btn btn-sm btn-dark' onclick='return confirm(\"Are you sure you want to make the employer  Inactive?\")'>Deactivate</a>";
-                                            } else if ($row['status'] == "Inactive") {
-                                                echo " <a href='scripts/employer-update.php?id={$row['employer_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the employer  Active?\")'>Active</a>";
+                                                echo " <a href='scripts/employer-update.php?id={$row['employer_id']}&status=2' class='btn btn-sm btn-dark' onclick='return confirm(\"Are you sure you want to make the employer  Inactive?\")'>Inactivate</a>";
+                                            } else if ($row['status'] == "Blocked") {
+                                                echo " <a href='scripts/employer-update.php?id={$row['employer_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the employer  Active?\")'>Unblocked</a>";
                                             }
 
                                             echo "</td></tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='10' class='text-center'>No Inactive Employer Found</td></tr>";
+                                        echo "<tr><td colspan='10' class='text-center'>No Blocked Employer Found</td></tr>";
                                     }
                                     $conn->close();
                                     ?>

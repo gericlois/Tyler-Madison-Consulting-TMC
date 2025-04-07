@@ -61,6 +61,12 @@ if (!isset($_SESSION["admin_id"])) {
                                 $row_today = $result_today->fetch_assoc();
                                 $active_jobs_today = $row_today['active_jobs_today'];
 
+                                 // Get today's inactive job count
+                                 $sql_today = "SELECT COUNT(*) AS active_jobs_today FROM jobpostings WHERE status = '2' AND DATE(posted_at) < CURDATE()";
+                                 $result_today = $conn->query($sql_today);
+                                 $row_today = $result_today->fetch_assoc();
+                                 $inactive_jobs_today = $row_today['active_jobs_today'];
+
                                 // Get yesterday's active job count
                                 $sql_yesterday = "SELECT COUNT(*) AS active_jobs_yesterday FROM jobpostings WHERE status = '1' AND DATE(posted_at) < CURDATE() - INTERVAL 1 DAY";
                                 $result_yesterday = $conn->query($sql_yesterday);
@@ -84,7 +90,7 @@ if (!isset($_SESSION["admin_id"])) {
                                             <i class="bi bi-briefcase-fill"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6><?php echo $active_jobs_today; ?></h6>
+                                            <h6><?php echo $active_jobs_today; ?> | <?php echo $inactive_jobs_today; ?></h6>
                                             <span class="text-success small pt-1 fw-bold">
                                                 <?php echo number_format($increase_percentage, 2); ?>%
                                             </span>
@@ -96,6 +102,7 @@ if (!isset($_SESSION["admin_id"])) {
                             </div>
                         </div><!-- End Jobs Card -->
 
+                        
                         <!-- Employee Card -->
                         <div class="col-xxl-4 col-md-6">
                             <div class="card info-card revenue-card">
@@ -122,6 +129,18 @@ if (!isset($_SESSION["admin_id"])) {
                                 $row = $result->fetch_assoc();
                                 $activeEmployees = $row['active_employees'];
 
+                                // Get inactive employees count
+                                $query = "SELECT COUNT(*) AS inactive_employees FROM employees WHERE status = 2";
+                                $result = $conn->query($query);
+                                $row = $result->fetch_assoc();
+                                $inactiveEmployees = $row['inactive_employees'];
+
+                                // Get blocked employees count
+                                $query = "SELECT COUNT(*) AS blocked_employees FROM employees WHERE status = 3";
+                                $result = $conn->query($query);
+                                $row = $result->fetch_assoc();
+                                $blockedEmployees = $row['blocked_employees'];
+
                                 // Get percentage increase
                                 $queryIncrease = "SELECT 
                                     (COUNT(CASE WHEN DATE(created_at) = CURDATE() THEN 1 END) * 100.0 / 
@@ -141,7 +160,8 @@ if (!isset($_SESSION["admin_id"])) {
                                             <i class="bi bi-people-fill"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6><?php echo $activeEmployees; ?></h6>
+                                            <h6><?php echo $activeEmployees; ?> | <?php echo $inactiveEmployees; ?> |
+                                                <?php echo $blockedEmployees; ?></h6>
                                             <span
                                                 class="text-success small pt-1 fw-bold"><?php echo number_format($percentageIncrease, 2); ?>%</span>
                                             <span class="text-muted small pt-2 ps-1">increase</span>
@@ -151,6 +171,7 @@ if (!isset($_SESSION["admin_id"])) {
 
                             </div>
                         </div><!-- End Employee Card -->
+
 
                         <!-- Employers Card -->
                         <div class="col-xxl-4 col-xl-12">
@@ -179,6 +200,19 @@ if (!isset($_SESSION["admin_id"])) {
                                 $row = $result->fetch_assoc();
                                 $activeEmployers = $row['active_employers'];
 
+                                // Get inactive employers count
+                                $query = "SELECT COUNT(DISTINCT employer_id) AS inactive_employers FROM jobpostings WHERE status = '2'";
+                                $result = $conn->query($query);
+                                $row = $result->fetch_assoc();
+                                $inactiveEmployers = $row['inactive_employers'];
+
+                                // Get blocked employers count
+                                $query = "SELECT COUNT(DISTINCT employer_id) AS blocked_employers FROM jobpostings WHERE status = '3'";
+                                $result = $conn->query($query);
+                                $row = $result->fetch_assoc();
+                                $blockedEmployers = $row['blocked_employers'];
+
+
                                 // Get percentage increase
                                 $queryIncrease = "SELECT 
                                     (COUNT(DISTINCT CASE WHEN DATE(posted_at) = CURDATE() THEN employer_id END) * 100.0 / 
@@ -198,7 +232,7 @@ if (!isset($_SESSION["admin_id"])) {
                                             <i class="bi bi-building"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6><?php echo $activeEmployers; ?></h6>
+                                            <h6><?php echo $activeEmployers; ?> | <?php echo $inactiveEmployers; ?> | <?php echo $blockedEmployers; ?></h6>
                                             <span
                                                 class="text-success small pt-1 fw-bold"><?php echo number_format($percentageIncrease, 2); ?>%</span>
                                             <span class="text-muted small pt-2 ps-1">increase</span>
@@ -263,58 +297,58 @@ if (!isset($_SESSION["admin_id"])) {
                                     <div id="reportsChart"></div>
 
                                     <script>
-                                        document.addEventListener("DOMContentLoaded", () => {
-                                            new ApexCharts(document.querySelector("#reportsChart"), {
-                                                series: [{
-                                                    name: 'Active Jobs',
-                                                    data: <?php echo json_encode($activeJobs); ?>
-                                                }, {
-                                                    name: 'Inactive Jobs',
-                                                    data: <?php echo json_encode($inactiveJobs); ?>
-                                                }, {
-                                                    name: 'Pending Jobs',
-                                                    data: <?php echo json_encode($pendingJobs); ?>
-                                                }],
-                                                chart: {
-                                                    height: 350,
-                                                    type: 'area',
-                                                    toolbar: {
-                                                        show: false
-                                                    },
+                                    document.addEventListener("DOMContentLoaded", () => {
+                                        new ApexCharts(document.querySelector("#reportsChart"), {
+                                            series: [{
+                                                name: 'Active Jobs',
+                                                data: <?php echo json_encode($activeJobs); ?>
+                                            }, {
+                                                name: 'Inactive Jobs',
+                                                data: <?php echo json_encode($inactiveJobs); ?>
+                                            }, {
+                                                name: 'Pending Jobs',
+                                                data: <?php echo json_encode($pendingJobs); ?>
+                                            }],
+                                            chart: {
+                                                height: 350,
+                                                type: 'area',
+                                                toolbar: {
+                                                    show: false
                                                 },
-                                                markers: {
-                                                    size: 4
-                                                },
-                                                colors: ['#4154f1', '#ff771d', '#2eca6a'],
-                                                fill: {
-                                                    type: "gradient",
-                                                    gradient: {
-                                                        shadeIntensity: 1,
-                                                        opacityFrom: 0.3,
-                                                        opacityTo: 0.4,
-                                                        stops: [0, 90, 100]
-                                                    }
-                                                },
-                                                dataLabels: {
-                                                    enabled: false
-                                                },
-                                                stroke: {
-                                                    curve: 'smooth',
-                                                    width: 2
-                                                },
-                                                xaxis: {
-                                                    categories: <?php echo json_encode($months); ?>,
-                                                    labels: {
-                                                        format: 'MMM yyyy' // Format for month-year display
-                                                    }
-                                                },
-                                                tooltip: {
-                                                    x: {
-                                                        format: 'MMM yyyy'
-                                                    },
+                                            },
+                                            markers: {
+                                                size: 4
+                                            },
+                                            colors: ['#4154f1', '#ff771d', '#2eca6a'],
+                                            fill: {
+                                                type: "gradient",
+                                                gradient: {
+                                                    shadeIntensity: 1,
+                                                    opacityFrom: 0.3,
+                                                    opacityTo: 0.4,
+                                                    stops: [0, 90, 100]
                                                 }
-                                            }).render();
-                                        });
+                                            },
+                                            dataLabels: {
+                                                enabled: false
+                                            },
+                                            stroke: {
+                                                curve: 'smooth',
+                                                width: 2
+                                            },
+                                            xaxis: {
+                                                categories: <?php echo json_encode($months); ?>,
+                                                labels: {
+                                                    format: 'MMM yyyy' // Format for month-year display
+                                                }
+                                            },
+                                            tooltip: {
+                                                x: {
+                                                    format: 'MMM yyyy'
+                                                },
+                                            }
+                                        }).render();
+                                    });
                                     </script>
 
                                     <!-- End Line Chart -->
@@ -363,19 +397,19 @@ if (!isset($_SESSION["admin_id"])) {
                                                 // Assign class based on status
                                                 $status_class = ($row['status'] == "1") ? "bg-primary" : "bg-danger";
                                             ?>
-                                                <tr>
-                                                    <th scope="row"><a
-                                                            href="#">#<?php echo $row['jobapplication_id']; ?></a></th>
-                                                    <td><?php echo $row['first_name'] . ' ' . $row['last_name']; ?></td>
-                                                    <td><a href="#"
-                                                            class="text-primary"><?php echo $row['job_title']; ?></a></td>
-                                                    <td><?php echo date("M d, Y", strtotime($row['created_at'])); ?></td>
-                                                    <td>
-                                                        <span class="badge <?php echo $status_class; ?>">
-                                                            <?php echo $status_text; ?>
-                                                        </span>
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <th scope="row"><a
+                                                        href="#">#<?php echo $row['jobapplication_id']; ?></a></th>
+                                                <td><?php echo $row['first_name'] . ' ' . $row['last_name']; ?></td>
+                                                <td><a href="#"
+                                                        class="text-primary"><?php echo $row['job_title']; ?></a></td>
+                                                <td><?php echo date("M d, Y", strtotime($row['created_at'])); ?></td>
+                                                <td>
+                                                    <span class="badge <?php echo $status_class; ?>">
+                                                        <?php echo $status_text; ?>
+                                                    </span>
+                                                </td>
+                                            </tr>
                                             <?php } ?>
                                         </tbody>
                                     </table>
@@ -437,17 +471,17 @@ if (!isset($_SESSION["admin_id"])) {
                                     </thead>
                                     <tbody>
                                         <?php if ($top_employer): ?>
-                                            <tr>
-                                                <td><a href="employers-profile.php?id=<?= htmlspecialchars($top_employer['employer_id']) ?>"
-                                                        class="text-primary fw-bold"><?= htmlspecialchars($top_employer['name']) ?></a>
-                                                </td>
-                                                <td><?= htmlspecialchars($top_employer['email']) ?></td>
-                                                <td class="fw-bold"><?= $top_employer['total_jobs'] ?></td>
-                                            </tr>
+                                        <tr>
+                                            <td><a href="employers-profile.php?id=<?= htmlspecialchars($top_employer['employer_id']) ?>"
+                                                    class="text-primary fw-bold"><?= htmlspecialchars($top_employer['name']) ?></a>
+                                            </td>
+                                            <td><?= htmlspecialchars($top_employer['email']) ?></td>
+                                            <td class="fw-bold"><?= $top_employer['total_jobs'] ?></td>
+                                        </tr>
                                         <?php else: ?>
-                                            <tr>
-                                                <td colspan="5" class="text-center">No job postings available</td>
-                                            </tr>
+                                        <tr>
+                                            <td colspan="5" class="text-center">No job postings available</td>
+                                        </tr>
                                         <?php endif; ?>
                                     </tbody>
                                 </table>

@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
     } else {
-        header("Location: ../login.php?error=admin_not_found");
+        header("Location: ../login.php?error=AccountNotFound");
         exit();
     }
 

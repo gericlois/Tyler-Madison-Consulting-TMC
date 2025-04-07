@@ -22,15 +22,17 @@ $employee_id = intval($_GET['id']); // Ensure ID is an integer
 
 // Fetch employee details
 $sql = "SELECT *, e.resume_path, e.employee_id, u.first_name, u.last_name, u.email, e.employee_id,
-               u.phone, u.address, e.position, e.created_at
+               u.phone, u.address, e.position, e.created_at, u.user_id as employee_id_two
         FROM employees e
         LEFT JOIN users u ON e.user_id = u.user_id 
         WHERE e.employee_id = ?";
 
+
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $employee_id); // Corrected "j" to "i"
+$stmt->bind_param("i", $employee_id);
 $stmt->execute();
 $result = $stmt->get_result();
+
 
 if ($result->num_rows === 0) {
     echo "<p style='color:red;'>Employee not found.</p>";
@@ -71,21 +73,28 @@ $stmt->close();
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-                          
-                        <img src="../../pages/<?php echo htmlspecialchars(string: $employee['profile_picture']); ?>" alt="Profile Picture"
-                            class="rounded-circle img-fluid my-3" width="150" height="150">
+
+                            <img src="../../pages/<?php echo htmlspecialchars(string: $employee['profile_picture']); ?>"
+                                alt="Profile Picture" class="rounded-circle img-fluid my-3" width="150" height="150">
                             <h2><?php echo htmlspecialchars($employee['first_name']); ?>
                                 <?php echo htmlspecialchars($employee['last_name']); ?>
-                            
-                                                   
-                                <a href='employees-edit.php?id=<?php echo htmlspecialchars($employee['employee_id']); ?>' class='btn btn-sm btn-warning'>Edit</a></h2>
+
+
+                                <a href='employees-edit.php?id=<?php echo htmlspecialchars($employee['employee_id']); ?>'
+                                    class='btn btn-sm btn-success'>Edit</a>
+                                <a href='#' class='btn btn-sm btn-warning' data-bs-toggle='modal'
+                                    data-bs-target='#blockModal'
+                                    data-employee-id='<?php echo htmlspecialchars($employee['employee_id']); ?>'>
+                                    Block
+                                </a>
+                            </h2>
                             <h3><?php
-                                            if ($employee['status'] == "1") {
-                                                echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
-                                            } else if ($employee['status'] == "2") {
-                                                echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
-                                            }
-                                        ?></h3>
+                            if ($employee['status'] == "1") {
+                                echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
+                            } else if ($employee['status'] == "2") {
+                                echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
+                            }
+                            ?></h3>
                             <div class="social-links mt-2">
                                 <a href="<?php echo htmlspecialchars($employee['link_facebook']); ?>"
                                     class="facebook"><i class="bi bi-facebook"></i></a>
@@ -124,31 +133,36 @@ $stmt->close();
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label ">Desired Position</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <?php echo htmlspecialchars($employee['position']); ?></div>
+                                            <?php echo htmlspecialchars($employee['position']); ?>
+                                        </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Email</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <?php echo htmlspecialchars($employee['email']); ?></div>
+                                            <?php echo htmlspecialchars($employee['email']); ?>
+                                        </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Phone</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <?php echo htmlspecialchars($employee['phone']); ?></div>
+                                            <?php echo htmlspecialchars($employee['phone']); ?>
+                                        </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Address</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <?php echo htmlspecialchars($employee['address']); ?></div>
+                                            <?php echo htmlspecialchars($employee['address']); ?>
+                                        </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Birthday</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <?php echo htmlspecialchars($employee['birthday']); ?></div>
+                                            <?php echo htmlspecialchars($employee['birthday']); ?>
+                                        </div>
                                     </div>
 
                                     <hr>
@@ -156,7 +170,7 @@ $stmt->close();
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Resume</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <?php if (!empty($employee['resume_path'])) : ?>
+                                            <?php if (!empty($employee['resume_path'])): ?>
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                 data-bs-target="#resumeModal">
                                                 View Resume
@@ -174,14 +188,15 @@ $stmt->close();
                                                         </div>
                                                         <div class="modal-body"
                                                             style="max-height: 80vh; overflow-y: auto;">
-                                                            <iframe src="/<?php echo htmlspecialchars($employee['resume_path']); ?>"
+                                                            <iframe
+                                                                src="/<?php echo htmlspecialchars($employee['resume_path']); ?>"
                                                                 width="100%" height="1000px"
                                                                 style="border: none;"></iframe>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php else : ?>
+                                            <?php else: ?>
                                             <p>No Resume</p>
                                             <?php endif; ?>
 
@@ -245,6 +260,95 @@ $stmt->close();
                                 </div>
 
                             </div><!-- End Bordered Tabs -->
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-12">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Job List</h5>
+
+                            <!-- Table with stripped rows -->
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Job ID</th>
+                                        <th>Title</th>
+                                        <th>Location</th>
+                                        <th>Salary</th>
+                                        <th>Employer</th>
+                                        <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
+                                        <th data-type="date" data-format="YYYY/DD/MM">Deadline</th>
+                                        <th>Status</th>
+                                        <th>Progress</th>
+                                        <th>Applicants</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+
+                                    $sql = "SELECT jp.job_id, jp.title, jp.description, jp.location, jp.salary, jp.end_at, jp.status, 
+                                            u.username AS posted_by_name, jp.posted_at, e.name as employer_name, e.employer_id,
+                                            ja.progress,
+                                            (SELECT COUNT(*) FROM jobapplications ja2 WHERE ja2.job_id = jp.job_id) AS applicant_count
+                                        FROM jobpostings jp
+                                        LEFT JOIN users u ON jp.posted_by = u.user_id 
+                                        LEFT JOIN employers e ON jp.employer_id = e.employer_id
+                                        INNER JOIN jobapplications ja ON ja.job_id = jp.job_id
+                                        WHERE ja.employee_id = ? 
+                                        ORDER BY jp.job_id DESC";
+
+                                    $stmt = $conn->prepare($sql);
+                                    $stmt->bind_param("i", $employee_id);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+
+                                    $progress_options = [
+                                        0 => "Applied",
+                                        1 => "First Interview",
+                                        2 => "Second Interview",
+                                        3 => "Final Interview",
+                                        4 => "Hired",
+                                        5 => "Declined",
+                                        6 => "Filled"
+                                    ];
+
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            $status_text = ($row['status'] == "1") ? "Active" : "Inactive";
+                                            $status_class = ($row['status'] == "1") ? "bg-primary" : "bg-secondary";
+                                            $progress_text = $progress_options[$row['progress']] ?? "Unknown";
+
+                                            echo "<tr>
+                                            <td>100{$row['job_id']}</td>
+                                            <td><a href='jobs-profile.php?id={$row['job_id']}' class='fw-bold text-decoration-none'>" . htmlspecialchars($row['title']) . "</a></td>
+                                            <td>{$row['location']}</td>
+                                            <td>$" . number_format($row['salary'], 2) . "</td>
+                                            <td><a href='employers-profile.php?id={$row['employer_id']}'>" . htmlspecialchars($row['employer_name']) . "</a></td>
+                                            <td>{$row['posted_at']}</td>
+                                            <td>{$row['end_at']}</td>
+                                            <td><span class='badge $status_class'>{$status_text}</span></td>
+                                            <td><span class='badge bg-info'>{$progress_text}</span></td>
+                                            <td>{$row['applicant_count']}</td>
+                                            ";
+                                            echo "</tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='11' class='text-center'>No Applied jobs found</td></tr>";
+                                    }
+
+                                    $stmt->close();
+                                    $conn->close();
+                                    ?>
+                                </tbody>
+
+                            </table>
+
+                            <!-- End Table with stripped rows -->
 
                         </div>
                     </div>

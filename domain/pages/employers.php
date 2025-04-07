@@ -83,57 +83,88 @@ if (!isset($_SESSION["admin_id"])) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT * FROM `employers`
-                                            WHERE status = 1 
-                                            ORDER BY employer_id DESC";
-
+                                    $sql = "SELECT * FROM `employers` where status = 1 ORDER BY employer_id DESC";
                                     $result = $conn->query($sql);
 
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
-                                            // Convert numeric status to text
-                                            if ($row['status'] == "1") {
-                                                $row['status'] = "Active";
-                                            } elseif ($row['status'] == "2") {
-                                                $row['status'] = "Inactive";
-                                            }
-
-                                            // Assign class based on status
-                                            $status_class = "bg-secondary";
-                                            if ($row['status'] == "Active") {
-                                                $status_class = "bg-primary";
-                                            } elseif ($row['status'] == "Inactive") {
-                                                $status_class = "bg-dark";
-                                            }
-
-
+                                            $status_text = ($row['status'] == 1) ? "Active" : "Inactive";
+                                            $status_class = ($row['status'] == 1) ? "bg-primary" : "bg-dark";
 
                                             echo "<tr>
-                                                <td>{$row['employer_id']}</td>
-                                               <td><a href='employers-profile.php?id={$row['employer_id']}' class='text-primary fw-bold'>{$row['name']}</a></td>
-                                                <td>{$row['location']}</td>
-                                                <td><span class='badge $status_class'>{$row['status']}</span></td>
-                                                <td>{$row['created_at']}</td>
-                                                <td>
-                                                    ";
+                                                    <td>300" . htmlspecialchars($row['employer_id']) . "</td>
+                                                    <td><a href='employers-profile.php?id=" . $row['employer_id'] . "' class='text-primary fw-bold'>" . htmlspecialchars($row['name']) . "</a></td>
+                                                    <td>" . htmlspecialchars($row['location']) . "</td>
+                                                    <td><span class='badge $status_class'>$status_text</span></td>
+                                                    <td>" . htmlspecialchars($row['created_at']) . "</td>
+                                                    <td>";
 
-                                            if ($row['status'] == "Active") {
-                                                echo " <a href='scripts/employer-update.php?id={$row['employer_id']}&status=2' class='btn btn-sm btn-dark' onclick='return confirm(\"Are you sure you want to make the employer  Inactive?\")'>Inactive</a>";
-                                            } else if ($row['status'] == "Inactive") {
-                                                echo " <a href='scripts/employer-update.php?id={$row['employer_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the employer  Active?\")'>Active</a>";
+                                            if ($row['status'] == 1) {
+                                                echo "<a href='scripts/employer-update.php?id={$row['employer_id']}&status=2' class='btn btn-sm btn-dark' onclick='return confirm(\"Are you sure you want to make the employer Inactive?\")'>Deactivate</a>
+                                                <a href='#' class='btn btn-sm btn-warning' data-bs-toggle='modal' data-bs-target='#blockModal' data-employer-id='{$row['employer_id']}'>Block</a>";
+                                            } else {
+                                                echo "<a href='scripts/employer-update.php?id={$row['employer_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the employer Active?\")'>Active</a>";
                                             }
 
                                             echo "</td></tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='10' class='text-center'>No Employer Found</td></tr>";
+                                        echo "<tr><td colspan='6' class='text-center'>No Employer Found</td></tr>";
                                     }
-                                    $conn->close();
                                     ?>
                                 </tbody>
+
                             </table>
 
                             <!-- End Table with stripped rows -->
+
+                            <!-- Block Modal -->
+                            <div class="modal fade" id="blockModal" tabindex="-1" aria-labelledby="blockModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form action="scripts/employer-block.php" method="POST">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="blockModalLabel">Block Employer</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="employer_id" id="blockEmployerId">
+                                                <div class="mb-3">
+                                                    <label for="blockReason" class="form-label">Reason for
+                                                        Blocking</label>
+                                                    <textarea class="form-control" name="reason" id="blockReason"
+                                                        rows="4" required></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-danger">Block Employer</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const blockModal = document.getElementById('blockModal');
+
+                                blockModal.addEventListener('show.bs.modal', function(event) {
+                                    const button = event.relatedTarget;
+                                    const employerId = button.getAttribute('data-employer-id');
+
+                                    const inputField = document.getElementById('blockEmployerId');
+                                    if (inputField && employerId) {
+                                        inputField.value = employerId;
+                                    }
+                                });
+                            });
+                            </script>
+
+
 
                         </div>
                     </div>

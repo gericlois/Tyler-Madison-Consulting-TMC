@@ -37,20 +37,6 @@ if (!isset($_SESSION["admin_id"])) {
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
                 }
-                if ($_GET["success"] == "JobUpdated") {
-                    echo '
-                                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                            <b>The job posting has been successfully updated!</b> Review the updated details to ensure accuracy.
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>';
-                }
-                if ($_GET["success"] == "StatusUpdated") {
-                    echo '
-                                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                            <b>The job posting has been successfully updated!</b> Review the updated details to ensure accuracy.
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>';
-                }
             }
             ?>
         </div><!-- End Page Title -->
@@ -70,7 +56,7 @@ if (!isset($_SESSION["admin_id"])) {
                                 <thead>
                                     <tr>
                                         <th>Activity ID</th>
-                                        <th>User</th>
+                                        <th>Admin</th>
                                         <th>Action</th>
                                         <th>Description</th>
                                         <th>Timestamp</th>

@@ -13,7 +13,7 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
                     </div>
                     <div class="ps-3">
                         <a href="mailto:example@gmail.com" class="text-muted small"><i
-                                class="fas fa-envelope text-primary me-2"></i>example@gmail.com</a>
+                                class="fas fa-envelope text-primary me-2"></i>info@tylermadisonconsulting.com</a>
                     </div>
                 </div>
             </div>
@@ -30,10 +30,6 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
                                     class="fas fa-globe-europe text-primary me-2"></i> English</small></a>
                         <div class="dropdown-menu rounded">
                             <a href="#" class="dropdown-item">English</a>
-                            <a href="#" class="dropdown-item">Bangla</a>
-                            <a href="#" class="dropdown-item">French</a>
-                            <a href="#" class="dropdown-item">Spanish</a>
-                            <a href="#" class="dropdown-item">Arabic</a>
                         </div>
                     </div>
                 </div>

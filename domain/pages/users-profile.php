@@ -111,7 +111,6 @@ $stmt->close();
                                 <thead>
                                     <tr>
                                         <th>Activity ID</th>
-                                        <th>User</th>
                                         <th>Action</th>
                                         <th>Description</th>
                                         <th>Timestamp</th>
@@ -133,7 +132,6 @@ $stmt->close();
                                                                     $user_id = $activity_row['user_id'];
                                                                     echo "<tr>
                                             <td>{$activity_row['activity_id']}</td>
-                                            <td><a href='users-profile.php?id={$user_id}' class='fw-bold text-decoration-none'>{$user_name}</a></td>
                                             <td>{$activity_row['action']}</td>
                                             <td>{$activity_row['description']}</td>
                                             <td>{$activity_row['timestamp']}</td>

@@ -81,7 +81,7 @@ if (!isset($_SESSION["admin_id"])) {
                                         <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
                                         <th data-type="date" data-format="YYYY/DD/MM">Deadline</th>
                                         <th>Status</th>
-                                        <th>Applicants</th> <!-- Added Applicants Column -->
+                                        <th>Applicants</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -96,16 +96,16 @@ if (!isset($_SESSION["admin_id"])) {
                                     WHERE jp.status = 1
                                     ORDER BY jp.job_id DESC";
 
-                                                            $result = $conn->query($sql);
+                                    $result = $conn->query($sql);
 
-                                                            if ($result->num_rows > 0) {
-                                                                while ($row = $result->fetch_assoc()) {
-                                                                    $status_text = ($row['status'] == "1") ? "Active" : "Inactive";
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            $status_text = ($row['status'] == "1") ? "Active" : "Inactive";
 
-                                                                    $status_class = ($row['status'] == "Active") ? "bg-primary" : "bg-primary";
+                                            $status_class = ($row['status'] == "Active") ? "bg-primary" : "bg-primary";
 
-                                                                    echo "<tr>
-                                        <td>{$row['job_id']}</td>
+                                            echo "<tr>
+                                        <td>100{$row['job_id']}</td>
                                         <td>
                                             <a href='jobs-profile.php?id={$row['job_id']}' class='fw-bold text-decoration-none'>
                                                 " . htmlspecialchars($row['title']) . "
@@ -124,12 +124,18 @@ if (!isset($_SESSION["admin_id"])) {
                                         <td>{$row['applicant_count']}</td>
                                         <td>";
 
-                                            if ($row['status'] == "1") {
-                                                echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Inactive</a>";
-                                            } else if ($row['status'] == "2") {
-                                                echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Active</a>";
+                                        if ($row['status'] == "1") {
+                                            echo "<a href='scripts/job-update.php?id={$row['job_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Deactivate</a>";
+                                    
+                                            if ($row['applicant_count'] > 0) {
+                                                echo " <a href='#' class='btn btn-sm btn-success' data-bs-toggle='modal' data-bs-target='#fillJobModal' data-job-id='{$row['job_id']}'>
+                                                            Fill
+                                                        </a>";
                                             }
-
+                                    
+                                        } else if ($row['status'] == "2") {
+                                            echo "<a href='scripts/job-update.php?id={$row['job_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Active</a>";
+                                        }
                                             echo "</td></tr>";
                                         }
                                     } else {
@@ -142,6 +148,76 @@ if (!isset($_SESSION["admin_id"])) {
                             </table>
 
                             <!-- End Table with stripped rows -->
+                            <!-- Fill Job Modal -->
+                            <div class="modal fade" id="fillJobModal" tabindex="-1" aria-labelledby="fillJobModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form action="scripts/job-fill.php" method="POST">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Fill Job Position</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="job_id" id="fillJobId">
+                                                <div class="mb-3">
+                                                    <label for="employeeSelect" class="form-label">Select
+                                                        Employee</label>
+                                                    <select name="employee_id" id="employeeSelect" class="form-select"
+                                                        required>
+                                                        <option value="">Loading applicants...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-success">Confirm Fill</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var fillJobModal = document.getElementById('fillJobModal');
+
+                                fillJobModal.addEventListener('show.bs.modal', function(event) {
+                                    var button = event.relatedTarget;
+                                    var jobId = button.getAttribute('data-job-id');
+                                    document.getElementById('fillJobId').value = jobId;
+
+                                    var dropdown = document.getElementById('employeeSelect');
+                                    dropdown.innerHTML =
+                                        '<option value="">Loading applicants...</option>';
+
+                                    fetch('scripts/fetch-applicants.php?job_id=' + jobId)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            dropdown.innerHTML = '';
+                                            if (data.length > 0) {
+                                                data.forEach(applicant => {
+                                                    let option = document.createElement(
+                                                        'option');
+                                                    option.value = applicant.employee_id;
+                                                    option.textContent = applicant
+                                                        .employee_name;
+                                                    dropdown.appendChild(option);
+                                                });
+                                            } else {
+                                                dropdown.innerHTML =
+                                                    '<option value="">No applicants found</option>';
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error("Error fetching applicants:", error);
+                                            dropdown.innerHTML =
+                                                '<option value="">Error loading applicants</option>';
+                                        });
+                                });
+                            });
+                            </script>
 
                         </div>
                     </div>

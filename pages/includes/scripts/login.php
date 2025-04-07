@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Query to check username and get employee position
     $stmt = $conn->prepare("
-        SELECT u.user_id, u.username, u.password_hash, u.role, e.position
+        SELECT u.user_id, u.username, u.password_hash, u.role, e.position, e.employee_id
         FROM users u
         LEFT JOIN employees e ON u.user_id = e.user_id
         WHERE u.username = ?
@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($user_id, $db_username, $hashed_password, $role, $position);
+        $stmt->bind_result($user_id, $db_username, $hashed_password, $role, $position, $employee_id);
         $stmt->fetch();
 
         // Only allow employees to log in
@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['username'] = $db_username; 
             $_SESSION['role'] = $role;
+            $_SESSION['employee_id'] = $employee_id;
             $_SESSION['position'] = $position ?: 'Not Assigned'; 
 
             // Redirect employee to their dashboard

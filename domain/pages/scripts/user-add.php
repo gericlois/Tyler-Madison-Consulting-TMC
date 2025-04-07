@@ -53,9 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
         $activity_stmt->execute();
         $activity_stmt->close();
-    }
-    
-    if ($stmt->execute()) {
+        
         $_SESSION['success'] = "User added successfully!";
         header("Location: ../users.php");
     } else {

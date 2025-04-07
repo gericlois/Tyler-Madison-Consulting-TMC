@@ -19,7 +19,7 @@ $stmt = $conn->prepare("INSERT INTO comments (comment, job_id, employee_id) VALU
 $stmt->bind_param("sii", $comment, $job_id, $employee_id);
 
 if ($stmt->execute()) {
-    $admin_id = $_SESSION['admin_id']; // Assuming admin ID is stored in session
+    $admin_id = $_SESSION['admin_id'];
     $action = "Added a Comment";
     $activity_description = "Added a Comment to Employee ID {$employee_id}, comment '{$comment}', job '{$job_id}'.";
 
@@ -27,9 +27,7 @@ if ($stmt->execute()) {
     $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
     $activity_stmt->execute();
     $activity_stmt->close();
-}
 
-if ($stmt->execute()) {
     header("Location: ../jobs-profile.php?id=" . $job_id . "&success=AddedComment");
     exit();
 } else {

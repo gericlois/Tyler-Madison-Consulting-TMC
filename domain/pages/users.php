@@ -9,15 +9,21 @@ if (!isset($_SESSION["admin_id"])) {
     include "includes/head.php";
     include "../../pages/includes/connection.php";
 
-    // Fetch current user's role
     $admin_id = $_SESSION["admin_id"];
+
     $role_query = "SELECT role FROM users WHERE user_id = ?";
     $stmt = $conn->prepare($role_query);
     $stmt->bind_param("i", $admin_id);
     $stmt->execute();
     $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        die("User not found.");
+    }
+
     $user = $result->fetch_assoc();
-    $user_role = $user['role']; // 'superadmin' or 'admin'
+    $user_role = $user['role']; // Will be either 'admin' or 'superadmin'
+
 }
 ?>
 
@@ -33,9 +39,9 @@ if (!isset($_SESSION["admin_id"])) {
 
         <div class="pagetitle">
             <h1>Admin Accounts
-                <?php if ($user_role == 'superadmin') : ?>
-                <a href="users-add.php" class="btn btn-primary rounded-pill">
-                    <i class="bi bi-plus-circle me-1"></i> Add New Admin</a>
+                <?php if ($user_role == 'superadmin'): ?>
+                    <a href="users-add.php" class="btn btn-primary rounded-pill">
+                        <i class="bi bi-plus-circle me-1"></i> Add New Admin</a>
                 <?php endif; ?>
             </h1>
             <nav>
@@ -98,14 +104,16 @@ if (!isset($_SESSION["admin_id"])) {
                                     <?php
                                     $sql = "SELECT user_id, first_name, last_name, email, phone, address, role, created_at 
                                             FROM users 
-                                            WHERE role IN ('admin', 'superadmin') and status = 1
-                                            ORDER BY user_id DESC";
+                                            WHERE role IN ('admin', 'superadmin') 
+                                            AND status IN (1, 2)
+                                            ORDER BY user_id DESC
+                                            ";
                                     $result = $conn->query($sql);
 
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>
-                                                    <td>{$row['user_id']}</td>
+                                                    <td>{$row['user_id']}</td>Deactivate
                                                     <td><a href='users-profile.php?id={$row['user_id']}'>{$row['first_name']} {$row['last_name']}</a></td>
                                                     <td>{$row['email']}</td>
                                                     <td>{$row['phone']}</td>
@@ -115,11 +123,11 @@ if (!isset($_SESSION["admin_id"])) {
                                                     <td>";
 
                                             if ($user_role == 'superadmin') {
-                                               
+
                                                 echo "<a href='scripts/user-edit.php?user_id={$row['user_id']}&status=2' 
                                                 class='btn btn-sm btn-danger' 
                                                 onclick='return confirm(\"Are you sure you want to deactivate this admin account?\")'>
-                                                Inactive
+                                                
                                                </a>";
                                             } else {
                                                 echo " <a href='users-profile.php?id={$row['user_id']}' class='btn btn-sm btn-success'>View</a>";

@@ -63,7 +63,7 @@ $stmt->close();
                         <div class="card-body pt-3">
 
                             <h2><?php echo htmlspecialchars($job['title']); ?>
-                                <a href='jobs-edit.php?id=<?= $job_id ?>' class='btn btn-warning rounded-pill'>
+                                <a href='jobs-edit.php?id=<?= $job_id ?>' class='btn btn-success rounded-pill'>
                                     <i class="bi bi-plus-circle me-1"></i>Edit
                                 </a>
                             </h2>
@@ -95,38 +95,38 @@ $stmt->close();
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label"><b></b>Schedule:</b></div>
+                                <div class="col-lg-3 col-md-4 label"><b>Schedule:</b></div>
                                 <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['schedule']); ?>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label"><b></b>Location:</b></div>
+                                <div class="col-lg-3 col-md-4 label"><b>Location:</b></div>
                                 <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['location']); ?>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label"><b></b>Skills:</b></div>
+                                <div class="col-lg-3 col-md-4 label"><b>Skills:</b></div>
                                 <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['skills']); ?>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label"><b></b>Date Posted:</b></div>
+                                <div class="col-lg-3 col-md-4 label"><b>Date Posted:</b></div>
                                 <div class="col-lg-9 col-md-8">
                                     <?php echo htmlspecialchars($job['posted_at']); ?>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label"><b></b>Deadline:</b></div>
+                                <div class="col-lg-3 col-md-4 label"><b>Deadline:</b></div>
                                 <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['end_at']); ?>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label"><b></b>Posted By:</b></div>
+                                <div class="col-lg-3 col-md-4 label"><b>Posted By:</b></div>
                                 <div class="col-lg-9 col-md-8">
                                     <?php echo htmlspecialchars($job['first_name']); ?>
                                     <?php echo htmlspecialchars($job['last_name']); ?>
@@ -156,12 +156,10 @@ $stmt->close();
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT ja.jobapplication_id AS application_id, ja.created_at AS applied_at, 
-                            u.user_id AS employee_id, u.first_name, u.last_name, u.email, u.phone, ja.progress
-                        FROM jobapplications ja
-                        INNER JOIN users u ON ja.employee_id = u.user_id
-                        WHERE ja.job_id = $job_id
-                        ORDER BY ja.created_at DESC";
+                                    $sql = "SELECT ja.jobapplication_id AS application_id, ja.created_at AS applied_at, ja.employee_id AS user_id, u.first_name, u.last_name, u.email, u.phone, ja.progress, e.employee_id AS employee_id FROM jobapplications ja 
+                                    INNER JOIN employees e ON e.employee_id = ja.employee_id 
+                                    INNER JOIN users u ON u.user_id = e.user_id 
+                                    WHERE ja.job_id = $job_id ORDER BY ja.created_at DESC;";
 
                                     $result = $conn->query($sql);
                                     if ($result->num_rows > 0) {
@@ -172,10 +170,11 @@ $stmt->close();
                                                 2 => "Second Interview",
                                                 3 => "Final Interview",
                                                 4 => "Hired",
-                                                5 => "Declined"
+                                                5 => "Declined",
+                                                6 => "Filled"
                                             ];
 
-                                            $comment_sql = "SELECT comment, created_at FROM comments WHERE job_id = ? AND employee_id = ?";
+                                            $comment_sql = "SELECT comment, created_at FROM comments WHERE job_id = ? AND employee_id  = ?";
                                             $comment_stmt = $conn->prepare($comment_sql);
                                             $comment_stmt->bind_param("ii", $job_id, $row['employee_id']);
                                             $comment_stmt->execute();
@@ -188,82 +187,82 @@ $stmt->close();
 
                                             // Display employee's information
                                             echo "<tr>
-                                <td>{$row['first_name']} {$row['last_name']}</td>
-                                <td>{$row['email']}</td>
-                                <td>{$row['phone']}</td>
-                                <td>{$row['applied_at']}</td>
-                                <td>
-                                    <select class='form-select progress-dropdown' data-app-id='{$row['application_id']}'>";
+                                                <td><a href='employees-profile.php?id={$row['employee_id']}' class='text-primary fw-bold'>{$row['first_name']} {$row['last_name']}</a></td>
+                                                <td>{$row['email']}</td>
+                                                <td>{$row['phone']}</td>
+                                                <td>{$row['applied_at']}</td>
+                                                <td>
+                                                    <select class='form-select progress-dropdown' data-app-id='{$row['application_id']}'>";
                                             foreach ($progress_options as $key => $value) {
                                                 $selected = ($row['progress'] == $key) ? "selected" : "";
                                                 echo "<option value='$key' $selected>$value</option>";
                                             }
                                             echo "</select>
-                                </td>
-                                
-                                <td>";
+                                                </td>
+                                                
+                                                <td>";
 
                                             // If comments exist, show them
                                             if (!empty($comments)) {
                                                 echo "<button type='button' class='btn btn-sm btn-info' data-bs-toggle='modal' data-bs-target='#viewCommentsModal{$row['employee_id']}'>View Comments</button>
-                                      <button type='button' class='btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#commentModal{$row['employee_id']}'>Add Comment</button>";
+                                                    <button type='button' class='btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#commentModal{$row['employee_id']}'>Add Comment</button>";
                                             } else {
                                                 // If no comments, show Add Comment button
                                                 echo "<button type='button' class='btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#commentModal{$row['employee_id']}'>Add Comment</button>";
                                             }
 
                                             echo "</td>
-                                <td>
-                                    <a href='employees-profile.php?id={$row['employee_id']}' class='btn btn-sm btn-success'>View Profile</a>
-                                    <a href='scripts/remove-application.php?app_id={$row['application_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to remove this application?\")'>Remove</a>
-                                </td>
-                            </tr>";
+                                                <td>
+                                                    <a href='scripts/remove-application.php?app_id={$row['application_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to remove this application?\")'>Remove</a>
+                                                </td>
+                                            </tr>";
 
                                             // View Comments Modal
                                             if (!empty($comments)) {
                                                 echo "<div class='modal fade' id='viewCommentsModal{$row['employee_id']}' tabindex='-1' aria-labelledby='viewCommentsModalLabel{$row['employee_id']}' aria-hidden='true'>
-                                        <div class='modal-dialog'>
-                                            <div class='modal-content'>
-                                                <div class='modal-header'>
-                                                    <h5 class='modal-title' id='viewCommentsModalLabel{$row['employee_id']}'>View Comments</h5>
-                                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                                </div>
-                                                <div class='modal-body'>";
+                                                        <div class='modal-dialog'>
+                                                            <div class='modal-content'>
+                                                                <div class='modal-header'>
+                                                                    <h5 class='modal-title' id='viewCommentsModalLabel{$row['employee_id']}'>View Comments</h5>
+                                                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                                </div>
+                                                                <div class='modal-body'>";
                                                 foreach ($comments as $comment) {
                                                     echo "<ul><li>" . htmlspecialchars($comment['comment']) . " | <small>" . htmlspecialchars($comment['created_at']) . "</small></li></ul>";
                                                 }
                                                 echo "</div>
-                                            <div class='modal-footer'>
-                                                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>";
+                                                            <div class='modal-footer'>
+                                                                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>";
                                             }
 
 
                                             // Add/Edit Comment Modal
-                                            echo "<div class='modal fade' id='commentModal{$row['employee_id']}' tabindex='-1' aria-labelledby='commentModalLabel{$row['employee_id']}' aria-hidden='true'>
-                                    <div class='modal-dialog'>
-                                        <div class='modal-content'>
-                                            <div class='modal-header'>
-                                                <h5 class='modal-title' id='commentModalLabel{$row['employee_id']}'>Add/Edit Comment</h5>
-                                                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                            </div>
-                                            <div class='modal-body'>
-                                                <form method='POST' action='scripts/save-comment.php'>
-                                                    <input type='hidden' name='job_id' value='{$job_id}'>
-                                                    <input type='hidden' name='employee_id' value='{$row['employee_id']}'>
-                                                    <textarea name='comment' class='form-control'></textarea>
-                                                    <button type='submit' class='btn btn-primary mt-2'>Save Comment</button>
-                                                </form>
-                                            </div>
-                                            <div class='modal-footer'>
-                                                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                  </div>";
+                                            echo "
+                                            <div class='modal fade' id='commentModal{$row['employee_id']}' tabindex='-1' aria-labelledby='commentModalLabel{$row['employee_id']}' aria-hidden='true'>
+                                                <div class='modal-dialog'>
+                                                    <div class='modal-content'>
+                                                        <div class='modal-header'>
+                                                            <h5 class='modal-title' id='commentModalLabel{$row['employee_id']}'>Add/Edit Comment</h5>
+                                                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                        </div>
+                                                        <div class='modal-body'>
+                                                            <form method='POST' action='scripts/save-comment.php'>
+                                                                <input type='hidden' name='job_id' value='{$job_id}'>
+                                                                <input type='hidden' name='employee_id' value='{$row['employee_id']}'>
+                                                                <textarea name='comment' class='form-control'></textarea>
+                                                                <button type='submit' class='btn btn-primary mt-2'>Save Comment</button>
+                                                            </form>
+                                                        </div>
+                                                        <div class='modal-footer'>
+                                                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>";
                                         }
                                     } else {
                                         echo "<tr><td colspan='7' class='text-center'>No employees have applied for this job yet.</td></tr>";

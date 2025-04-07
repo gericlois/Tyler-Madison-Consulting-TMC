@@ -19,9 +19,7 @@ if (isset($_GET['id']) && isset($_GET['status'])) {
         $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
         $activity_stmt->execute();
         $activity_stmt->close();
-    }
-
-    if ($stmt->execute()) {
+        
         header("Location: ../jobs.php?success=StatusUpdated"); 
     } else {
         header("Location: ../jobs.php?error=UpdateFailed"); 
