@@ -47,13 +47,6 @@ session_start();
                                 <p class="mb-4">Great! Your job application has been sent successfully!🎉 <br>Check your email and notifications for any updates.</p>
                                 <a class="btn btn-primary rounded-pill py-3 px-5" href="jobs.php">APPLY FOR ANOTHER JOB!</a>';
                                 }
-                                if ($_GET["error"] == "AlreadyApplied") {
-                                    echo '
-                                <i class="fa fa-check text-primary display-1 text-primary mb-4" style="width: 80px; height: 80px;"></i>
-                                <h1 class="display-1">Application Succesful!</h1>
-                                <p class="mb-4">Great! Your job application has been sent successfully!🎉 <br>Check your email and notifications for any updates.</p>
-                                <a class="btn btn-primary rounded-pill py-3 px-5" href="jobs.php">APPLY FOR ANOTHER JOB!</a>';
-                                }
                             }
                             ?>
 

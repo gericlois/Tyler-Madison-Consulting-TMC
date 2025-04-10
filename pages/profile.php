@@ -103,11 +103,11 @@ $stmt->close();
             <div class="col-lg-4 mb-4">
                 <div class="card shadow-lg">
                     <div class="card-body text-left">
-                        <?php if (!empty($profile_picture)) : ?>
+                        <?php if (!empty($profile_picture)): ?>
                             <!-- Show Profile Picture -->
                             <img src="<?php echo htmlspecialchars($profile_picture); ?>" alt="Profile Picture"
                                 class="rounded-circle img-fluid my-3" width="150" height="150">
-                        <?php else : ?>
+                        <?php else: ?>
                             <!-- Default Profile Picture & Upload Form -->
                             <p>No Profile Picture</p>
                             <!-- Upload Profile Picture Form -->
@@ -147,9 +147,9 @@ $stmt->close();
                     <div class="card-body text-left">
                         <p><strong>Cover Letter:</strong></p>
 
-                        <?php if (!empty($cover_letter)) : ?>
+                        <?php if (!empty($cover_letter)): ?>
                             <p><?php echo nl2br(htmlspecialchars($cover_letter)); ?></p>
-                        <?php else : ?>
+                        <?php else: ?>
                             <form action="includes/scripts/upload_cover_letter.php" method="POST">
                                 <div class="mb-3">
                                     <textarea name="cover_letter" class="form-control"
@@ -164,7 +164,7 @@ $stmt->close();
                         <!-- Resume Upload / View -->
                         <p><strong>Resume:</strong>
 
-                            <?php if (!empty($resume_path)) : ?>
+                            <?php if (!empty($resume_path)): ?>
                                 <!-- Button to Open Modal -->
                                 <button type="button" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0"
                                     data-bs-toggle="modal" data-bs-target="#resumeModal">
@@ -178,54 +178,54 @@ $stmt->close();
                                 </button>
 
                                 <!-- Resume Modal -->
-                        <div class="modal fade" id="resumeModal" tabindex="-1" aria-labelledby="resumeModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="resumeModalLabel">Resume Preview</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
-                                        <iframe src="includes/scripts/<?php echo htmlspecialchars($resume_path); ?>" width="100%"
-                                            height="1000px" style="border: none;"></iframe>
+                            <div class="modal fade" id="resumeModal" tabindex="-1" aria-labelledby="resumeModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="resumeModalLabel">Resume Preview</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+                                            <iframe src="includes/scripts/<?php echo htmlspecialchars($resume_path); ?>"
+                                                width="100%" height="1000px" style="border: none;"></iframe>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Hidden Resume Upload Form (Initially Hidden) -->
-                        <form action="includes/scripts/upload_resume.php" method="POST" enctype="multipart/form-data"
-                            class="row justify-content-center mt-3" id="resumeUploadForm" style="display: none;">
-                            <div class="col-5">
-                                <input type="file" name="resume" accept=".pdf" required class="form-control">
-                            </div>
-                            <div class="col-3">
-                                <button type="submit" class="btn btn-success">Upload</button>
-                            </div>
-                        </form>
+                            <!-- Hidden Resume Upload Form (Initially Hidden) -->
+                            <form action="includes/scripts/upload_resume.php" method="POST" enctype="multipart/form-data"
+                                class="row justify-content-center mt-3" id="resumeUploadForm" style="display: none;">
+                                <div class="col-5">
+                                    <input type="file" name="resume" accept=".pdf" required class="form-control">
+                                </div>
+                                <div class="col-3">
+                                    <button type="submit" class="btn btn-success">Upload</button>
+                                </div>
+                            </form>
 
-                    <?php else : ?>
-                        <!-- Resume Upload Form (Default) -->
-                        <form action="includes/scripts/upload_resume.php" method="POST" enctype="multipart/form-data"
-                            class="row justify-content-center">
-                            <div class="col-5">
-                                <input type="file" name="resume" accept=".pdf" required class="form-control">
-                            </div>
-                            <div class="col-3">
-                                <button type="submit" class="btn btn-success">Upload</button>
-                            </div>
-                        </form>
-                    <?php endif; ?>
-                    </p>
+                        <?php else: ?>
+                            <!-- Resume Upload Form (Default) -->
+                            <form action="includes/scripts/upload_resume.php" method="POST" enctype="multipart/form-data"
+                                class="row justify-content-center">
+                                <div class="col-5">
+                                    <input type="file" name="resume" accept=".pdf" required class="form-control">
+                                </div>
+                                <div class="col-3">
+                                    <button type="submit" class="btn btn-success">Upload</button>
+                                </div>
+                            </form>
+                        <?php endif; ?>
+                        </p>
                     </div>
                 </div>
             </div>
 
             <!-- JavaScript to Show Resume Upload Form -->
             <script>
-                document.getElementById('changeResumeBtn')?.addEventListener('click', function() {
+                document.getElementById('changeResumeBtn')?.addEventListener('click', function () {
                     document.getElementById('resumeUploadForm').style.display = 'flex';
                 });
             </script>
@@ -267,7 +267,7 @@ $stmt->close();
                       LIMIT ?, ?";
 
                         $stmt = $conn->prepare($query);
-                        $stmt->bind_param("iii", $user_id, $start, $limit);
+                        $stmt->bind_param("iii", $employee_id, $start, $limit);
                         $stmt->execute();
                         $result = $stmt->get_result();
                         ?>
@@ -289,7 +289,9 @@ $stmt->close();
                                 <?php if ($result->num_rows > 0): ?>
                                     <?php while ($row = $result->fetch_assoc()): ?>
                                         <tr>
-                                            <td><a href="jobs_details.php?id=<?= $row['job_id']; ?>"><?= htmlspecialchars($row['title']); ?></a></td>
+                                            <td><a
+                                                    href="jobs_details.php?id=<?= $row['job_id']; ?>"><?= htmlspecialchars($row['title']); ?></a>
+                                            </td>
                                             <td><?= htmlspecialchars($row['job_type']); ?></td>
                                             <td><?= htmlspecialchars($row['schedule']); ?></td>
                                             <td><?= htmlspecialchars($row['location'] ?? 'N/A'); ?></td>
@@ -360,7 +362,7 @@ $stmt->close();
 
             <!-- JavaScript for Search Function -->
             <script>
-                document.getElementById('searchInput').addEventListener('keyup', function() {
+                document.getElementById('searchInput').addEventListener('keyup', function () {
                     let filter = this.value.toLowerCase();
                     let rows = document.querySelectorAll('#jobsTable tbody tr');
 

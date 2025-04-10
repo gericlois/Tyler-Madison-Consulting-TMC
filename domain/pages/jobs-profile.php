@@ -275,6 +275,44 @@ $stmt->close();
                 </div>
 
 
+                <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    // Add event listener to each progress dropdown
+                    const progressDropdowns = document.querySelectorAll('.progress-dropdown');
+
+                    progressDropdowns.forEach(function(dropdown) {
+                        dropdown.addEventListener('change', function() {
+                            const appId = dropdown.getAttribute('data-app-id');
+                            const progress = dropdown.value;
+
+                            // Create a FormData object to send data via AJAX
+                            const formData = new FormData();
+                            formData.append('app_id', appId);
+                            formData.append('progress', progress);
+
+                            // Send AJAX request to update the progress in the database
+                            fetch('scripts/update-progress.php', {
+                                    method: 'POST',
+                                    body: formData
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // Optionally, display a success message or update the UI
+                                        console.log("Progress updated successfully.");
+                                    } else {
+                                        // Optionally, display an error message
+                                        alert("Failed to update progress.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error updating progress:", error);
+                                    alert("An error occurred while updating progress.");
+                                });
+                        });
+                    });
+                });
+                </script>
 
 
 

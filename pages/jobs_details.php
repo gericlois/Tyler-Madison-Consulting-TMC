@@ -32,7 +32,7 @@ $stmt->close(); // Close statement but NOT connection
 
 // Check if the user has applied for this job
 $applied = false;
-$employee_id = $_SESSION['user_id'] ?? null; // Assuming user_id is stored in session
+$employee_id = $_SESSION['employee_id'] ?? null; // Assuming user_id is stored in session
 
 if ($employee_id) {
     $stmt = $conn->prepare("SELECT * FROM jobapplications WHERE job_id = ? AND employee_id = ?");
