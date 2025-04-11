@@ -156,10 +156,10 @@ $stmt->close();
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT ja.jobapplication_id AS application_id, ja.created_at AS applied_at, ja.employee_id AS user_id, u.first_name, u.last_name, u.email, u.phone, ja.progress, e.employee_id AS employee_id FROM jobapplications ja 
+                                    $sql = "SELECT ja.status as jobstatus, ja.jobapplication_id AS application_id, ja.created_at AS applied_at, ja.employee_id AS user_id, u.first_name, u.last_name, u.email, u.phone, ja.progress, e.employee_id AS employee_id FROM jobapplications ja 
                                     INNER JOIN employees e ON e.employee_id = ja.employee_id 
                                     INNER JOIN users u ON u.user_id = e.user_id 
-                                    WHERE ja.job_id = $job_id ORDER BY ja.created_at DESC;";
+                                    WHERE ja.job_id = $job_id and ja.status = 1 ORDER BY ja.created_at DESC;";
 
                                     $result = $conn->query($sql);
                                     if ($result->num_rows > 0) {
@@ -169,9 +169,8 @@ $stmt->close();
                                                 1 => "First Interview",
                                                 2 => "Second Interview",
                                                 3 => "Final Interview",
-                                                4 => "Hired",
+                                                4 => "See HR",
                                                 5 => "Declined",
-                                                6 => "Filled"
                                             ];
 
                                             $comment_sql = "SELECT comment, created_at FROM comments WHERE job_id = ? AND employee_id  = ?";
@@ -213,7 +212,7 @@ $stmt->close();
 
                                             echo "</td>
                                                 <td>
-                                                    <a href='scripts/remove-application.php?app_id={$row['application_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to remove this application?\")'>Remove</a>
+                                                    <a href='scripts/job-update.php?id=" . $row["application_id"] . "&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to remove this application?\")'>Remove</a>
                                                 </td>
                                             </tr>";
 

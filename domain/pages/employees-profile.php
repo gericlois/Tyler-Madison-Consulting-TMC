@@ -283,9 +283,9 @@ $stmt->close();
                                         <th>Employer</th>
                                         <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
                                         <th data-type="date" data-format="YYYY/DD/MM">Deadline</th>
+                                        <th>Applicants</th>
                                         <th>Status</th>
                                         <th>Progress</th>
-                                        <th>Applicants</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -331,9 +331,9 @@ $stmt->close();
                                             <td><a href='employers-profile.php?id={$row['employer_id']}'>" . htmlspecialchars($row['employer_name']) . "</a></td>
                                             <td>{$row['posted_at']}</td>
                                             <td>{$row['end_at']}</td>
+                                            <td>{$row['applicant_count']}</td>
                                             <td><span class='badge $status_class'>{$status_text}</span></td>
                                             <td><span class='badge bg-info'>{$progress_text}</span></td>
-                                            <td>{$row['applicant_count']}</td>
                                             ";
                                             echo "</tr>";
                                         }

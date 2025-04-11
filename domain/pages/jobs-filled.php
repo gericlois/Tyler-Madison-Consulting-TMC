@@ -122,7 +122,7 @@ if (!isset($_SESSION["admin_id"])) {
                                                     </td>
                                                     <td>{$row['posted_at']}</td>
                                                     <td>{$row['end_at']}</td>
-                                                    <td><span class='badge bg-primary'>Filled</span></td>
+                                                    <td><span class='badge bg-primary'>Hired</span></td>
                                                     <td><a href='employees-profile.php?id={$row['employee_id']}' class='text-primary fw-bold'>" . ($row['hired_employee_name'] ? htmlspecialchars($row['hired_employee_name']) : '<i>No employee selected</i>') . "</a></td>
                                                 </tr>";
                                         }
