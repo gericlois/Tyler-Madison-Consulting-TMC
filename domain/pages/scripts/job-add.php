@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $job_type = $_POST['job_type'];
     $schedule = $_POST['schedule'];
     $skills = $_POST['skills'];
-    $status = "Active"; 
+    $status = "1"; 
 
     $formatted_deadline = date('Y-m-d H:i:s', strtotime($deadline));
 

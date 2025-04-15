@@ -24,7 +24,11 @@ if (!isset($_SESSION["admin_id"])) {
                 <a href="jobs-add.php" class="btn btn-primary rounded-pill">
                     <i class="bi bi-plus-circle me-1"></i> Add Job
                 </a>
+                <a href="jobs-duplicate.php" class="btn btn-secondary rounded-pill">
+                    <i class="bi bi-files me-1"></i> Duplicate Job
+                </a>
             </h1>
+
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
