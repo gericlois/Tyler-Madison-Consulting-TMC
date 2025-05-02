@@ -31,11 +31,39 @@ include "includes/connection.php";
                 <p class="mb-0">Join us as we explore behind-the-scenes stories, client journeys, industry insights, and everyday adventures.</p>
             </div>
             <div class="row g-4 mb-4 justify-content-center">
-                <iframe width="560" height="560" src="https://www.youtube.com/embed/8uMFNyPXw0c?si=YJi6cgMdh2BGn_za" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <?php
 
-                <iframe width="560" height="560" src="https://www.youtube.com/embed/-0fL7JF4FYo?si=64InzzSRNcZozwn5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                $vlog_query = "SELECT * FROM vlogs WHERE status = 1 ORDER BY created_at DESC";
+                $result = $conn->query($vlog_query);
 
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $youtubeLink = $row['link'];
+                        $title = $row['title'];
+
+                        // Extract YouTube video ID
+                        preg_match('/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/))([^\s&]+)/', $youtubeLink, $matches);
+                        $videoId = $matches[1] ?? null;
+
+                        if ($videoId) {
+                            echo "<hr>
+                                    <div class='col-md-10 text-center'>
+                        <h3 class='display-6 mb-4'>$title</h3>
+                                        <iframe width='100%' height='500' src='https://www.youtube.com/embed/{$videoId}' 
+                                            title='YouTube video player' frameborder='0' 
+                                            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' 
+                                            referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>
+                                    </div>";
+                        }
+                    }
+                } else {
+                    echo "<p class='text-center'>No videos available at the moment.</p>";
+                }
+
+                $conn->close();
+                ?>
             </div>
+
         </div>
     </div>
     <!-- Vlog End -->

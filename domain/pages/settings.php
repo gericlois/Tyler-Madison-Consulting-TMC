@@ -43,56 +43,141 @@ if (!isset($_SESSION["admin_id"])) {
 
         <section class="section">
             <div class="row">
+
+
+                <!-- Vlogs Section -->
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
 
-                            <!-- Activity Section -->
-                            <h5 class="card-title">Admin Activity</h5>
-                            <p>View recent actions performed by admins on the job postings.</p>
+                            <h5 class="card-title">Vlogs
+                                <a href="vlogs-add.php" class="btn btn-primary rounded-pill">
+                                    <i class="bi bi-plus-circle me-1"></i> Add Vlogs
+                                </a>
+                            </h5>
 
-                            <!-- Table to display activity -->
+                            <!-- Table to display Vlogs -->
                             <table class="table datatable">
                                 <thead>
                                     <tr>
-                                        <th>Activity ID</th>
-                                        <th>Admin</th>
+                                        <th>Vlog ID</th>
+                                        <th>Title</th>
+                                        <th>Link</th>
+                                        <th>Status</th>
+                                        <th>Date Created</th>
                                         <th>Action</th>
-                                        <th>Description</th>
-                                        <th>Timestamp</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $activity_sql = "SELECT a.activity_id, a.action, a.description, a.timestamp, u.user_id, u.first_name, u.last_name
-                                    FROM activity a
-                                    LEFT JOIN users u ON a.user_id = u.user_id
-                                    ORDER BY a.timestamp DESC";
+                                    $vlogs = "SELECT * FROM `vlogs` ORDER BY created_at DESC";
+                                    $activity_result = $conn->query($vlogs);
 
-                                                            $activity_result = $conn->query($activity_sql);
+                                    if ($activity_result->num_rows > 0) {
+                                        while ($activity_row = $activity_result->fetch_assoc()) {
+                                            $statusText = $activity_row['status'] == 1 ? 'Visible' : 'Hidden';
+                                            $toggleAction = $activity_row['status'] == 1 ? 0 : 1;
+                                            $buttonLabel = $activity_row['status'] == 1 ? 'Hide' : 'Show';
+                                            $buttonClass = $activity_row['status'] == 1 ? 'btn-danger' : 'btn-success';
 
-                                                            if ($activity_result->num_rows > 0) {
-                                                                while ($activity_row = $activity_result->fetch_assoc()) {
-                                                                    $user_name = htmlspecialchars($activity_row['first_name'] . " " . $activity_row['last_name']);
-                                                                    $user_id = $activity_row['user_id'];
-                                                                    echo "<tr>
-                                            <td>{$activity_row['activity_id']}</td>
-                                            <td><a href='users-profile.php?id={$user_id}' class='fw-bold text-decoration-none'>{$user_name}</a></td>
-                                            <td>{$activity_row['action']}</td>
-                                            <td>{$activity_row['description']}</td>
-                                            <td>{$activity_row['timestamp']}</td>
-                                        </tr>";
+                                            echo "<tr>
+                                <td>{$activity_row['vlogs_id']}</td>
+                                <td>{$activity_row['title']}</td>
+                                <td><a href='{$activity_row['link']}' target='_blank'>View</a></td>
+                                <td>{$statusText}</td>
+                                <td>{$activity_row['created_at']}</td>
+                                <td>
+                                    <a href='scripts/vlog-update.php?id={$activity_row['vlogs_id']}&status={$toggleAction}' 
+                                       class='btn btn-sm {$buttonClass}' 
+                                       onclick='return confirm(\"Are you sure you want to {$buttonLabel} this vlog?\")'>
+                                       {$buttonLabel}
+                                    </a>
+                                </td>
+                            </tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='5' class='text-center'>No activity found</td></tr>";
+                                        echo "<tr><td colspan='6' class='text-center'>No Vlogs Found</td></tr>";
                                     }
                                     ?>
                                 </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Testimonials Section -->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h5 class="card-title">Testimonials
+                                <a href="testimonials-add.php" class="btn btn-primary rounded-pill">
+                                    <i class="bi bi-plus-circle me-1"></i> Add Testimonials
+                                </a>
+                            </h5>
+
+                            <!-- Table to display Testimonials -->
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Testimonial ID</th>
+                                        <th>Name</th>
+                                        <th>Testimonial</th>
+                                        <th>Company</th>
+                                        <th>Rate</th>
+                                        <th>Email</th>
+                                        <th>Date Created</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $vlogs = "SELECT * FROM `testimonials`";
+                                    $activity_result = $conn->query($vlogs);
+
+                                    if ($activity_result->num_rows > 0) {
+                                        while ($testimonial_row = $activity_result->fetch_assoc()) {
+                                            echo "<tr>
+                                                    <td>{$testimonial_row['testimonial_id']}</td>
+                                                    <td>{$testimonial_row['name']}</td>
+                                                    <td>{$testimonial_row['testimonial']}</td>
+                                                    <td>{$testimonial_row['company']}</td>
+                                                    <td>{$testimonial_row['rate']}</td>
+                                                    <td>{$testimonial_row['email']}</td>
+                                                    <td>{$testimonial_row['created_at']}</td>
+                                                    <td>";
+
+                                            // Show Display/Hide button based on status
+                                            if ($testimonial_row['status'] == 0) {
+                                                echo "<a href='scripts/testimonial-update.php?id={$testimonial_row['testimonial_id']}&status=1' 
+                                                            class='btn btn-sm btn-success' 
+                                                            onclick='return confirm(\"Are you sure you want to display this testimonial?\")'>
+                                                            Display
+                                                        </a>";
+                                            } elseif ($testimonial_row['status'] == 1) {
+                                                echo "<a href='scripts/testimonial-update.php?id={$testimonial_row['testimonial_id']}&status=0' 
+                                                            class='btn btn-sm btn-danger' 
+                                                            onclick='return confirm(\"Are you sure you want to hide this testimonial?\")'>
+                                                            Hide
+                                                        </a>";
+                                            }
+
+                                            echo "</td></tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='8' class='text-center'>No Testimonials Found</td></tr>";
+                                    }
+                                    ?>
+                                </tbody>
+
                             </table>
 
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </section>
 

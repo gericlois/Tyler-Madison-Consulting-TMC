@@ -12,10 +12,10 @@
         </li><!-- End Dashboard Nav -->
 
         <li class="nav-item">
-            <a class="nav-link <?= ($current_page == 'jobs.php' || $current_page == 'jobs-inactive.php'|| $current_page == 'jobs-filled.php') ? '' : 'collapsed' ?>" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link <?= ($current_page == 'jobs.php' || $current_page == 'jobs-inactive.php' || $current_page == 'jobs-filled.php') ? '' : 'collapsed' ?>" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-pc-display-horizontal"></i><span>Jobs</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="components-nav" class="nav-content collapse <?= ($current_page == 'jobs.php' || $current_page == 'jobs-inactive.php'|| $current_page == 'jobs-filled.php') ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
+            <ul id="components-nav" class="nav-content collapse <?= ($current_page == 'jobs.php' || $current_page == 'jobs-inactive.php' || $current_page == 'jobs-filled.php') ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="jobs.php" class="<?= ($current_page == 'jobs.php') ? 'active' : '' ?>">
                         <i class="bi bi-circle"></i><span>Jobs</span>
@@ -58,7 +58,7 @@
         </li><!-- End Employees Nav -->
 
         <li class="nav-item">
-            <a class="nav-link <?= ($current_page == 'employers.php' || $current_page == 'employers-inactive.php' || $current_page == 'employers-blocked.php' ) ? '' : 'collapsed' ?>" data-bs-target="#employer-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link <?= ($current_page == 'employers.php' || $current_page == 'employers-inactive.php' || $current_page == 'employers-blocked.php') ? '' : 'collapsed' ?>" data-bs-target="#employer-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-person-badge-fill"></i><span>Employer</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="employer-nav" class="nav-content collapse <?= ($current_page == 'employers.php' || $current_page == 'employers-inactive.php' || $current_page == 'employers-blocked.php') ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
@@ -98,7 +98,7 @@
             </ul>
         </li><!-- End User Nav -->
 
-        <li class="nav-heading">Pages</li>
+        <li class="nav-heading">Website Settings</li>
 
         <li class="nav-item">
             <a class="nav-link <?= ($current_page == 'settings.php') ? '' : 'collapsed' ?>" href="settings.php">
@@ -106,6 +106,13 @@
                 <span>Settings</span>
             </a>
         </li><!-- End Settings Page Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link <?= ($current_page == 'history.php') ? '' : 'collapsed' ?>" href="history.php">
+                <i class="bi bi-eye"></i>
+                <span>Activity History</span>
+            </a>
+        </li><!-- End History Page Nav -->
 
     </ul>
 

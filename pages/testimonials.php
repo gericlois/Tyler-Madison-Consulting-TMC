@@ -36,7 +36,7 @@ include "includes/connection.php";
             <?php
             include "includes/connection.php";
 
-            $query = "SELECT * FROM testimonials ORDER BY created_at DESC";
+            $query = "SELECT * FROM testimonials where status = 1 ORDER BY created_at DESC";
             $result = $conn->query($query);
 
             if ($result->num_rows > 0) {
