@@ -93,6 +93,10 @@ if (!isset($_SESSION["admin_id"])) {
                                         <td>{$row['position']}</td>
                                         <td>{$row['created_at']}</td>
                                         <td>
+                                            <a href='scripts/feedback-request.php?employee_id={$row['employee_id']}' 
+                                                    class='btn btn-sm btn-success' onclick='return confirm('Send feedback request email to this employee?')'> Request Feedback
+                                                    </a>
+
                                            <a href='scripts/employee-update.php?id={$row['employee_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the employee's account inactive?\")'>Deactivate</a>
 
                                             <a href='#' class='btn btn-sm btn-warning' data-bs-toggle='modal' data-bs-target='#blockModal' 

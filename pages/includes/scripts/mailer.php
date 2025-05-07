@@ -3,38 +3,40 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require __DIR__ . '/../../../vendor/autoload.php';
-if (!function_exists('sendEmail')) {
-function sendEmail($to, $subject, $body) {
+
+function sendApplicationEmail($to, $fullName, $jobTitle) {
     $mail = new PHPMailer(true);
 
     try {
-        // SMTP Configuration
+        // SMTP configuration
         $mail->isSMTP();
-        $mail->Host       = 'smtp.example.com'; // Replace with your SMTP server
+        $mail->Host       = 'smtp.secureserver.net';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'your_email@example.com'; // Your email
-        $mail->Password   = 'your_password'; // Your email password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 587;
+        $mail->Username   = 'administrator@tylermadisonconsulting.com';
+        $mail->Password   = 'YB)V=A-^9c3R';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port       = 465;
 
-        // Sender
-        $mail->setFrom('your_email@example.com', 'Your Website');
+        // Email content
+        $mail->setFrom('administrator@tylermadisonconsulting.com', 'Tyler Madison Consulting');
+        $mail->addAddress($to, $fullName);
 
-        // Recipient
-        $mail->addAddress($to);
-
-        // Content
         $mail->isHTML(true);
-        $mail->Subject = $subject;
-        $mail->Body    = $body;
+        $mail->Subject = "Application Received for $jobTitle";
+        $mail->Body    = "
+            <p>Dear <strong>$fullName</strong>,</p>
+            <p>Thank you for applying for the <strong>$jobTitle</strong> position. We will review your application and follow up shortly.</p>
+            <p>Best regards,<br>Tyler Madison Consulting</p>
+        ";
 
         $mail->send();
+        echo "Email sent!";
         return true;
+
     } catch (Exception $e) {
+        echo "Mailer Error: {$mail->ErrorInfo}";
+        error_log("PHPMailer Error: " . $mail->ErrorInfo);
         return false;
     }
 }
-
-}
-
 ?>

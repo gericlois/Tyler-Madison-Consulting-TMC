@@ -2,10 +2,6 @@
 <html lang="en">
 <?php
 session_start();
-if (!isset($_SESSION["user_id"])) { // Ensure correct session variable
-    header("Location: login.php");
-    exit();
-}
 
 include "includes/head.php";
 include "includes/connection.php"; // Make sure the connection is open
@@ -124,8 +120,16 @@ $conn->close(); // Now close connection after all queries are done
 
                 <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
                     <?php if (!$applied): ?>
-                        <a class="btn btn-primary rounded-pill py-3 px-5"
-                            href="includes/scripts/jobsapplication.php?id=<?= $job['job_id']; ?>&status=1">Apply Now</a>
+                        <?php if (!isset($_SESSION['employee_id'])): ?>
+                            <a class="btn btn-primary rounded-pill py-3 px-5" href="login.php">
+                                Apply Now
+                            </a>
+                        <?php else: ?>
+                            <a class="btn btn-primary rounded-pill py-3 px-5"
+                                href="includes/scripts/jobsapplication.php?id=<?= $job['job_id']; ?>&status=1">
+                                Apply Now
+                            </a>
+                        <?php endif; ?>
                     <?php endif; ?>
                     <a href="javascript:history.back()" class="btn btn-success rounded-pill py-3 px-5">Back to
                         Job Listing</a>

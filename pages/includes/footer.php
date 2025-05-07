@@ -17,8 +17,6 @@
                                     <a class="btn btn-md-square rounded-circle me-3" href="#"><i
                                             class="fab fa-facebook-f"></i></a>
                                     <a class="btn btn-md-square rounded-circle me-3" href="#"><i
-                                            class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-md-square rounded-circle me-3" href="#"><i
                                             class="fab fa-instagram"></i></a>
                                     <a class="btn btn-md-square rounded-circle me-0" href="#"><i
                                             class="fab fa-linkedin-in"></i></a>
@@ -30,7 +28,9 @@
                                 <h4 class="text-white mb-4">Useful Links</h4>
                                 <a href="index.php"><i class="fas fa-angle-right me-2"></i> Home</a>
                                 <a href="jobs.php"><i class="fas fa-angle-right me-2"></i> Jobs</a>
-                                <a href="contact.php"><i class="fas fa-angle-right me-2"></i> Contact</a>Contact</a>
+                                <a href="vlogs.php"><i class="fas fa-angle-right me-2"></i> Vlogs</a>
+                                <a href="testimonials.php"><i class="fas fa-angle-right me-2"></i> Testimonials</a>
+                                <a href="contact.php"><i class="fas fa-angle-right me-2"></i> Contact</a>
                             </div>
                         </div>
 
@@ -69,7 +69,7 @@
                                         </div>
                                         <div>
                                             <h4 class="text-white">Telephone</h4>
-                                            <p class="mb-0"> +973 717-7312</p>
+                                            <p class="mb-0"> +973-715-7312</p>
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                         </div>
                         <div class="d-flex flex-column ms-3 flex-shrink-0">
                             <span>Need Help? Call Our Experts</span>
-                            <a href="tel:+01234567890"><span class="text-white">Free: +973 717-7312</span></a>
+                            <a href="tel:+01234567890"><span class="text-white">Free: +973-715-7312</span></a>
                         </div>
                     </div>
                 </div>

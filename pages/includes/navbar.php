@@ -53,7 +53,7 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
                     <a href="index.php"
                         class="nav-item nav-link <?php echo ($current_page == 'index.php') ? 'active' : ''; ?>">Home</a>
                     <a href="jobs.php"
-                        class="nav-item nav-link <?php echo ($current_page == 'jobs.php') ? 'active' : ''; ?>">Jobs</a>
+                    class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Jobs</a>
                     <a href="vlog.php"
                         class="nav-item nav-link <?php echo ($current_page == 'vlog.php') ? 'active' : ''; ?>">Vlog</a>
                         <a href="testimonials.php"
