@@ -37,9 +37,9 @@ session_start();
                                     industry needs
                                 </p>
                                 <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
-                                    <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="#"><i
+                                    <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="vlog.php"><i
                                             class="fas fa-play-circle me-2"></i> Watch Video</a>
-                                    <a class="btn btn-dark rounded-pill py-3 px-4 px-md-5 ms-2" href="#">Learn More</a>
+                                    <a class="btn btn-dark rounded-pill py-3 px-4 px-md-5 ms-2" href="#aboutus">Learn More</a>
                                 </div>
                             </div>
                         </div>
@@ -71,9 +71,9 @@ session_start();
                                     unique needs of the pharmaceutical industry.
                                 </p>
                                 <div class="d-flex justify-content-center justify-content-md-end flex-shrink-0 mb-4">
-                                    <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="#"><i
+                                    <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="vlog.php"><i
                                             class="fas fa-play-circle me-2"></i> Watch Video</a>
-                                    <a class="btn btn-dark rounded-pill py-3 px-4 px-md-5 ms-2" href="#">Learn More</a>
+                                    <a class="btn btn-dark rounded-pill py-3 px-4 px-md-5 ms-2" href="#aboutus">Learn More</a>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +85,7 @@ session_start();
     <!-- Carousel End -->
 
     <!-- About Start -->
-    <div class="container-fluid bg-light about py-5">
+    <div class="container-fluid bg-light about py-5" id="aboutus">
         <div class="container py-5">
             <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
                 <h4 class="text-primary">About Us</h4>

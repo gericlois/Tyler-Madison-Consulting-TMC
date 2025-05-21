@@ -7,10 +7,6 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
         <div class="row gx-0 align-items-center">
             <div class="col-lg-8 text-center text-lg-start mb-lg-0">
                 <div class="d-flex flex-wrap">
-                    <div class="border-end border-primary pe-3">
-                        <a href="#" class="text-muted small"><i class="fas fa-map-marker-alt text-primary me-2"></i>Find
-                            A Location</a>
-                    </div>
                     <div class="ps-3">
                         <a href="mailto:example@gmail.com" class="text-muted small"><i
                                 class="fas fa-envelope text-primary me-2"></i>info@tylermadisonconsulting.com</a>
@@ -20,19 +16,18 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
             <div class="col-lg-4 text-center text-lg-end">
                 <div class="d-flex justify-content-end">
                     <div class="d-flex border-end border-primary pe-3">
-                        <a class="btn p-0 text-primary me-3" href="../domain/pages/index.php"><i class="fab fa-android"></i></a>
-                        <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-instagram"></i></a>
-                        <a class="btn p-0 text-primary me-0" href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a class="btn p-0 text-primary me-3" href="../domain/pages/index.php"><i
+                                class="fab fa-android"></i></a>
+                        <a class="btn p-0 text-primary me-3"
+                            href="https://www.facebook.com/profile.php?id=61574810855929" target="_blank"
+                            rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn p-0 text-primary me-3" href="https://www.instagram.com/tylermadisonconsulting/"
+                            target="_blank" rel="noopener noreferrer"><i
+                                    class="fab fa-instagram"></i></a>
+                        <a class="btn p-0 text-primary me-0"
+                            href="https://www.linkedin.com/in/tyler-madison-consulting-undefined-b39914365/"
+                            target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
                     </div>
-                    <div class="dropdown ms-3">
-                        <a href="#" class="dropdown-toggle text-dark" data-bs-toggle="dropdown"><small><i
-                                    class="fas fa-globe-europe text-primary me-2"></i> English</small></a>
-                        <div class="dropdown-menu rounded">
-                            <a href="#" class="dropdown-item">English</a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -52,11 +47,10 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
                 <div class="navbar-nav mx-0 mx-lg-auto">
                     <a href="index.php"
                         class="nav-item nav-link <?php echo ($current_page == 'index.php') ? 'active' : ''; ?>">Home</a>
-                    <a href="jobs.php"
-                    class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Jobs</a>
+                    <a href="jobs.php" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Jobs</a>
                     <a href="vlog.php"
                         class="nav-item nav-link <?php echo ($current_page == 'vlog.php') ? 'active' : ''; ?>">Vlog</a>
-                        <a href="testimonials.php"
+                    <a href="testimonials.php"
                         class="nav-item nav-link <?php echo ($current_page == 'testimonials.php') ? 'active' : ''; ?>">Testimonials</a>
                     <a href="contact.php"
                         class="nav-item nav-link <?php echo ($current_page == 'contact.php') ? 'active' : ''; ?>">Contact</a>
@@ -66,12 +60,12 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
                             data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search"></i></button>
 
                         <?php if (isset($_SESSION['user_id'])): ?>
-                        <a href="profile.php"
-                            class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Profile</a>
-                        <a href="includes/scripts/logout.php"
-                            class="btn btn-danger rounded-pill py-2 px-4 ms-3 flex-shrink-0">Logout</a>
+                            <a href="profile.php"
+                                class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Profile</a>
+                            <a href="includes/scripts/logout.php"
+                                class="btn btn-danger rounded-pill py-2 px-4 ms-3 flex-shrink-0">Logout</a>
                         <?php else: ?>
-                        <a href="login.php" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Login</a>
+                            <a href="login.php" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Login</a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -84,11 +78,11 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
                 </a>
                 <div class="d-flex flex-column ms-3">
                     <?php if (isset($_SESSION['user_id'])): ?>
-                    <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
-                    <span class="text-dark"><?php echo htmlspecialchars($_SESSION['position']); ?></span>
+                        <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                        <span class="text-dark"><?php echo htmlspecialchars($_SESSION['position']); ?></span>
                     <?php else: ?>
-                    <span>Guest</span>
-                    <span class="text-dark">Visitor</span>
+                        <span>Guest</span>
+                        <span class="text-dark">Visitor</span>
                     <?php endif; ?>
                 </div>
             </div>

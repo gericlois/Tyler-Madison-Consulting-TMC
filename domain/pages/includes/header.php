@@ -42,19 +42,36 @@
                     <li class="dropdown-header">
                         <h6><?php echo $adminName; ?></h6>
                         <span>
-                            <?php echo ($_SESSION['role']  == 'superadmin') ? 'Super Administrator' : 'Administrator'; ?>
+                            <?php
+                            if ($_SESSION['role'] == 'superadmin') {
+                                echo 'Super Administrator';
+                            } elseif ($_SESSION['role'] == 'employer') {
+                                echo 'Employer ';
+                            } else {
+                                echo 'Administrator';
+                            }
+                            ?>
                         </span>
+
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile.php?id=<?php echo $_SESSION['admin_id']; ?>">
+                        <?php
+                        if ($_SESSION['role'] === 'employer') {
+                            $profileLink = 'employers-profile.php?id=' . $_SESSION['employer_id'];
+                        } else {
+                            $profileLink = 'users-profile.php?id=' . $_SESSION['admin_id'];
+                        }
+                        ?>
+                        <a class="dropdown-item d-flex align-items-center" href="<?php echo $profileLink; ?>">
                             <i class="bi bi-person"></i>
                             <span>My Profile</span>
                         </a>
                     </li>
+
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -67,13 +84,6 @@
                     </li>
                     <li>
                         <hr class="dropdown-divider">
-                    </li>
-
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <i class="bi bi-question-circle"></i>
-                            <span>Need Help?</span>
-                        </a>
                     </li>
                     <li>
                         <hr class="dropdown-divider">

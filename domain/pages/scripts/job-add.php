@@ -1,37 +1,56 @@
 <?php
-// Start the session at the beginning of the file
 session_start();
 
 include "../../../pages/includes/connection.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the admin ID is set in the session
+    // Check if admin_id is set
     if (isset($_SESSION['admin_id'])) {
-        $admin_id = $_SESSION['admin_id']; // Assuming the admin's ID is stored in the session
+        $admin_id = $_SESSION['admin_id']; 
     } else {
-        // Handle the case when admin_id is not set (you can redirect, show an error, or handle it accordingly)
         header("Location: ../login.php?error=AdminNotLoggedIn");
         exit();
     }
 
+    // Sanitize and get POST data
     $title = $_POST['title'];
     $description = $_POST['description'];
     $location = $_POST['location'];
     $salary = $_POST['salary'];
-    $posted_by = $_POST['posted_by'];
-    $deadline = $_POST['deadline']; 
+    $posted_by = $_POST['posted_by']; // This should be the admin_id or employer_id who posted
+    $deadline = $_POST['deadline'];
     $job_type = $_POST['job_type'];
     $schedule = $_POST['schedule'];
     $skills = $_POST['skills'];
-    $status = "1"; 
+    $status = "1";
 
+    // New: get employer_id from POST
+    $employer_id = $_POST['employer_id'];
+
+    // Format deadline to MySQL datetime
     $formatted_deadline = date('Y-m-d H:i:s', strtotime($deadline));
 
+    // Prepare statement with employer_id
     $stmt = $conn->prepare("INSERT INTO jobpostings 
-        (title, job_type, schedule, skills, end_at, description, location, salary, posted_by, status, posted_at) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+        (title, job_type, schedule, skills, end_at, description, location, salary, posted_by, employer_id, status, posted_at) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 
-    $stmt->bind_param("sssssssdis", $title, $job_type, $schedule, $skills, $formatted_deadline, $description, $location, $salary, $posted_by, $status);
+    // Bind parameters (string, string, string, string, string, string, string, double, int, int, string)
+$stmt->bind_param(
+    "sssssssdiis",
+    $title,
+    $job_type,
+    $schedule,
+    $skills,
+    $formatted_deadline,
+    $description,
+    $location,
+    $salary,
+    $posted_by,
+    $employer_id,
+    $status
+);
+
 
     if ($stmt->execute()) {
         $action = "Job Posting Added";
@@ -39,7 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $activity_stmt = $conn->prepare("INSERT INTO activity (user_id, action, description) VALUES (?, ?, ?)");
         $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
-
         $activity_stmt->execute();
         $activity_stmt->close();
 

@@ -92,7 +92,7 @@ if (!isset($_SESSION["admin_id"])) {
                                             $status_class = ($row['status'] == 1) ? "bg-primary" : "bg-dark";
 
                                             echo "<tr>
-                                                    <td>300" . htmlspecialchars($row['employer_id']) . "</td>
+                                                    <td>00" . htmlspecialchars($row['employer_id']) . "</td>
                                                     <td><a href='employers-profile.php?id=" . $row['employer_id'] . "' class='text-primary fw-bold'>" . htmlspecialchars($row['name']) . "</a></td>
                                                     <td>" . htmlspecialchars($row['location']) . "</td>
                                                     <td><span class='badge $status_class'>$status_text</span></td>

@@ -4,10 +4,19 @@
 session_start();
 if (!isset($_SESSION["admin_id"])) {
     header("Location: login.php");
-} else {
-    include "includes/head.php";
-    include "../../pages/includes/connection.php";
-} ?>
+    exit();
+}
+
+include "includes/head.php";
+include "../../pages/includes/connection.php";
+
+// Capture employer ID if role is employer
+$employer_id_filter = "";
+if ($_SESSION["role"] === "employer" && isset($_SESSION["employer_id"])) {
+    $employer_id = intval($_SESSION["employer_id"]);
+    $employer_id_filter = "AND jp.employer_id = $employer_id";
+}
+ ?>
 
 <body>
 
@@ -86,17 +95,15 @@ if (!isset($_SESSION["admin_id"])) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT jp.job_id, jp.title, jp.description, jp.location, jp.salary, jp.end_at, jp.status, 
-                                    u.username AS posted_by_name, jp.posted_at, e.name AS employer_name, e.employer_id, emp.employee_id,
-                                    CONCAT(us.first_name, ' ', us.last_name) AS hired_employee_name
-                                FROM jobpostings jp
-                                LEFT JOIN users u ON jp.posted_by = u.user_id 
-                                LEFT JOIN employers e ON jp.employer_id = e.employer_id
-                                LEFT JOIN jobapplications ja ON jp.job_id = ja.job_id AND ja.progress = 6 AND ja.status = 2
-                                LEFT JOIN employees emp ON ja.employee_id = emp.employee_id  -- Joined employees table on employee_id
-                                LEFT JOIN users us ON emp.user_id = us.user_id  -- Joined users table on user_id for employee details
-                                WHERE jp.status = 3
-                                ORDER BY jp.job_id DESC";
+                                   $sql = "SELECT jp.job_id, jp.title, jp.description, jp.location, jp.salary, jp.end_at, jp.status, 
+                                        u.username AS posted_by_name, jp.posted_at, e.name as employer_name, e.employer_id,
+                                        (SELECT COUNT(*) FROM jobapplications ja WHERE ja.job_id = jp.job_id) AS applicant_count
+                                    FROM jobpostings jp
+                                    LEFT JOIN users u ON jp.posted_by = u.user_id 
+                                    LEFT JOIN employers e ON jp.employer_id = e.employer_id
+                                    WHERE jp.status = 3 $employer_id_filter
+                                    ORDER BY jp.job_id DESC";
+
                         
                                     $result = $conn->query($sql);
 

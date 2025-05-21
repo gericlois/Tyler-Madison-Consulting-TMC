@@ -14,12 +14,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Prepare and execute query
-    $stmt = $conn->prepare("SELECT user_id, username, password_hash, first_name, last_name, role FROM users WHERE username = ? AND role IN ('admin', 'superadmin')");
+    $stmt = $conn->prepare("SELECT user_id, username, password_hash, first_name, last_name, role FROM users WHERE username = ? AND role IN ('admin', 'superadmin', 'employer')");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $stmt->store_result();
 
-    // Verify if admin exists
+    // Verify if admin/employer exists
     if ($stmt->num_rows > 0) {
         $stmt->bind_result($user_id, $db_username, $db_password, $first_name, $last_name, $role);
         $stmt->fetch();
@@ -30,9 +30,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['first_name'] = $first_name;
             $_SESSION['last_name'] = $last_name;
             $_SESSION['username'] = $db_username;
-            $_SESSION['role'] = $role; // Store role in session
-            
-            header("Location: ../index.php"); // Redirect to admin dashboard
+            $_SESSION['role'] = $role;
+
+            // If employer, get employer_id
+            if ($role === 'employer') {
+                $emp_stmt = $conn->prepare("SELECT employer_id FROM employers WHERE user_id = ?");
+                $emp_stmt->bind_param("i", $user_id);
+                $emp_stmt->execute();
+                $emp_stmt->bind_result($employer_id);
+                if ($emp_stmt->fetch()) {
+                    $_SESSION['employer_id'] = $employer_id;
+                }
+                $emp_stmt->close();
+            }
+
+            header("Location: ../index.php"); // Redirect to dashboard
             exit();
         } else {
             header("Location: ../login.php?error=invalid_password");

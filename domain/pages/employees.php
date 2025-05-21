@@ -85,7 +85,7 @@ if (!isset($_SESSION["admin_id"])) {
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>
-                                        <td>200{$row['employee_id']}</td>
+                                        <td>00{$row['employee_id']}</td>
                                         <td><a href='employees-profile.php?id={$row['employee_id']}' class='text-primary fw-bold'>{$row['first_name']} {$row['last_name']}</a></td>
                                         <td>{$row['email']}</td>
                                         <td>{$row['phone']}</td>

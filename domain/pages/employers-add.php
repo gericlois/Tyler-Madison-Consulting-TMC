@@ -36,6 +36,17 @@ if (!isset($_SESSION["admin_id"])) {
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Add Employer</h5>
+                            <?php
+            if (isset($_GET['error'])) {
+                if ($_GET["error"] == "EmailDuplicate") {
+                    echo '
+                                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                            <b>A employer email is alread taken, pick another email.</b>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </div>';
+                }
+            }
+            ?>
 
                             <!-- Add Employer Form -->
                             <form action="scripts/employer-add.php" method="POST" enctype="multipart/form-data">
@@ -56,9 +67,31 @@ if (!isset($_SESSION["admin_id"])) {
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="location" class="col-sm-2 col-form-label">Location</label>
+                                    <label for="location" class="col-sm-2 col-form-label">Username</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="location" name="location" required>
+                                        <input type="text" class="form-control" id="username" name="username" required>
+                                    </div>
+                                </div>
+
+
+                                <div class="row mb-3">
+                                    <label for="location" class="col-sm-2 col-form-label">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="password" name="password" required>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="location" class="col-sm-2 col-form-label">Cellphone Number</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="phone" name="phone" required>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="location" class="col-sm-2 col-form-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="email" name="email" required>
                                     </div>
                                 </div>
 

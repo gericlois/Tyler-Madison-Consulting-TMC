@@ -14,12 +14,18 @@
                                     businesses and top-tier professionals, delivering tailored staffing solutions that
                                     drive innovation, efficiency, and success.</p>
                                 <div class="footer-btn d-flex">
-                                    <a class="btn btn-md-square rounded-circle me-3" href="#"><i
-                                            class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-md-square rounded-circle me-3" href="#"><i
-                                            class="fab fa-instagram"></i></a>
-                                    <a class="btn btn-md-square rounded-circle me-0" href="#"><i
-                                            class="fab fa-linkedin-in"></i></a>
+                                    <a class="btn btn-md-square rounded-circle me-3"
+                                        href="https://www.facebook.com/profile.php?id=61574810855929" target="_blank"
+                                        rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                                    <a class="btn btn-md-square rounded-circle me-3"
+                                        href="https://www.instagram.com/tylermadisonconsulting/" target="_blank"
+                                        rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                                    <a class="btn btn-md-square rounded-circle me-0"
+                                        href="https://www.linkedin.com/in/tyler-madison-consulting-undefined-b39914365/"
+                                        target="_blank" rel="noopener noreferrer">
+                                        <i class="fab fa-linkedin-in"></i>
+                                    </a>
+
                                 </div>
                             </div>
                         </div>

@@ -121,27 +121,32 @@ if (isset($_GET['duplicate_id'])) {
                                             value="<?= $jobData && $jobData['deadline'] ? date('Y-m-d\TH:i', strtotime($jobData['deadline'])) : '' ?>">
                                     </div>
                                 </div>
-
-                                <div class="row mb-3">
-                                    <label for="employer_id" class="col-sm-2 col-form-label">Employer</label>
-                                    <div class="col-sm-10">
-                                        <select class="form-control" id="employer_id" name="employer_id" required>
-                                            <option value="">Select Employer</option>
-                                            <?php
-                                            $query = "SELECT employer_id, name FROM employers ORDER BY name ASC";
-                                            $result = $conn->query($query);
-                                            if ($result->num_rows > 0) {
-                                                while ($row = $result->fetch_assoc()) {
-                                                    $selected = ($jobData && $jobData['employer_id'] == $row['employer_id']) ? 'selected' : '';
-                                                    echo "<option value='" . $row['employer_id'] . "' $selected>" . $row['name'] . "</option>";
+                                
+                                <?php if ($_SESSION["role"] === "employer" && isset($_SESSION["employer_id"])): ?>
+                                    <input type="hidden" name="employer_id" value="<?= intval($_SESSION["employer_id"]) ?>">
+                                <?php else: ?>
+                                    <div class="row mb-3">
+                                        <label for="employer_id" class="col-sm-2 col-form-label">Employer</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control" id="employer_id" name="employer_id" required>
+                                                <option value="">Select Employer</option>
+                                                <?php
+                                                $query = "SELECT employer_id, name FROM employers ORDER BY name ASC";
+                                                $result = $conn->query($query);
+                                                if ($result->num_rows > 0) {
+                                                    while ($row = $result->fetch_assoc()) {
+                                                        $selected = ($jobData && $jobData['employer_id'] == $row['employer_id']) ? 'selected' : '';
+                                                        echo "<option value='" . $row['employer_id'] . "' $selected>" . $row['name'] . "</option>";
+                                                    }
+                                                } else {
+                                                    echo "<option value=''>No Employers Available</option>";
                                                 }
-                                            } else {
-                                                echo "<option value=''>No Employers Available</option>";
-                                            }
-                                            ?>
-                                        </select>
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
+<?php endif; ?>
+
 
                                 <input type="hidden" id="status" name="status" value="<?= $jobData ? $jobData['status'] : '1' ?>">
 

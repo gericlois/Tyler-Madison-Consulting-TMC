@@ -4,9 +4,17 @@
 session_start();
 if (!isset($_SESSION["admin_id"])) {
     header("Location: login.php");
-} else {
-    include "includes/head.php";
-    include "../../pages/includes/connection.php";
+    exit();
+}
+
+include "includes/head.php";
+include "../../pages/includes/connection.php";
+
+// Capture employer ID if role is employer
+$employer_id_filter = "";
+if ($_SESSION["role"] === "employer" && isset($_SESSION["employer_id"])) {
+    $employer_id = intval($_SESSION["employer_id"]);
+    $employer_id_filter = "AND jp.employer_id = $employer_id";
 } ?>
 
 <body>
@@ -97,8 +105,9 @@ if (!isset($_SESSION["admin_id"])) {
                                     FROM jobpostings jp
                                     LEFT JOIN users u ON jp.posted_by = u.user_id 
                                     LEFT JOIN employers e ON jp.employer_id = e.employer_id
-                                    WHERE jp.status = 1
+                                    WHERE jp.status = 1 $employer_id_filter
                                     ORDER BY jp.job_id DESC";
+
 
                                     $result = $conn->query($sql);
 
@@ -109,7 +118,7 @@ if (!isset($_SESSION["admin_id"])) {
                                             $status_class = ($row['status'] == "Active") ? "bg-primary" : "bg-primary";
 
                                             echo "<tr>
-                                        <td>100{$row['job_id']}</td>
+                                        <td>00{$row['job_id']}</td>
                                         <td>
                                             <a href='jobs-profile.php?id={$row['job_id']}' class='fw-bold text-decoration-none'>
                                                 " . htmlspecialchars($row['title']) . "
@@ -128,18 +137,18 @@ if (!isset($_SESSION["admin_id"])) {
                                         <td>{$row['applicant_count']}</td>
                                         <td>";
 
-                                        if ($row['status'] == "1") {
-                                            echo "<a href='scripts/job-update.php?id={$row['job_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Deactivate</a>";
-                                    
-                                            if ($row['applicant_count'] > 0) {
-                                                echo " <a href='#' class='btn btn-sm btn-success' data-bs-toggle='modal' data-bs-target='#fillJobModal' data-job-id='{$row['job_id']}'>
+                                            if ($row['status'] == "1") {
+                                                echo "<a href='scripts/job-update.php?id={$row['job_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Deactivate</a>";
+
+                                                if ($row['applicant_count'] > 0) {
+                                                    echo " <a href='#' class='btn btn-sm btn-success' data-bs-toggle='modal' data-bs-target='#fillJobModal' data-job-id='{$row['job_id']}'>
                                                             Fill
                                                         </a>";
+                                                }
+
+                                            } else if ($row['status'] == "2") {
+                                                echo "<a href='scripts/job-update.php?id={$row['job_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Active</a>";
                                             }
-                                    
-                                        } else if ($row['status'] == "2") {
-                                            echo "<a href='scripts/job-update.php?id={$row['job_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Active</a>";
-                                        }
                                             echo "</td></tr>";
                                         }
                                     } else {
@@ -184,43 +193,43 @@ if (!isset($_SESSION["admin_id"])) {
                                 </div>
                             </div>
                             <script>
-                            document.addEventListener("DOMContentLoaded", function() {
-                                var fillJobModal = document.getElementById('fillJobModal');
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    var fillJobModal = document.getElementById('fillJobModal');
 
-                                fillJobModal.addEventListener('show.bs.modal', function(event) {
-                                    var button = event.relatedTarget;
-                                    var jobId = button.getAttribute('data-job-id');
-                                    document.getElementById('fillJobId').value = jobId;
+                                    fillJobModal.addEventListener('show.bs.modal', function (event) {
+                                        var button = event.relatedTarget;
+                                        var jobId = button.getAttribute('data-job-id');
+                                        document.getElementById('fillJobId').value = jobId;
 
-                                    var dropdown = document.getElementById('employeeSelect');
-                                    dropdown.innerHTML =
-                                        '<option value="">Loading applicants...</option>';
+                                        var dropdown = document.getElementById('employeeSelect');
+                                        dropdown.innerHTML =
+                                            '<option value="">Loading applicants...</option>';
 
-                                    fetch('scripts/fetch-applicants.php?job_id=' + jobId)
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            dropdown.innerHTML = '';
-                                            if (data.length > 0) {
-                                                data.forEach(applicant => {
-                                                    let option = document.createElement(
-                                                        'option');
-                                                    option.value = applicant.employee_id;
-                                                    option.textContent = applicant
-                                                        .employee_name;
-                                                    dropdown.appendChild(option);
-                                                });
-                                            } else {
+                                        fetch('scripts/fetch-applicants.php?job_id=' + jobId)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                dropdown.innerHTML = '';
+                                                if (data.length > 0) {
+                                                    data.forEach(applicant => {
+                                                        let option = document.createElement(
+                                                            'option');
+                                                        option.value = applicant.employee_id;
+                                                        option.textContent = applicant
+                                                            .employee_name;
+                                                        dropdown.appendChild(option);
+                                                    });
+                                                } else {
+                                                    dropdown.innerHTML =
+                                                        '<option value="">No applicants found</option>';
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error("Error fetching applicants:", error);
                                                 dropdown.innerHTML =
-                                                    '<option value="">No applicants found</option>';
-                                            }
-                                        })
-                                        .catch(error => {
-                                            console.error("Error fetching applicants:", error);
-                                            dropdown.innerHTML =
-                                                '<option value="">Error loading applicants</option>';
-                                        });
+                                                    '<option value="">Error loading applicants</option>';
+                                            });
+                                    });
                                 });
-                            });
                             </script>
 
                         </div>

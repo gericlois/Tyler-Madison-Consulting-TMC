@@ -48,7 +48,7 @@ include "includes/connection.php";
                         $stars .= '<i class="fas fa-star"></i>';
                     }
 
-                            echo '
+                    echo '
                 <div class="testimonial-item bg-light rounded">
                     <div class="row g-0">
                         <div class="col-4 col-lg-4 col-xl-3">
@@ -67,11 +67,12 @@ include "includes/connection.php";
                         </div>
                     </div>
                 </div>';
-                        }
+                }
 
                 echo '</div>';
             } else {
-                echo '<p>No testimonials available at the moment.</p>';
+                echo '<div class="text-center fw-bold">No testimonials available at the moment.</div>';
+
             }
             ?>
 

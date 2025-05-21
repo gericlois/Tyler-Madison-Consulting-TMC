@@ -4,10 +4,19 @@
 session_start();
 if (!isset($_SESSION["admin_id"])) {
     header("Location: login.php");
-} else {
-    include "includes/head.php";
-    include "../../pages/includes/connection.php";
-} ?>
+    exit();
+}
+
+include "includes/head.php";
+include "../../pages/includes/connection.php";
+
+// Capture employer ID if role is employer
+$employer_id_filter = "";
+if ($_SESSION["role"] === "employer" && isset($_SESSION["employer_id"])) {
+    $employer_id = intval($_SESSION["employer_id"]);
+    $employer_id_filter = "AND jp.employer_id = $employer_id";
+}
+ ?>
 
 <body>
 
@@ -88,13 +97,14 @@ if (!isset($_SESSION["admin_id"])) {
                                 <tbody>
                                     <?php
                                     $sql = "SELECT jp.job_id, jp.title, jp.description, jp.location, jp.salary, jp.end_at, jp.status, 
-                                            u.username AS posted_by_name, jp.posted_at, e.name as employer_name, e.employer_id,
-                                            (SELECT COUNT(*) FROM jobapplications ja WHERE ja.job_id = jp.job_id) AS applicant_count
-                                        FROM jobpostings jp
-                                        LEFT JOIN users u ON jp.posted_by = u.user_id 
-                                        LEFT JOIN employers e ON jp.employer_id = e.employer_id
-                                        WHERE jp.status = 2
-                                        ORDER BY jp.job_id DESC";
+                                        u.username AS posted_by_name, jp.posted_at, e.name as employer_name, e.employer_id,
+                                        (SELECT COUNT(*) FROM jobapplications ja WHERE ja.job_id = jp.job_id) AS applicant_count
+                                    FROM jobpostings jp
+                                    LEFT JOIN users u ON jp.posted_by = u.user_id 
+                                    LEFT JOIN employers e ON jp.employer_id = e.employer_id
+                                    WHERE jp.status = 2 $employer_id_filter
+                                    ORDER BY jp.job_id DESC";
+
 
                                                                 $result = $conn->query($sql);
 

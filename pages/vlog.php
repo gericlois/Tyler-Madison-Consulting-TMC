@@ -23,6 +23,7 @@ include "includes/connection.php";
     </div>
 
     <!-- Vlog Start -->
+     
     <div class="container-fluid service py-5">
         <div class="container py-5">
             <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
@@ -57,7 +58,7 @@ include "includes/connection.php";
                         }
                     }
                 } else {
-                    echo "<p class='text-center'>No videos available at the moment.</p>";
+                    echo '<div class="text-center fw-bold">No videos available at the moment.</div>';
                 }
 
                 $conn->close();
