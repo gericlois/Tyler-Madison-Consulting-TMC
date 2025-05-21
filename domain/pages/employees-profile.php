@@ -89,12 +89,12 @@ $stmt->close();
                                 </a>
                             </h2>
                             <h3><?php
-                            if ($employee['status'] == "1") {
-                                echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
-                            } else if ($employee['status'] == "2") {
-                                echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
-                            }
-                            ?></h3>
+                                if ($employee['status'] == "1") {
+                                    echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
+                                } else if ($employee['status'] == "2") {
+                                    echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
+                                }
+                                ?></h3>
                             <div class="social-links mt-2">
                                 <a href="<?php echo htmlspecialchars($employee['link_facebook']); ?>"
                                     class="facebook"><i class="bi bi-facebook"></i></a>
@@ -171,33 +171,33 @@ $stmt->close();
                                         <div class="col-lg-3 col-md-4 label">Resume</div>
                                         <div class="col-lg-9 col-md-8">
                                             <?php if (!empty($employee['resume_path'])): ?>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                data-bs-target="#resumeModal">
-                                                View Resume
-                                            </button>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#resumeModal">
+                                                    View Resume
+                                                </button>
 
-                                            <div class="modal fade" id="resumeModal" tabindex="-1"
-                                                aria-labelledby="resumeModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="resumeModalLabel">Resume Preview
-                                                            </h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body"
-                                                            style="max-height: 80vh; overflow-y: auto;">
-                                                            <iframe
-                                                                src="/<?php echo htmlspecialchars($employee['resume_path']); ?>"
-                                                                width="100%" height="1000px"
-                                                                style="border: none;"></iframe>
+                                                <div class="modal fade" id="resumeModal" tabindex="-1"
+                                                    aria-labelledby="resumeModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="resumeModalLabel">Resume Preview
+                                                                </h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body"
+                                                                style="max-height: 80vh; overflow-y: auto;">
+                                                                <iframe
+                                                                    src="/<?php echo htmlspecialchars($employee['resume_path']); ?>"
+                                                                    width="100%" height="1000px"
+                                                                    style="border: none;"></iframe>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                             <?php else: ?>
-                                            <p>No Resume</p>
+                                                <p>No Resume</p>
                                             <?php endif; ?>
 
                                         </div>

@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $employer_id = intval($_POST['employer_id']);
     $reason = trim($_POST['reason']);
     $admin_id = $_SESSION["admin_id"];
+    $user_type = "employer"; // New user type
 
     if (empty($reason)) {
         header("Location: ../employer.php?error=NoReason");
@@ -25,9 +26,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $update_stmt->close();
 
     // Insert into block_history
-    $block_sql = "INSERT INTO block_history (user_id, blocked_by, reason) VALUES (?, ?, ?)";
+    $block_sql = "INSERT INTO block_history (id, blocked_by, reason, user_type) VALUES (?, ?, ?, ?)";
     $block_stmt = $conn->prepare($block_sql);
-    $block_stmt->bind_param("iis", $employer_id, $admin_id, $reason);
+    $block_stmt->bind_param("iiss", $employer_id, $admin_id, $reason, $user_type);
     $block_stmt->execute();
     $block_stmt->close();
 

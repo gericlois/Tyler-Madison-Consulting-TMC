@@ -127,7 +127,7 @@ if (!isset($_SESSION["admin_id"])) {
                                                 echo "<a href='scripts/user-edit.php?user_id={$row['user_id']}&status=2' 
                                                 class='btn btn-sm btn-danger' 
                                                 onclick='return confirm(\"Are you sure you want to deactivate this admin account?\")'>
-                                                
+                                                Deactivate
                                                </a>";
                                             } else {
                                                 echo " <a href='users-profile.php?id={$row['user_id']}' class='btn btn-sm btn-success'>View</a>";

@@ -70,29 +70,54 @@ if (!isset($_SESSION["admin_id"])) {
                                         <th>Phone</th>
                                         <th>Address</th>
                                         <th>Position</th>
+                                        <th>Reason</th> <!-- new column -->
                                         <th>Created At</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT e.employee_id, u.first_name, u.last_name, u.email, u.phone, u.address, e.position, e.created_at, e.status 
-                                    FROM employees e
-                                    LEFT JOIN users u ON e.user_id = u.user_id
-                                    WHERE e.status = 3
-                                    ORDER BY e.employee_id DESC";
+                                    $sql = "SELECT 
+                                    e.employee_id, 
+                                    u.first_name, 
+                                    u.last_name, 
+                                    u.email, 
+                                    u.phone, 
+                                    u.address, 
+                                    e.position, 
+                                    e.created_at, 
+                                    e.status,
+                                    bh.reason
+                                FROM employees e
+                                LEFT JOIN users u ON e.user_id = u.user_id
+                                LEFT JOIN (
+                                    SELECT bh1.id, bh1.reason
+                                    FROM block_history bh1
+                                    INNER JOIN (
+                                        SELECT id, MAX(blocked_at) AS latest_blocked_at
+                                        FROM block_history
+                                        WHERE user_type = 'employee'
+                                        GROUP BY id
+                                    ) bh2 ON bh1.id = bh2.id AND bh1.blocked_at = bh2.latest_blocked_at
+                                    WHERE bh1.user_type = 'employee'
+                                ) bh ON bh.id = e.employee_id
+                                WHERE e.status = 3
+                                ORDER BY e.employee_id DESC
+                                ";
 
-                                                            $result = $conn->query($sql);
+                                    $result = $conn->query($sql);
 
-                                                            if ($result->num_rows > 0) {
-                                                                while ($row = $result->fetch_assoc()) {
-                                                                    echo "<tr>
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo "<tr>
                                         <td>200{$row['employee_id']}</td>
                                         <td><a href='employees-profile.php?id={$row['employee_id']}' class='text-primary fw-bold'>{$row['first_name']} {$row['last_name']}</a></td>
                                         <td>{$row['email']}</td>
                                         <td>{$row['phone']}</td>
                                         <td>{$row['address']}</td>
                                         <td>{$row['position']}</td>
+                                        <td>{$row['reason']}</td>
                                         <td>{$row['created_at']}</td>
                                         <td>
                                             <a href='scripts/employees-update.php?id={$row['employee_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this employee?\")'>Delete</a>

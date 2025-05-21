@@ -18,9 +18,9 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     exit();
 }
 
-$employer_id = intval($_GET['id']); // Ensure ID is an integer
-
+$employer_id = 1;
 // Fetch employer details
+
 $sql = "SELECT * FROM employers WHERE employer_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $employer_id);
@@ -64,6 +64,7 @@ $stmt->close();
                             <h2><?php echo htmlspecialchars($employer['name']); ?> <a href='employers-edit.php?id=<?php echo htmlspecialchars($employer['employer_id']); ?>' class='btn btn-sm btn-success'>Edit</a></h2>
                             <span><?php echo nl2br(htmlspecialchars($employer['description'])); ?></span>
                             <span><strong>Location:</strong><?php echo nl2br(htmlspecialchars($employer['location'])); ?></span>
+                            <span><strong>Location:</strong><?php echo $employer_id ?></span>
                             <div class="social-links mt-2">
                                 <a href="<?php echo htmlspecialchars($employer['link_facebook']); ?>"
                                     class="facebook"><i class="bi bi-facebook"></i></a>
@@ -87,50 +88,62 @@ $stmt->close();
                             </ul>
                             <div class="tab-content pt-2">
                                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <table class="table datatable">
-                                <thead>
-                                    <tr>
-                                        <th>Job ID</th>
-                                        <th>Title</th>
-                                        <th>Salary</th>
-                                        <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
-                                        <th data-type="date" data-format="YYYY/DD/MM">Deadline</th>
-                                        <th>Status</th>
-                                        <th>Applicants</th> <!-- Added Applicants Column -->
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $sql = "SELECT jp.job_id, jp.title, jp.description, jp.location, jp.salary, jp.end_at, jp.status, 
-                                                u.username AS posted_by_name, jp.posted_at, e.name as employer_name, e.employer_id,
-                                                (SELECT COUNT(*) FROM jobapplications ja WHERE ja.job_id = jp.job_id) AS applicant_count
-                                            FROM jobpostings jp
-                                            LEFT JOIN users u ON jp.posted_by = u.user_id 
-                                            LEFT JOIN employers e ON jp.employer_id = e.employer_id
-                                            WHERE e.employer_id = $employer_id
-                                            ORDER BY jp.job_id DESC";
+                                    <table class="table datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>Job ID</th>
+                                                <th>Title</th>
+                                                <th>Salary</th>
+                                                <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
+                                                <th data-type="date" data-format="YYYY/DD/MM">Deadline</th>
+                                                <th>Status</th>
+                                                <th>Applicants</th> <!-- Added Applicants Column -->
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                                $sql = "
+                                                SELECT 
+                                                    jp.job_id, 
+                                                    jp.title, 
+                                                    jp.description, 
+                                                    jp.location, 
+                                                    jp.salary, 
+                                                    jp.end_at, 
+                                                    jp.status, 
+                                                    u.username AS posted_by_name, 
+                                                    jp.posted_at, 
+                                                    e.name AS employer_name, 
+                                                    e.employer_id,
+                                                    (SELECT COUNT(*) FROM jobapplications ja WHERE ja.job_id = jp.job_id) AS applicant_count
+                                                FROM jobpostings jp
+                                                LEFT JOIN users u ON jp.posted_by = u.user_id 
+                                                LEFT JOIN employers e ON jp.employer_id = e.employer_id
+                                                WHERE jp.employer_id = " . intval($employer['employer_id']) . "
+                                                ORDER BY jp.job_id DESC
+                                            ";
+                                            
+                                            $result = $conn->query($sql);
 
-                                    $result = $conn->query($sql);
+                                            if ($result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    // Convert numeric status to text
+                                                    if ($row['status'] == "1") {
+                                                        $row['status'] = "Active";
+                                                    } elseif ($row['status'] == "2") {
+                                                        $row['status'] = "Inactive";
+                                                    }
 
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            // Convert numeric status to text
-                                            if ($row['status'] == "1") {
-                                                $row['status'] = "Active";
-                                            } elseif ($row['status'] == "2") {
-                                                $row['status'] = "Inactive";
-                                            }
-                                    
-                                            // Assign class based on status
-                                            $status_class = "bg-secondary"; 
-                                            if ($row['status'] == "Active") {
-                                                $status_class = "bg-primary";
-                                            } elseif ($row['status'] == "Inactive") {
-                                                $status_class = "bg-danger";
-                                            }
+                                                    // Assign class based on status
+                                                    $status_class = "bg-secondary";
+                                                    if ($row['status'] == "Active") {
+                                                        $status_class = "bg-primary";
+                                                    } elseif ($row['status'] == "Inactive") {
+                                                        $status_class = "bg-danger";
+                                                    }
 
-                                            echo "<tr>
+                                                    echo "<tr>
                                             <td>{$row['job_id']}</td>
                                             <td>{$row['title']}</td>
                                             <td>$" . number_format($row['salary'], 2) . "</td>
@@ -141,23 +154,22 @@ $stmt->close();
                                             <td>
                                                 <a href='jobs-profile.php?id={$row['job_id']}' class='btn btn-sm btn-success'>View</a>
                                                 <a href='jobs-edit.php?id={$row['job_id']}' class='btn btn-sm btn-success'>Edit</a>";
-                                    
-                                    if ($row['status'] == "Active") {
-                                        echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Inactive</a>";
-                                    } else if ($row['status'] == "Inactive") {
-                                        echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Active</a>";
-                                    }
-                                    
-                                    echo "</td></tr>";
-                                    
-                                        }
-                                    } else {
-                                        echo "<tr><td colspan='10' class='text-center'>No jobs found</td></tr>";
-                                    }
-                                    $conn->close();
-                                    ?>
-                                </tbody>
-                            </table>
+
+                                                    if ($row['status'] == "Active") {
+                                                        echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Inactive</a>";
+                                                    } else if ($row['status'] == "Inactive") {
+                                                        echo " <a href='scripts/job-update.php?id={$row['job_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Active</a>";
+                                                    }
+
+                                                    echo "</td></tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='10' class='text-center'>No jobs found</td></tr>";
+                                            }
+                                            $conn->close();
+                                            ?>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

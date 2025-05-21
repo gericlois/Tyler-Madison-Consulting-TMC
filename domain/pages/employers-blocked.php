@@ -77,15 +77,19 @@ if (!isset($_SESSION["admin_id"])) {
                                         <th>Name</th>
                                         <th>Location</th>
                                         <th>Status</th>
+                                        <th>Reason</th>
                                         <th>Date Created</th>
                                         <th>Actions</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT * FROM `employers`
-                                            WHERE status = 3
-                                            ORDER BY employer_id DESC";
+                                    $sql = "SELECT e.*, bh.* 
+                                    FROM employers e
+                                    LEFT JOIN block_history bh ON bh.id = e.employer_id
+                                    WHERE e.status = 3 and bh.user_type = 'employer'
+                                    ORDER BY e.employer_id DESC";
 
                                     $result = $conn->query($sql);
 
@@ -113,7 +117,9 @@ if (!isset($_SESSION["admin_id"])) {
                                                 <td><a href='employers-profile.php?id={$row['employer_id']}' class='text-primary fw-bold'>{$row['name']}</a></td>
                                                 <td>{$row['location']}</td>
                                                 <td><span class='badge $status_class'>{$row['status']}</span></td>
+                                                <td>{$row['reason']}</td>
                                                 <td>{$row['created_at']}</td>
+
                                                 <td>";
 
                                             if ($row['status'] == "Active") {
