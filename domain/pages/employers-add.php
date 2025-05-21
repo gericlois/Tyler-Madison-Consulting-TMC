@@ -139,6 +139,67 @@ if (!isset($_SESSION["admin_id"])) {
                         </div>
                     </div>
                 </div>
+
+                <?php
+                $userCounts = [];
+                $monthLabels = [];
+
+                $sql = "SELECT 
+                MONTH(created_at) AS month, 
+                COUNT(*) AS count 
+                FROM employers 
+                GROUP BY MONTH(created_at) 
+                ORDER BY MONTH(created_at)";
+                $result = $conn->query($sql);
+
+                
+                $monthNames = [1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'];
+                while ($row = $result->fetch_assoc()) {
+                    $monthNumber = (int)$row['month'];
+                    $monthLabels[] = $monthNames[$monthNumber];
+                    $userCounts[] = (int)$row['count'];
+                }
+                ?>
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Bar Chart</h5>
+
+                            <!-- Bar Chart -->
+                            <canvas id="barChart" style="max-height: 400px;"></canvas>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    new Chart(document.querySelector('#barChart'), {
+                                        type: 'bar',
+                                        data: {
+                                            labels: <?= json_encode($monthLabels); ?>,
+                                            datasets: [{
+                                                label: 'Employer Added',
+                                                data: <?= json_encode($userCounts); ?>,
+                                                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                                borderColor: 'rgba(54, 162, 235, 1)',
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true,
+                                                    stepSize: 1
+                                                }
+                                            }
+                                        }
+                                    });
+                                });
+                            </script>
+
+                            <!-- End Bar CHart -->
+
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </section>
 

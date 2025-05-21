@@ -153,12 +153,12 @@ if ($_SESSION["role"] === "employer" && isset($_SESSION["employer_id"])) {
                                                     <td>{$row['end_at']}</td>
                                                     <td><span class='badge bg-primary'>Hired</span></td>
                                                   <td>
-    " . ($row['employee_id'] ? 
-        "<a href='employees-profile.php?id={$row['employee_id']}' class='text-primary fw-bold'>" . 
-            htmlspecialchars($row['hired_first_name'] . ' ' . $row['hired_last_name']) . 
-        "</a>" 
-        : "<i>No employee selected</i>") . "
-</td>
+                                                        " . ($row['employee_id'] ? 
+                                                            "<a href='employees-profile.php?id={$row['employee_id']}' class='text-primary fw-bold'>" . 
+                                                                htmlspecialchars($row['hired_first_name'] . ' ' . $row['hired_last_name']) . 
+                                                            "</a>" 
+                                                            : "<i>No employee selected</i>") . "
+                                                    </td>
 
                                                 </tr>";
                                         }
