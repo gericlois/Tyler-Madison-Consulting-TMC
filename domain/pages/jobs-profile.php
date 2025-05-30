@@ -57,7 +57,7 @@ $stmt->close();
         <section class="section profile">
             <div class="row">
 
-                <div class="col-xl-12">
+                <div class="col-xl-5">
 
                     <div class="card">
                         <div class="card-body pt-3">
@@ -69,9 +69,9 @@ $stmt->close();
                             </h2>
                             <p>
                                 <?php
-                                if ($job['status'] == "Active") {
+                                if ($job['status'] == "1") {
                                     echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
-                                } else if ($job['status'] == "Inactive") {
+                                } else if ($job['status'] == "2") {
                                     echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
                                 }
                                 ?>
@@ -136,6 +136,152 @@ $stmt->close();
                         </div>
                     </div>
 
+                </div>
+
+                <div class="col-xl-7">
+                    <div class="card">
+                        <div class="card-body pt-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <ul class="nav nav-tabs nav-tabs-bordered">
+                                    <li class="nav-item">
+                                        <button class="nav-link active" data-bs-toggle="tab"
+                                            data-bs-target="#profile-overview">Files</button>
+                                    </li>
+                                </ul>
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#uploadFileModal">
+                                    <i class="bi bi-upload"></i> Add File
+                                </button>
+                            </div>
+
+                            <div class="tab-content pt-2">
+                                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                    <table class="table datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>File ID</th>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Uploaded By</th>
+                                                <th>Created At</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $file_sql = "
+                                SELECT f.*, u.username 
+                                FROM files f
+                                LEFT JOIN users u ON f.uploaded_by = u.user_id
+                                WHERE f.job_id = ?
+                                ORDER BY f.created_at DESC
+                            ";
+                                            $stmt = $conn->prepare($file_sql);
+                                            $stmt->bind_param("i", $job_id);
+                                            $stmt->execute();
+                                            $files_result = $stmt->get_result();
+
+                                            $allowed_extensions = ['pdf', 'doc', 'docx', 'txt'];
+
+                                            if ($files_result->num_rows > 0) {
+                                                while ($file = $files_result->fetch_assoc()) {
+                                                    $file_extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+                                                    if (!in_array($file_extension, $allowed_extensions)) {
+                                                        continue; // Skip non-document files
+                                                    }
+
+                                                    echo "<tr>";
+                                                    echo "<td>" . htmlspecialchars($file['file_id']) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($file['name']) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($file['type']) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($file['username']) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($file['created_at']) . "</td>";
+                                                    echo "<td>";
+
+                                                    $fileUrl = htmlspecialchars($file['directory']); // use directory for path
+
+                                                    if ($file_extension === 'pdf') {
+                                                        echo '<button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#pdfViewerModal" data-pdf="' . $fileUrl . '">View</button> ';
+                                                    } else {
+                                                        echo '<a href="' . $fileUrl . '" class="btn btn-sm btn-primary" target="_blank">Open</a> ';
+                                                    }
+
+                                                    echo '<a href="scripts/file-delete.php?id=' . htmlspecialchars($file['file_id']) . '" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure you want to delete this file?\')">Delete</a>';
+
+                                                    echo "</td>";
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='6' class='text-center'>No files found</td></tr>";
+                                            }
+                                            $stmt->close();
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PDF Viewer Modal -->
+                <div class="modal fade" id="pdfViewerModal" tabindex="-1" aria-labelledby="pdfViewerLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered" style="max-width:90vw;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="pdfViewerLabel">PDF Viewer</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-0" style="height:80vh;">
+                                <iframe id="pdfFrame" src="" frameborder="0" style="width:100%; height:100%;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Upload File Modal -->
+                <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form action="scripts/file-upload.php" method="post" enctype="multipart/form-data"
+                            class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="uploadFileModalLabel">Upload File</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="fileName" class="form-label">File Name</label>
+                                    <input type="text" class="form-control" id="fileName" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fileType" class="form-label">File Type</label>
+                                    <input type="text" class="form-control" id="fileType" name="type" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fileUpload" class="form-label">Choose File</label>
+                                    <input type="file" class="form-control" id="fileUpload" name="file" required>
+                                </div>
+
+                                <!-- Required hidden fields -->
+                                <input type="hidden" name="user_id" value="<?php echo $job['posted_by']; ?>">
+                                <input type="hidden" name="uploaded_by" value="<?php echo $_SESSION['admin_id']; ?>">
+                                <input type="hidden" name="job_id" value="<?php echo $job['job_id']; ?>"> <!-- Add this line -->
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Upload</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
 
@@ -275,42 +421,42 @@ $stmt->close();
 
 
                 <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    // Add event listener to each progress dropdown
-                    const progressDropdowns = document.querySelectorAll('.progress-dropdown');
+                    document.addEventListener("DOMContentLoaded", function() {
+                        // Add event listener to each progress dropdown
+                        const progressDropdowns = document.querySelectorAll('.progress-dropdown');
 
-                    progressDropdowns.forEach(function(dropdown) {
-                        dropdown.addEventListener('change', function() {
-                            const appId = dropdown.getAttribute('data-app-id');
-                            const progress = dropdown.value;
+                        progressDropdowns.forEach(function(dropdown) {
+                            dropdown.addEventListener('change', function() {
+                                const appId = dropdown.getAttribute('data-app-id');
+                                const progress = dropdown.value;
 
-                            // Create a FormData object to send data via AJAX
-                            const formData = new FormData();
-                            formData.append('app_id', appId);
-                            formData.append('progress', progress);
+                                // Create a FormData object to send data via AJAX
+                                const formData = new FormData();
+                                formData.append('app_id', appId);
+                                formData.append('progress', progress);
 
-                            // Send AJAX request to update the progress in the database
-                            fetch('scripts/update-progress.php', {
-                                    method: 'POST',
-                                    body: formData
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        // Optionally, display a success message or update the UI
-                                        console.log("Progress updated successfully.");
-                                    } else {
-                                        // Optionally, display an error message
-                                        alert("Failed to update progress.");
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error("Error updating progress:", error);
-                                    alert("An error occurred while updating progress.");
-                                });
+                                // Send AJAX request to update the progress in the database
+                                fetch('scripts/update-progress.php', {
+                                        method: 'POST',
+                                        body: formData
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            // Optionally, display a success message or update the UI
+                                            console.log("Progress updated successfully.");
+                                        } else {
+                                            // Optionally, display an error message
+                                            alert("Failed to update progress.");
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error("Error updating progress:", error);
+                                        alert("An error occurred while updating progress.");
+                                    });
+                            });
                         });
                     });
-                });
                 </script>
 
 

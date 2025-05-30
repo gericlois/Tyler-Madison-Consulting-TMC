@@ -1,4 +1,5 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -30,14 +31,14 @@ if ($row = $result->fetch_assoc()) {
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
-        $mail->Host       = 'smtp.secureserver.net';
+        $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'administrator@tylermadisonconsulting.com';
-        $mail->Password   = 'YB)V=A-^9c3R';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
+        $mail->Username   = 'tylermadisonconsulting@gmail.com';
+        $mail->Password   = 'wasw nnca fquy chkb';
+       $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+$mail->Port = 465;
 
-        $mail->setFrom('administrator@tylermadisonconsulting.com', 'Tyler Madison Consulting');
+        $mail->setFrom('tylermadisonconsulting@gmail.com', 'Tyler Madison Consulting');
         $mail->addAddress($email, $name);
 
         $mail->isHTML(true);
@@ -61,4 +62,3 @@ if ($row = $result->fetch_assoc()) {
     header("Location: ../employees.php?error=NotFound");
 }
 exit;
-?>

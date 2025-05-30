@@ -61,7 +61,9 @@ $stmt->close();
                 <div class="col-xl-4">
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                            <h2><?php echo htmlspecialchars($employer['name']); ?> <a href='employers-edit.php?id=<?php echo htmlspecialchars($employer['employer_id']); ?>' class='btn btn-sm btn-success'>Edit</a></h2>
+                            <h2><?php echo htmlspecialchars($employer['name']); ?> <a
+                                    href='employers-edit.php?id=<?php echo htmlspecialchars($employer['employer_id']); ?>'
+                                    class='btn btn-sm btn-success'>Edit</a></h2>
                             <span><?php echo nl2br(htmlspecialchars($employer['description'])); ?></span>
                             <span><strong>Location:</strong><?php echo nl2br(htmlspecialchars($employer['location'])); ?></span>
                             <span><strong>Location:</strong><?php echo $employer_id ?></span>
@@ -76,6 +78,150 @@ $stmt->close();
                         </div>
                     </div>
                 </div>
+
+                <div class="col-xl-8">
+                    <div class="card">
+                        <div class="card-body pt-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <ul class="nav nav-tabs nav-tabs-bordered">
+                                    <li class="nav-item">
+                                        <button class="nav-link active" data-bs-toggle="tab"
+                                            data-bs-target="#profile-overview">Files</button>
+                                    </li>
+                                </ul>
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#uploadFileModal">
+                                    <i class="bi bi-upload"></i> Add File
+                                </button>
+                            </div>
+
+                            <div class="tab-content pt-2">
+                                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                    <table class="table datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>File ID</th>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Uploaded By</th>
+                                                <th>Created At</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $file_sql = "
+                                                SELECT f.*, u.username 
+                                                FROM files f
+                                                LEFT JOIN users u ON f.uploaded_by = u.user_id
+                                                WHERE f.user_id = ?
+                                                ORDER BY f.created_at DESC
+                                            ";
+                                            $stmt = $conn->prepare($file_sql);
+                                            $stmt->bind_param("i", $employer['user_id']);
+                                            $stmt->execute();
+                                            $files_result = $stmt->get_result();
+                                            $allowed_extensions = ['pdf', 'doc', 'docx', 'txt'];
+
+                                            if ($files_result->num_rows > 0) {
+                                                while ($file = $files_result->fetch_assoc()) {
+                                                    $file_extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+                                                    if (!in_array($file_extension, $allowed_extensions)) {
+                                                        continue; // Skip non-document files
+                                                    }
+
+                                                    echo "<tr>";
+                                                    echo "<td>" . htmlspecialchars($file['file_id']) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($file['name']) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($file['type']) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($file['username']) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($file['created_at']) . "</td>";
+                                                    echo "<td>";
+
+                                                    if ($file_extension === 'pdf') {
+                                                        // Button to open PDF modal
+                                                        echo '<button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#pdfViewerModal" data-pdf="uploads/' . htmlspecialchars($file['name']) . '">View</button> ';
+                                                    } else {
+                                                        // Link to open document in new tab
+                                                        echo '<a href="uploads/' . htmlspecialchars($file['name']) . '" class="btn btn-sm btn-primary" target="_blank">Open</a> ';
+                                                    }
+
+                                                    // Delete button
+                                                    echo '<a href="scripts/file-delete.php?id=' . htmlspecialchars($file['file_id']) . '" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure you want to delete this file?\')">Delete</a>';
+
+                                                    echo "</td>";
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='6' class='text-center'>No files found</td></tr>";
+                                            }
+                                            $stmt->close();
+                                            ?>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PDF Viewer Modal -->
+                <div class="modal fade" id="pdfViewerModal" tabindex="-1" aria-labelledby="pdfViewerLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered" style="max-width:90vw;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="pdfViewerLabel">PDF Viewer</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-0" style="height:80vh;">
+                                <iframe id="pdfFrame" src="" frameborder="0" style="width:100%; height:100%;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Upload File Modal -->
+                <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form action="scripts/file-upload.php" method="post" enctype="multipart/form-data"
+                            class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="uploadFileModalLabel">Upload File</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="fileName" class="form-label">File Name</label>
+                                    <input type="text" class="form-control" id="fileName" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fileType" class="form-label">File Type</label>
+                                    <input type="text" class="form-control" id="fileType" name="type" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fileUpload" class="form-label">Choose File</label>
+                                    <input type="file" class="form-control" id="fileUpload" name="file" required>
+                                </div>
+                                <input type="hidden" name="user_id" value="<?php echo $employer['user_id']; ?>">
+                                <input type="hidden" name="uploaded_by" value="<?php echo $_SESSION['admin_id']; ?>">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Upload</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
 
                 <div class="col-xl-12">
                     <div class="card">
@@ -103,7 +249,7 @@ $stmt->close();
                                         </thead>
                                         <tbody>
                                             <?php
-                                                $sql = "
+                                            $sql = "
                                                 SELECT 
                                                     jp.job_id, 
                                                     jp.title, 
@@ -123,7 +269,7 @@ $stmt->close();
                                                 WHERE jp.employer_id = " . intval($employer['employer_id']) . "
                                                 ORDER BY jp.job_id DESC
                                             ";
-                                            
+
                                             $result = $conn->query($sql);
 
                                             if ($result->num_rows > 0) {
@@ -182,5 +328,21 @@ $stmt->close();
     <?php include "includes/footer.php" ?>
     <?php include "includes/scripts.php" ?>
 </body>
+
+
+<script>
+var pdfViewerModal = document.getElementById('pdfViewerModal');
+pdfViewerModal.addEventListener('show.bs.modal', function(event) {
+    var button = event.relatedTarget;
+    var pdfUrl = button.getAttribute('data-pdf');
+    var iframe = pdfViewerModal.querySelector('#pdfFrame');
+    iframe.src = pdfUrl;
+});
+
+pdfViewerModal.addEventListener('hidden.bs.modal', function() {
+    var iframe = pdfViewerModal.querySelector('#pdfFrame');
+    iframe.src = ''; // clear src on close to stop PDF loading
+});
+</script>
 
 </html>

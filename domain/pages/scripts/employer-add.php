@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $last_name = "Employer";
     $address = "N/A";
     $birthday = "2000-01-01";
-    $role = "employee";
+    $role = "employer";
     $user_status = 1;
 
     // Handle profile picture upload

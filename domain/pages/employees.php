@@ -45,6 +45,13 @@ if (!isset($_SESSION["admin_id"])) {
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
                 }
+                if ($_GET["success"] == "FeedbackRequestSent") {
+                    echo '
+                                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                            <b>Feedback request has been successfully sent!</b> Double-check the details if needed.
+                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </div>';
+                }
             }
             ?>
         </div><!-- End Page Title -->
@@ -97,6 +104,16 @@ if (!isset($_SESSION["admin_id"])) {
                                                     class='btn btn-sm btn-success' onclick='return confirm('Send feedback request email to this employee?')'> Request Feedback
                                                     </a>
 
+                                          <a href='#' class='btn btn-sm btn-primary' 
+                                        data-bs-toggle='modal' 
+                                        data-bs-target='#emailModal' 
+                                        data-employee-id={$row['employee_id']} 
+                                        data-employee-email={$row['email']}
+                                        data-employee-name={$row['first_name']}>
+                                        Email
+                                        </a>
+
+
                                            <a href='scripts/employee-update.php?id={$row['employee_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the employee's account inactive?\")'>Deactivate</a>
 
                                             <a href='#' class='btn btn-sm btn-warning' data-bs-toggle='modal' data-bs-target='#blockModal' 
@@ -147,14 +164,14 @@ if (!isset($_SESSION["admin_id"])) {
                             <!-- End Table with stripped rows -->
 
                             <script>
-                            document.addEventListener("DOMContentLoaded", function() {
-                                var blockModal = document.getElementById('blockModal');
-                                blockModal.addEventListener('show.bs.modal', function(event) {
-                                    var button = event.relatedTarget;
-                                    var employeeId = button.getAttribute('data-employee-id');
-                                    blockModal.querySelector('#blockEmployeeId').value = employeeId;
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    var blockModal = document.getElementById('blockModal');
+                                    blockModal.addEventListener('show.bs.modal', function(event) {
+                                        var button = event.relatedTarget;
+                                        var employeeId = button.getAttribute('data-employee-id');
+                                        blockModal.querySelector('#blockEmployeeId').value = employeeId;
+                                    });
                                 });
-                            });
                             </script>
 
                         </div>
@@ -165,6 +182,40 @@ if (!isset($_SESSION["admin_id"])) {
         </section>
 
     </main><!-- End #main -->
+
+    <!-- Email Modal -->
+    <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="scripts/send-email.php" method="POST">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="emailModalLabel">Send Email to Employee</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="employee_id" id="emailEmployeeId">
+                        <div class="mb-3">
+                            <label for="emailTo" class="form-label">To</label>
+                            <input type="email" class="form-control" id="emailTo" name="email_to" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailSubject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="emailSubject" name="subject" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailBody" class="form-label">Message</label>
+                            <textarea class="form-control" id="emailBody" name="message" rows="5" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Send Email</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <!-- ======= Footer ======= -->
     <?php include "includes/footer.php" ?>

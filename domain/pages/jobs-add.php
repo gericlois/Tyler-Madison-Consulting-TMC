@@ -117,11 +117,12 @@ if (isset($_GET['duplicate_id'])) {
                                 <div class="row mb-3">
                                     <label for="deadline" class="col-sm-2 col-form-label">Application Deadline</label>
                                     <div class="col-sm-10">
-                                        <input type="datetime-local" class="form-control" id="deadline" name="deadline" required
+                                        <input type="datetime-local" class="form-control" id="deadline" name="deadline"
+                                            required
                                             value="<?= $jobData && $jobData['deadline'] ? date('Y-m-d\TH:i', strtotime($jobData['deadline'])) : '' ?>">
                                     </div>
                                 </div>
-                                
+
                                 <?php if ($_SESSION["role"] === "employer" && isset($_SESSION["employer_id"])): ?>
                                     <input type="hidden" name="employer_id" value="<?= intval($_SESSION["employer_id"]) ?>">
                                 <?php else: ?>
@@ -133,7 +134,10 @@ if (isset($_GET['duplicate_id'])) {
                                                 <?php
                                                 $query = "SELECT employer_id, name FROM employers ORDER BY name ASC";
                                                 $result = $conn->query($query);
-                                                if ($result->num_rows > 0) {
+                                                $hasEmployers = $result->num_rows > 0;
+
+                                                if ($hasEmployers) {
+                                                    echo '<option value="">Select Employer</option>';
                                                     while ($row = $result->fetch_assoc()) {
                                                         $selected = ($jobData && $jobData['employer_id'] == $row['employer_id']) ? 'selected' : '';
                                                         echo "<option value='" . $row['employer_id'] . "' $selected>" . $row['name'] . "</option>";
@@ -142,18 +146,22 @@ if (isset($_GET['duplicate_id'])) {
                                                     echo "<option value=''>No Employers Available</option>";
                                                 }
                                                 ?>
+
                                             </select>
                                         </div>
                                     </div>
-<?php endif; ?>
+                                <?php endif; ?>
 
 
-                                <input type="hidden" id="status" name="status" value="<?= $jobData ? $jobData['status'] : '1' ?>">
+                                <input type="hidden" id="status" name="status"
+                                    value="<?= $jobData ? $jobData['status'] : '1' ?>">
 
 
                                 <div class="row mb-3">
                                     <div class="col-sm-10 offset-sm-2">
-                                        <button type="submit" class="btn btn-primary">Submit Job</button>
+                                        <button type="submit" class="btn btn-primary" <?= !$hasEmployers ? 'disabled' : '' ?>>
+                                            Submit Job
+                                        </button>
                                     </div>
                                 </div>
                             </form>
