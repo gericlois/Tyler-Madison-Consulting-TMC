@@ -6,6 +6,17 @@ include "includes/head.php";
 include "includes/connection.php";
 ?>
 
+<?php
+$role = $_GET['role'] ?? '';
+$roleTitle = 'Login';
+
+if ($role === 'employer') {
+    $roleTitle = 'Login as Employer';
+} elseif ($role === 'employee') {
+    $roleTitle = 'Login as Employee';
+}
+?>
+
 <body>
 
     <!-- Spinner Start -->
@@ -41,30 +52,30 @@ include "includes/connection.php";
         <div class="container d-flex justify-content-center">
             <div class="card login-card wow fadeInUp" data-wow-delay="0.2s">
                 <div class="card-body p-5 text-center">
-                    <h4 class="text-primary">Login</h4>
+                    <h4 class="text-primary"><?php echo $roleTitle; ?></h4>
                     <h1 class="display-6 mb-4">Your journey starts here.</h1>
                     <p class="text-muted">Access your personalized dashboard now</p>
 
-                    <?php
-                    if (isset($_GET['error'])) {
-                        if ($_GET["error"] == "AccountNotFound") {
-                            echo '
-                                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                        <b>There is no account registered! First, create an account! <a class="text-primary fw-bold" href="signup.php">SIGN UP NOW!</a></b>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>';
-                        }
-                        if ($_GET["error"] == "IncorrectPassword") {
-                            echo '
-                                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                        <b>The password is incorrect. Before logging in, make sure your password is correct.</b>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>';
-                        }
-                    }
-                    ?>
+                    <?php if (isset($_GET['error'])): ?>
+                        <?php if ($_GET["error"] == "AccountNotFound"): ?>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <b>There is no account registered! First, create an account!
+                                    <a class="text-primary fw-bold" href="signup.php">SIGN UP NOW!</a></b>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php elseif ($_GET["error"] == "IncorrectPassword"): ?>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <b>The password is incorrect. Before logging in, make sure your password is correct.</b>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
                     <hr>
+
                     <form action="includes/scripts/login.php" method="POST">
+                        <input type="hidden" name="role" value="<?php echo htmlspecialchars($role, ENT_QUOTES); ?>">
+
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control border-0" id="username" name="username"
                                 placeholder="Username" required>
@@ -75,9 +86,8 @@ include "includes/connection.php";
                                 placeholder="Password" required>
                             <label for="password">Password</label>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100 py-3">Login</button>
+                        <button type="submit" class="btn btn-primary w-100 py-3"><?php echo $roleTitle; ?></button>
                     </form>
-
 
                     <p class="mt-4"> Don't have an account yet? <a class="text-primary fw-bold" href="signup.php">SIGN
                             UP NOW!</a></p>

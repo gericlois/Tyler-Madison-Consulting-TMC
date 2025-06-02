@@ -45,8 +45,7 @@
                 <div class="pt-5" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
                     <div class="row g-0">
                         <div class="col-12">
-                            <div class="row g-4">
-                                <div class="col-lg-6 col-xl-4">
+                            <div class="row g-4">                                <div class="col-lg-6 col-xl-4">
                                     <div class="d-flex">
                                         <div class="btn-sm-square bg-primary text-white rounded p-4 me-4">
                                             <i class="fas fa-map-marker-alt fa-2x"></i>

@@ -1,53 +1,50 @@
 <?php
-
 session_start();
 include "../connection.php";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']); // Get username input
-    $password = $_POST['password'];
+$username = $_POST['username'];
+$password = $_POST['password'];
+$role = $_POST['role'] ?? null; // 'employee' or 'employer'
 
-    // Query to check username and get employee position
-    $stmt = $conn->prepare("
-        SELECT u.user_id, u.username, u.password_hash, u.role, e.position, e.employee_id
-        FROM users u
-        LEFT JOIN employees e ON u.user_id = e.user_id
-        WHERE u.username = ?
-    ");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($user_id, $db_username, $hashed_password, $role, $position, $employee_id);
-        $stmt->fetch();
-
-        // Only allow employees to log in
-        if ($role !== 'employee') {
-            header("Location: ../../login.php?error=AccessDenied");
-            exit();
-        }
-
-        // Verify password
-        if (password_verify($password, $hashed_password)) {
-            $_SESSION['user_id'] = $user_id;
-            $_SESSION['username'] = $db_username; 
-            $_SESSION['role'] = $role;
-            $_SESSION['employee_id'] = $employee_id;
-            $_SESSION['position'] = $position ?: 'Not Assigned'; 
-
-            // Redirect employee to their dashboard
-            header("Location: ../../index.php");
-            exit();
-        } else {
-            header("Location: ../../login.php?error=IncorrectPassword");
-            exit();
-        }
-    } else {
-        header("Location: ../../login.php?error=AccountNotFound");
-        exit();
-    }
-
-    $stmt->close();
+if (!$role) {
+    header("Location: ../../login.php?error=MissingRole");
+    exit();
 }
-?>
+
+// Always query from users table
+$query = "SELECT * FROM users WHERE username = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    header("Location: ../../login.php?role=$role&error=AccountNotFound");
+    exit();
+}
+
+$user = $result->fetch_assoc();
+
+// Check if role matches
+if ($user['role'] !== $role) {
+    header("Location: ../../login.php?role=$role&error=AccountNotFound");
+    exit();
+}
+
+// Verify password
+if (password_verify($password, $user['password_hash'])) {
+    $_SESSION['user_id'] = $user['user_id'];
+    $_SESSION['username'] = $user['username']; // <-- Add this line
+    $_SESSION['role'] = $user['role'];
+
+    // Redirect to appropriate dashboard
+    if ($role === 'employee') {
+        header("Location: ../../index.php");
+    } elseif ($role === 'employer') {
+        header("Location: ../../../domain/pages/index.php");
+    }
+    exit();
+} else {
+    header("Location: ../../login.php?role=$role&error=IncorrectPassword");
+    exit();
+}
