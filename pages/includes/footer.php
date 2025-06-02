@@ -63,7 +63,7 @@
                                         </div>
                                         <div>
                                             <h4 class="text-white">Mail Us</h4>
-                                            <p class="mb-0">info@tylermadisonconsulting.com</p>
+                                            <p class="mb-0">tylermadisonconsulting@gmail.com</p>
                                         </div>
                                     </div>
                                 </div>
