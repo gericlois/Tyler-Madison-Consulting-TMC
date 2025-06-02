@@ -35,10 +35,17 @@ include "../../pages/includes/connection.php";
             </nav>
             <?php
             if (isset($_GET['success'])) {
-                if ($_GET["success"] == "JobAdded") {
+                if ($_GET["success"] == "VlogAdded") {
                     echo '
                                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                            <b>A new job posting has been added! Review the details of the posted job.</b>
+                                                            <b>A new vlog posting has been added! Review the details of the posted job.</b>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </div>';
+                }
+                if ($_GET["success"] == "TestimonialAdded") {
+                    echo '
+                                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                            <b>A new vlog posting has been added! Review the details of the posted job.</b>
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
                 }
@@ -86,13 +93,13 @@ include "../../pages/includes/connection.php";
                                             $buttonClass = $activity_row['status'] == 1 ? 'btn-danger' : 'btn-success';
 
                                             echo "<tr>
-                                <td>{$activity_row['vlogs_id']}</td>
+                                <td>{$activity_row['vlog_id']}</td>
                                 <td>{$activity_row['title']}</td>
                                 <td><a href='{$activity_row['link']}' target='_blank'>View</a></td>
                                 <td>{$statusText}</td>
                                 <td>{$activity_row['created_at']}</td>
                                 <td>
-                                    <a href='scripts/vlog-update.php?id={$activity_row['vlogs_id']}&status={$toggleAction}' 
+                                    <a href='scripts/vlog-update.php?id={$activity_row['vlog_id']}&status={$toggleAction}' 
                                        class='btn btn-sm {$buttonClass}' 
                                        onclick='return confirm(\"Are you sure you want to {$buttonLabel} this vlog?\")'>
                                        {$buttonLabel}

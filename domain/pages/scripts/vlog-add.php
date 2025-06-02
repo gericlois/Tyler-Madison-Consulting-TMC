@@ -2,10 +2,6 @@
 session_start();
 include "../../../pages/includes/connection.php";
 
-if (!isset($_SESSION["admin_id"])) {
-    die("Unauthorized access.");
-}
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $title = trim($_POST["title"]);
     $link = trim($_POST["link"]);

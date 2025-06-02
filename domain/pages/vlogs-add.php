@@ -53,7 +53,7 @@ include "../../pages/includes/connection.php";
                                 <div class="row mb-3">
                                     <label for="link" class="col-sm-2 col-form-label">YouTube Link</label>
                                     <div class="col-sm-10">
-                                        <input type="url" class="form-control" id="link" name="link" required>
+                                        <input type="text" class="form-control" id="link" name="link" required>
                                     </div>
                                 </div>
 
