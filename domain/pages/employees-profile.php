@@ -3,14 +3,16 @@
 <?php
 session_start();
 
-// Check if admin is logged in
-if (!isset($_SESSION["admin_id"])) {
+// Check if user is logged in and is either admin or employer
+if (!isset($_SESSION["user_id"]) || !in_array($_SESSION["role"], ["admin", "superadmin", "employer"])) {
     header("Location: login.php");
     exit();
 }
 
+// Include common files
 include "includes/head.php";
 include "../../pages/includes/connection.php";
+
 
 // Validate employee ID
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {

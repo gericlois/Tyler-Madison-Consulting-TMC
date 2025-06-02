@@ -2,9 +2,10 @@
 <html lang="en">
 <?php
 session_start();
-if (!isset($_SESSION["admin_id"])) {
+if (!isset($_SESSION["user_id"]) || !in_array($_SESSION["role"], ["admin", "superadmin", "employer"])) {
     header("Location: login.php");
-} else {
+    exit();
+}else {
     include "includes/head.php";
     include "../../pages/includes/connection.php";
 }

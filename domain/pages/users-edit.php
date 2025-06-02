@@ -2,13 +2,17 @@
 <html lang="en">
 <?php
 session_start();
-if (!isset($_SESSION["admin_id"])) {
+
+// Check if user is logged in and is either admin or employer
+if (!isset($_SESSION["user_id"]) || !in_array($_SESSION["role"], ["admin", "superadmin", "employer"])) {
     header("Location: login.php");
     exit();
-} else {
-    include "includes/head.php";
-    include "../../pages/includes/connection.php";
 }
+
+// Include common files
+include "includes/head.php";
+include "../../pages/includes/connection.php";
+
 
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header("Location: ../users.php?error=NoUserID");

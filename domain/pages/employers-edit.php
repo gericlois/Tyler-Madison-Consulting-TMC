@@ -1,9 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
 <?php
 session_start();
-if (!isset($_SESSION["admin_id"])) {
+
+// Check if user is logged in and is either admin or employer
+if (!isset($_SESSION["user_id"]) || !in_array($_SESSION["role"], ["admin", "superadmin", "employer"])) {
     header("Location: login.php");
     exit();
 }
+
+// Include common files
 include "includes/head.php";
 include "../../pages/includes/connection.php";
 

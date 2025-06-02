@@ -2,15 +2,20 @@
 <html lang="en">
 <?php
 session_start();
-if (!isset($_SESSION["admin_id"])) {
+
+// Check if user is logged in and is either admin or employer
+if (!isset($_SESSION["user_id"]) || !in_array($_SESSION["role"], ["admin", "superadmin", "employer"])) {
     header("Location: login.php");
     exit();
-} else {
-    include "includes/head.php";
-    include "../../pages/includes/connection.php";
+}
+
+// Include common files
+include "includes/head.php";
+include "../../pages/includes/connection.php";
+
 
     // Fetch current user's role
-    $admin_id = $_SESSION["admin_id"];
+    $admin_id = $_SESSION["user_id"];
     $role_query = "SELECT role FROM users WHERE user_id = ?";
     $stmt = $conn->prepare($role_query);
     $stmt->bind_param("i", $admin_id);
@@ -18,7 +23,7 @@ if (!isset($_SESSION["admin_id"])) {
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
     $user_role = $user['role']; // 'superadmin' or 'admin'
-}
+
 ?>
 
 <body>
