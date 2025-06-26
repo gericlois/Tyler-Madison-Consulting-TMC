@@ -2,7 +2,7 @@
 <html lang="en">
 <?php
 session_start();
-if (!isset($_SESSION["user_id"]) || !in_array($_SESSION["role"], ["admin", "superadmin", "employer"])) {
+if (!isset($_SESSION["admin_id"]) || !in_array($_SESSION["role"], ["admin", "superadmin", "employer"])) {
     header("Location: login.php");
     exit();
 }else {
