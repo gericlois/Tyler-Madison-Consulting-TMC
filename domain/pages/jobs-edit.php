@@ -96,16 +96,8 @@ $stmt->close();
                                 <div class="row mb-3">
                                     <label for="salary" class="col-sm-2 col-form-label">Salary</label>
                                     <div class="col-sm-10">
-                                        <input type="number" class="form-control" id="salary" name="salary" step="0.01"
-                                            value="<?php echo $job['salary']; ?>" required>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="deadline" class="col-sm-2 col-form-label">Application Deadline</label>
-                                    <div class="col-sm-10">
-                                        <input type="datetime-local" class="form-control" id="deadline" name="deadline"
-                                            value="<?php echo date('Y-m-d\TH:i', strtotime($job['end_at'])); ?>">
+                                        <input type="text" class="form-control" id="salary" name="salary"
+                                            value="<?php echo htmlspecialchars($job['salary']); ?>" required>
                                     </div>
                                 </div>
 
@@ -113,12 +105,8 @@ $stmt->close();
                                     <label for="job_type" class="col-sm-2 col-form-label">Job Type</label>
                                     <div class="col-sm-10">
                                         <select class="form-control" id="job_type" name="job_type" required>
-                                            <option value="Full Time"
-                                                <?php echo ($job['job_type'] == 'Full Time') ? 'selected' : ''; ?>>Full
-                                                Time</option>
-                                            <option value="Part Time"
-                                                <?php echo ($job['job_type'] == 'Part Time') ? 'selected' : ''; ?>>Part
-                                                Time</option>
+                                            <option value="Full Time" <?php echo ($job['job_type'] == 'Full Time') ? 'selected' : ''; ?>>Full Time</option>
+                                            <option value="Part Time" <?php echo ($job['job_type'] == 'Part Time') ? 'selected' : ''; ?>>Part Time</option>
                                         </select>
                                     </div>
                                 </div>
@@ -139,6 +127,54 @@ $stmt->close();
                                     </div>
                                 </div>
 
+                                <!-- Optional fields below: only include if you're using them in your DB -->
+                                <div class="row mb-3">
+                                    <label for="start_date" class="col-sm-2 col-form-label">Start Date</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" class="form-control" id="start_date" name="start_date"
+                                            value="<?php echo htmlspecialchars($job['start_date']); ?>">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="duration" class="col-sm-2 col-form-label">Duration</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="duration" name="duration"
+                                            value="<?php echo htmlspecialchars($job['duration']); ?>">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="hours" class="col-sm-2 col-form-label">Working Hours</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="hours" name="hours"
+                                            value="<?php echo htmlspecialchars($job['hours']); ?>">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="preferred_skills" class="col-sm-2 col-form-label">Preferred Skills</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="preferred_skills" name="preferred_skills"
+                                            value="<?php echo htmlspecialchars($job['preferred_skills']); ?>">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="education" class="col-sm-2 col-form-label">Educational Requirement</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="education" name="education"
+                                            value="<?php echo htmlspecialchars($job['education']); ?>">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="responsibilities" class="col-sm-2 col-form-label">Responsibilities</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" id="responsibilities" name="responsibilities" rows="3"><?php echo htmlspecialchars($job['responsibilities']); ?></textarea>
+                                    </div>
+                                </div>
+
                                 <div class="row mb-3">
                                     <div class="col-sm-10 offset-sm-2">
                                         <button type="submit" class="btn btn-success">Update Job</button>
@@ -146,6 +182,7 @@ $stmt->close();
                                     </div>
                                 </div>
                             </form>
+
 
 
                             <!-- End Edit Job -->
@@ -163,31 +200,31 @@ $stmt->close();
                             <!-- Polar Area Chart -->
                             <canvas id="polarAreaChart" style="max-height: 400px;"></canvas>
                             <script>
-                            document.addEventListener("DOMContentLoaded", () => {
-                                new Chart(document.querySelector('#polarAreaChart'), {
-                                    type: 'polarArea',
-                                    data: {
-                                        labels: [
-                                            'Red',
-                                            'Green',
-                                            'Yellow',
-                                            'Grey',
-                                            'Blue'
-                                        ],
-                                        datasets: [{
-                                            label: 'My First Dataset',
-                                            data: [11, 16, 7, 3, 14],
-                                            backgroundColor: [
-                                                'rgb(255, 99, 132)',
-                                                'rgb(75, 192, 192)',
-                                                'rgb(255, 205, 86)',
-                                                'rgb(201, 203, 207)',
-                                                'rgb(54, 162, 235)'
-                                            ]
-                                        }]
-                                    }
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    new Chart(document.querySelector('#polarAreaChart'), {
+                                        type: 'polarArea',
+                                        data: {
+                                            labels: [
+                                                'Red',
+                                                'Green',
+                                                'Yellow',
+                                                'Grey',
+                                                'Blue'
+                                            ],
+                                            datasets: [{
+                                                label: 'My First Dataset',
+                                                data: [11, 16, 7, 3, 14],
+                                                backgroundColor: [
+                                                    'rgb(255, 99, 132)',
+                                                    'rgb(75, 192, 192)',
+                                                    'rgb(255, 205, 86)',
+                                                    'rgb(201, 203, 207)',
+                                                    'rgb(54, 162, 235)'
+                                                ]
+                                            }]
+                                        }
+                                    });
                                 });
-                            });
                             </script>
                             <!-- End Polar Area Chart -->
 

@@ -61,88 +61,107 @@ $stmt->close();
         <section class="section profile">
             <div class="row">
 
-                <div class="col-xl-5">
+                <div class="col-xl-7">
 
                     <div class="card">
                         <div class="card-body pt-3">
 
-                            <h2><?php echo htmlspecialchars($job['title']); ?>
+                            <h2>
+                                <?php echo htmlspecialchars($job['title']); ?>
                                 <a href='jobs-edit.php?id=<?= $job_id ?>' class='btn btn-success rounded-pill'>
                                     <i class="bi bi-plus-circle me-1"></i>Edit
                                 </a>
                             </h2>
+
                             <p>
                                 <?php
                                 if ($job['status'] == "1") {
-                                    echo ' <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
-                                } else if ($job['status'] == "2") {
-                                    echo ' <span class="badge bg-primary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
+                                    echo '<span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> Active</span>';
+                                } elseif ($job['status'] == "2") {
+                                    echo '<span class="badge bg-secondary"><i class="bi bi-exclamation-octagon me-1"></i> Inactive</span>';
                                 }
                                 ?>
                             </p>
 
                             <h5 class="card-title">Description:</h5>
-                            <p class="small"><?php echo htmlspecialchars($job['description']); ?></p>
+                            <p class="small"><?php echo nl2br(htmlspecialchars($job['description'])); ?></p>
 
                             <h5 class="card-title">Job Posting Details</h5>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label "><b>Job Type:</b></div>
-                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['job_type']); ?>
-                                </div>
+                                <div class="col-lg-3 col-md-4 label"><b>Job Type:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['job_type']); ?></div>
                             </div>
 
                             <div class="row">
                                 <div class="col-lg-3 col-md-4 label"><b>Salary:</b></div>
-                                <div class="col-lg-9 col-md-8"> $<?php echo htmlspecialchars($job['salary']); ?>
-                                </div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['salary']); ?></div>
                             </div>
 
                             <div class="row">
                                 <div class="col-lg-3 col-md-4 label"><b>Schedule:</b></div>
-                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['schedule']); ?>
-                                </div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['schedule']); ?></div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b>Duration:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['duration']); ?></div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b>Working Hours:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['hours']) . " hrs/week"; ?></div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b>Start Date:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['start_date']); ?></div>
                             </div>
 
                             <div class="row">
                                 <div class="col-lg-3 col-md-4 label"><b>Location:</b></div>
-                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['location']); ?>
-                                </div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['location']); ?></div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3 col-md-4 label"><b>Skills:</b></div>
-                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['skills']); ?>
-                                </div>
+                                <div class="col-lg-3 col-md-4 label"><b>Skills Required:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['skills']); ?></div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b>Preferred Skills:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['preferred_skills']); ?></div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b>Educational Requirement:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['education']); ?></div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label"><b>Responsibilities:</b></div>
+                                <div class="col-lg-9 col-md-8"><?php echo nl2br(htmlspecialchars($job['responsibilities'])); ?></div>
                             </div>
 
                             <div class="row">
                                 <div class="col-lg-3 col-md-4 label"><b>Date Posted:</b></div>
-                                <div class="col-lg-9 col-md-8">
-                                    <?php echo htmlspecialchars($job['posted_at']); ?>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label"><b>Deadline:</b></div>
-                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['end_at']); ?>
-                                </div>
+                                <div class="col-lg-9 col-md-8"><?php echo htmlspecialchars($job['posted_at']); ?></div>
                             </div>
 
                             <div class="row">
                                 <div class="col-lg-3 col-md-4 label"><b>Posted By:</b></div>
                                 <div class="col-lg-9 col-md-8">
-                                    <?php echo htmlspecialchars($job['first_name']); ?>
-                                    <?php echo htmlspecialchars($job['last_name']); ?>
+                                    <?php echo htmlspecialchars($job['first_name'] . ' ' . $job['last_name']); ?>
                                 </div>
                             </div>
 
                         </div>
                     </div>
 
+
                 </div>
 
-                <div class="col-xl-7">
+                <div class="col-xl-5">
                     <div class="card">
                         <div class="card-body pt-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">

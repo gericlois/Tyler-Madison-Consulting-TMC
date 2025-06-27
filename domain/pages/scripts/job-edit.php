@@ -12,34 +12,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = trim($_POST['title']);
     $description = trim($_POST['description']);
     $location = trim($_POST['location']);
-    $salary = floatval($_POST['salary']);
-    $deadline = $_POST['deadline'];
+    $salary = trim($_POST['salary']); // Now text, not float
     $job_type = trim($_POST['job_type']);
     $schedule = trim($_POST['schedule']);
     $skills = trim($_POST['skills']);
+    $start_date = trim($_POST['start_date']);
+    $duration = trim($_POST['duration']);
+    $hours = trim($_POST['hours']);
+    $responsibilities = trim($_POST['responsibilities']);
+    $preferred_skills = trim($_POST['preferred_skills']);
+    $education = trim($_POST['education']);
 
-    $formatted_deadline = date('Y-m-d H:i:s', strtotime($deadline));
-
+    // Updated SQL to include new fields, removed 'deadline'
     $sql = "UPDATE jobpostings 
-            SET title=?, description=?, location=?, salary=?, end_at=?, job_type=?, schedule=?, skills=?
+            SET title=?, description=?, location=?, salary=?, job_type=?, schedule=?, skills=?, start_date=?, duration=?, hours=?, responsibilities=?, preferred_skills=?, education=?
             WHERE job_id=?";
+
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssissssi", $title, $description, $location, $salary, $formatted_deadline, $job_type, $schedule, $skills, $job_id);
+    $stmt->bind_param(
+        "sssssssssssssi",
+        $title,
+        $description,
+        $location,
+        $salary,
+        $job_type,
+        $schedule,
+        $skills,
+        $start_date,
+        $duration,
+        $hours,
+        $responsibilities,
+        $preferred_skills,
+        $education,
+        $job_id
+    );
 
     if ($stmt->execute()) {
-        $admin_id = $_SESSION['admin_id']; // Assuming admin ID is stored in session
-        $action = "Job Posting Updated";
-        $activity_description = "Updated job posting ID {$job_id}, title '{$title}', location '{$location}', and salary '{$salary}'.";
+        $admin_id = $_SESSION['admin_id'] ?? null;
+        if ($admin_id) {
+            $action = "Job Posting Updated";
+            $activity_description = "Updated job posting ID {$job_id} with title '{$title}'.";
 
-        $activity_stmt = $conn->prepare("INSERT INTO activity (user_id, action, description) VALUES (?, ?, ?)");
-        $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
-        $activity_stmt->execute();
-        $activity_stmt->close();
+            $activity_stmt = $conn->prepare("INSERT INTO activity (user_id, action, description) VALUES (?, ?, ?)");
+            $activity_stmt->bind_param("iss", $admin_id, $action, $activity_description);
+            $activity_stmt->execute();
+            $activity_stmt->close();
+        }
 
         header("Location: ../jobs.php?success=JobUpdated");
+        exit();
     } else {
         header("Location: ../jobs.php?error=UpdateFailed");
+        exit();
     }
-    exit();
 }
 ?>
