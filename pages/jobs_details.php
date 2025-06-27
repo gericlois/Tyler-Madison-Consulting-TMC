@@ -79,64 +79,93 @@ $conn->close(); // Now close connection after all queries are done
 
 
     <!-- Jobs Details Start -->
-    <div class="container-fluid service py-5">
-        <div class="container py-2">
-            <div class="text-center mx-auto pb-3 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 1200px;">
-                <h4 class="text-primary">
-                    <?php
-                    if ($job['status'] == 1) {
-                        echo '<span class="badge bg-primary">Active</span>';
-                    } elseif ($job['status'] == 2) {
-                        echo '<span class="badge bg-danger">Inactive</span>';
-                    } else {
-                        echo '<span class="badge bg-warning">Pending</span>';
-                    }
-                    ?>
-                    <?php if ($applied): ?>
-                        <span class="badge bg-success">Applied</span>
-                    <?php endif; ?>
-                </h4>
-                <h1 class="display-4 mb-0">
-                    <?= htmlspecialchars($job['title']); ?>
-                </h1>
-                <p class="mb-0"><?= htmlspecialchars($job['posted_at']); ?></p>
-            </div>
+<div class="container-fluid service py-5">
+    <div class="container py-2">
+        <div class="text-center mx-auto pb-3 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 1200px;">
+            <h4 class="text-primary">
+                <?php
+                if ($job['status'] == 1) {
+                    echo '<span class="badge bg-primary">Active</span>';
+                } elseif ($job['status'] == 2) {
+                    echo '<span class="badge bg-danger">Inactive</span>';
+                } else {
+                    echo '<span class="badge bg-warning">Pending</span>';
+                }
 
-            <div class="row g-4 mb-4 justify-content-center">
-                <div class="col-12 wow fadeInUp" data-wow-delay="0.2s">
-                    <div class="service-item">
-                        <div class="service-content p-4">
-                            <div class="service-content-inner">
-                                <p><strong>Job Type:</strong> <?= htmlspecialchars($job['job_type']); ?></p>
-                                <p><strong>Salary:</strong> $<?= htmlspecialchars($job['salary']); ?></p>
-                                <p><strong>Schedule:</strong> <?= htmlspecialchars($job['schedule']); ?></p>
-                                <p><strong>Location:</strong> <?= htmlspecialchars($job['location']); ?></p>
-                                <p class="mb-4"> <?= nl2br(htmlspecialchars($job['description'])); ?> </p>
-                                <p><strong>Skills Needed:</strong> <?= htmlspecialchars($job['skills']); ?></p>
-                            </div>
+                if ($applied) {
+                    echo '<span class="badge bg-success ms-2">Applied</span>';
+                }
+                ?>
+            </h4>
+            <h1 class="display-4 mb-0">
+                <?= htmlspecialchars($job['title']); ?>
+            </h1>
+            <p class="mb-0"><?= htmlspecialchars(date('F j, Y g:i A', strtotime($job['posted_at']))); ?></p>
+        </div>
+
+        <div class="row g-4 mb-4 justify-content-center">
+            <div class="col-12 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="service-item">
+                    <div class="service-content p-4">
+                        <div class="service-content-inner">
+                            <p><strong>Job Type:</strong> <?= htmlspecialchars($job['job_type']); ?></p>
+                            <p><strong>Salary:</strong> <?= htmlspecialchars($job['salary']); ?></p>
+                            <p><strong>Schedule:</strong> <?= htmlspecialchars($job['schedule']); ?></p>
+                            <p><strong>Location:</strong> <?= htmlspecialchars($job['location']); ?></p>
+                            <p><strong>Skills Needed:</strong> <?= htmlspecialchars($job['skills']); ?></p>
+
+                            <?php if (!empty($job['start_date'])): ?>
+                                <p><strong>Start Date:</strong> <?= htmlspecialchars($job['start_date']); ?></p>
+                            <?php endif; ?>
+
+                            <?php if (!empty($job['duration'])): ?>
+                                <p><strong>Duration:</strong> <?= htmlspecialchars($job['duration']); ?></p>
+                            <?php endif; ?>
+
+                            <?php if (!empty($job['hours'])): ?>
+                                <p><strong>Working Hours:</strong> <?= htmlspecialchars($job['hours']); ?></p>
+                            <?php endif; ?>
+
+                            <?php if (!empty($job['preferred_skills'])): ?>
+                                <p><strong>Preferred Skills:</strong> <?= htmlspecialchars($job['preferred_skills']); ?></p>
+                            <?php endif; ?>
+
+                            <?php if (!empty($job['education'])): ?>
+                                <p><strong>Education Requirement:</strong> <?= htmlspecialchars($job['education']); ?></p>
+                            <?php endif; ?>
+
+                            <?php if (!empty($job['responsibilities'])): ?>
+                                <p><strong>Responsibilities:</strong><br> <?= nl2br(htmlspecialchars($job['responsibilities'])); ?></p>
+                            <?php endif; ?>
+
+                            <hr>
+                            <p class="mb-0"><strong>Description:</strong><br><?= nl2br(htmlspecialchars($job['description'])); ?></p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
-                    <?php if (!$applied): ?>
-                        <?php if (!isset($_SESSION['employee_id'])): ?>
-                            <a class="btn btn-primary rounded-pill py-3 px-5" href="login.php">
-                                Apply Now
-                            </a>
-                        <?php else: ?>
-                            <a class="btn btn-primary rounded-pill py-3 px-5"
-                                href="includes/scripts/jobsapplication.php?id=<?= $job['job_id']; ?>&status=1">
-                                Apply Now
-                            </a>
-                        <?php endif; ?>
+            <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
+                <?php if (!$applied): ?>
+                    <?php if (!isset($_SESSION['employee_id'])): ?>
+                        <a class="btn btn-primary rounded-pill py-3 px-5" href="login.php">
+                            Apply Now
+                        </a>
+                    <?php else: ?>
+                        <a class="btn btn-primary rounded-pill py-3 px-5"
+                           href="includes/scripts/jobsapplication.php?id=<?= $job['job_id']; ?>&status=1">
+                            Apply Now
+                        </a>
                     <?php endif; ?>
-                    <a href="javascript:history.back()" class="btn btn-success rounded-pill py-3 px-5">Back to
-                        Job Listing</a>
-                </div>
+                <?php endif; ?>
+
+                <a href="javascript:history.back()" class="btn btn-success rounded-pill py-3 px-5 ms-2">
+                    Back to Job Listing
+                </a>
             </div>
         </div>
     </div>
+</div>
 
 
     <!-- Jobs Details End -->
