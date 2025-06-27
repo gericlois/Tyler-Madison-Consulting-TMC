@@ -61,19 +61,19 @@ include "../../pages/includes/connection.php";
 
                                 <?php
                                 // Get today's active job count
-                                $sql_today = "SELECT COUNT(*) AS active_jobs_today FROM jobpostings WHERE status = '1' AND DATE(posted_at) < CURDATE()";
+                                $sql_today = "SELECT COUNT(*) AS active_jobs_today FROM jobpostings WHERE status = '1' ";
                                 $result_today = $conn->query($sql_today);
                                 $row_today = $result_today->fetch_assoc();
                                 $active_jobs_today = $row_today['active_jobs_today'];
 
                                 // Get today's inactive job count
-                                $sql_today = "SELECT COUNT(*) AS active_jobs_today FROM jobpostings WHERE status = '2' AND DATE(posted_at) < CURDATE()";
+                                $sql_today = "SELECT COUNT(*) AS active_jobs_today FROM jobpostings WHERE status = '2' ";
                                 $result_today = $conn->query($sql_today);
                                 $row_today = $result_today->fetch_assoc();
                                 $inactive_jobs_today = $row_today['active_jobs_today'];
 
                                 // Get yesterday's active job count
-                                $sql_yesterday = "SELECT COUNT(*) AS active_jobs_yesterday FROM jobpostings WHERE status = '1' AND DATE(posted_at) < CURDATE() - INTERVAL 1 DAY";
+                                $sql_yesterday = "SELECT COUNT(*) AS active_jobs_yesterday FROM jobpostings WHERE status = '1' ";
                                 $result_yesterday = $conn->query($sql_yesterday);
                                 $row_yesterday = $result_yesterday->fetch_assoc();
                                 $active_jobs_yesterday = $row_yesterday['active_jobs_yesterday'];
