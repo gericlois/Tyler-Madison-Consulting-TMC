@@ -86,83 +86,83 @@ if ($_SESSION["role"] === "employer" && isset($_SESSION["employer_id"])) {
                                 dates. </p>
 
                             <!-- Table with stripped rows -->
-                        <table class="table datatable">
-    <thead>
-        <tr>
-            <th>Job ID</th>
-            <th>Title</th>
-            <th>Location</th>
-            <th>Salary</th>
-            <th>Employer</th>
-            <th data-type="text">Start Date</th>
-            <th>Status</th>
-            <th>Applicants</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $sql = "SELECT jp.job_id, jp.title, jp.location, jp.salary, jp.start_date, jp.status, 
-                    u.username AS posted_by_name, jp.posted_at, e.name AS employer_name, e.employer_id,
-                    (SELECT COUNT(*) FROM jobapplications ja WHERE ja.job_id = jp.job_id) AS applicant_count
-                FROM jobpostings jp
-                LEFT JOIN users u ON jp.posted_by = u.user_id 
-                LEFT JOIN employers e ON jp.employer_id = e.employer_id
-                WHERE jp.status = 1 $employer_id_filter
-                ORDER BY jp.job_id DESC";
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Job ID</th>
+                                        <th>Title</th>
+                                        <th>Location</th>
+                                        <th>Salary</th>
+                                        <th>Employer</th>
+                                        <th data-type="text">Start Date</th>
+                                        <th>Status</th>
+                                        <th>Applicants</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql = "SELECT jp.job_id, jp.title, jp.location, jp.salary, jp.start_date, jp.status, 
+                                                    u.username AS posted_by_name, jp.posted_at, e.name AS employer_name, e.employer_id,
+                                                    (SELECT COUNT(*) FROM jobapplications ja WHERE ja.job_id = jp.job_id) AS applicant_count
+                                                FROM jobpostings jp
+                                                LEFT JOIN users u ON jp.posted_by = u.user_id 
+                                                LEFT JOIN employers e ON jp.employer_id = e.employer_id
+                                                WHERE jp.status = 1 $employer_id_filter
+                                                ORDER BY jp.job_id DESC";
 
-        $result = $conn->query($sql);
+                                                                    $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                // Format values
-                $job_id_formatted = str_pad($row['job_id'], 3, '0', STR_PAD_LEFT);
-              
-                $start_date = htmlspecialchars($row['start_date']);
-                $status_text = ($row['status'] == "1") ? "Active" : "Inactive";
-                $status_class = ($row['status'] == "1") ? "bg-primary" : "bg-secondary";
+                                                                    if ($result->num_rows > 0) {
+                                                                        while ($row = $result->fetch_assoc()) {
+                                                                            // Format values
+                                                                            $job_id_formatted = str_pad($row['job_id'], 3, '0', STR_PAD_LEFT);
 
-                echo "<tr>
-                    <td>{$job_id_formatted}</td>
-                    <td>
-                        <a href='jobs-profile.php?id={$row['job_id']}' class='fw-bold text-decoration-none'>
-                            " . htmlspecialchars($row['title']) . "
-                        </a>
-                    </td>
-                    <td>" . htmlspecialchars($row['location']) . "</td>
-                    <td>" . htmlspecialchars($row['salary']) . "</td>
-                    <td>
-                        <a href='employers-profile.php?id=" . $row['employer_id'] . "'>
-                            " . htmlspecialchars($row['employer_name']) . "
-                        </a>
-                    </td>
-                    <td>{$start_date}</td>
-                    <td><span class='badge {$status_class}'>{$status_text}</span></td>
-                    <td>{$row['applicant_count']}</td>
-                    <td>";
+                                                                            $start_date = htmlspecialchars($row['start_date']);
+                                                                            $status_text = ($row['status'] == "1") ? "Active" : "Inactive";
+                                                                            $status_class = ($row['status'] == "1") ? "bg-primary" : "bg-secondary";
 
-                // Action Buttons
-                if ($row['status'] == "1") {
-                    echo "<a href='scripts/job-update.php?id={$row['job_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Deactivate</a>";
+                                                                            echo "<tr>
+                                                    <td>{$job_id_formatted}</td>
+                                                    <td>
+                                                        <a href='jobs-profile.php?id={$row['job_id']}' class='fw-bold text-decoration-none'>
+                                                            " . htmlspecialchars($row['title']) . "
+                                                        </a>
+                                                    </td>
+                                                    <td>" . htmlspecialchars($row['location']) . "</td>
+                                                    <td>" . htmlspecialchars($row['salary']) . "</td>
+                                                    <td>
+                                                        <a href='employers-profile.php?id=" . $row['employer_id'] . "'>
+                                                            " . htmlspecialchars($row['employer_name']) . "
+                                                        </a>
+                                                    </td>
+                                                    <td>{$start_date}</td>
+                                                    <td><span class='badge {$status_class}'>{$status_text}</span></td>
+                                                    <td>{$row['applicant_count']}</td>
+                                                    <td>";
 
-                    if ($row['applicant_count'] > 0) {
-                        echo " <a href='#' class='btn btn-sm btn-success' data-bs-toggle='modal' data-bs-target='#fillJobModal' data-job-id='{$row['job_id']}'>
-                                Fill
-                              </a>";
-                    }
-                } elseif ($row['status'] == "2") {
-                    echo "<a href='scripts/job-update.php?id={$row['job_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Activate</a>";
-                }
+                                                                // Action Buttons
+                                                                if ($row['status'] == "1") {
+                                                                    echo "<a href='scripts/job-update.php?id={$row['job_id']}&status=2' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to make the Job Posting Inactive?\")'>Deactivate</a>";
 
-                echo "</td></tr>";
-            }
-        } else {
-            echo "<tr><td colspan='9' class='text-center'>No jobs found</td></tr>";
-        }
-        $conn->close();
-        ?>
-    </tbody>
-</table>
+                                                                    if ($row['applicant_count'] > 0) {
+                                                                        echo " <a href='#' class='btn btn-sm btn-success' data-bs-toggle='modal' data-bs-target='#fillJobModal' data-job-id='{$row['job_id']}'>
+                                                    Fill
+                                                </a>";
+                                                }
+                                            } elseif ($row['status'] == "2") {
+                                                echo "<a href='scripts/job-update.php?id={$row['job_id']}&status=1' class='btn btn-sm btn-primary' onclick='return confirm(\"Are you sure you want to make the Job Posting Active?\")'>Activate</a>";
+                                            }
+
+                                            echo "</td></tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='9' class='text-center'>No jobs found</td></tr>";
+                                    }
+                                    $conn->close();
+                                    ?>
+                                </tbody>
+                            </table>
 
                             <!-- End Table with stripped rows -->
                             <!-- Fill Job Modal -->
@@ -197,10 +197,10 @@ if ($_SESSION["role"] === "employer" && isset($_SESSION["employer_id"])) {
                                 </div>
                             </div>
                             <script>
-                                document.addEventListener("DOMContentLoaded", function () {
+                                document.addEventListener("DOMContentLoaded", function() {
                                     var fillJobModal = document.getElementById('fillJobModal');
 
-                                    fillJobModal.addEventListener('show.bs.modal', function (event) {
+                                    fillJobModal.addEventListener('show.bs.modal', function(event) {
                                         var button = event.relatedTarget;
                                         var jobId = button.getAttribute('data-job-id');
                                         document.getElementById('fillJobId').value = jobId;

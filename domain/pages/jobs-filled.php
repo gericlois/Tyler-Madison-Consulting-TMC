@@ -147,7 +147,7 @@ if ($_SESSION["role"] === "employer" && isset($_SESSION["employer_id"])) {
                                                         </a>
                                                     </td>
                                                     <td>{$row['location']}</td>
-                                                    <td>$" . number_format($row['salary'], 2) . "</td>
+                                                    <td>{$row['salary']}</td>
                                                     <td>
                                                         <a href='employers-profile.php?id=" . $row['employer_id'] . "'>
                                                             " . htmlspecialchars($row['employer_name']) . "
