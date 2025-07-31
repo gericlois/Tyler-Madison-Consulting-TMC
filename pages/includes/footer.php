@@ -21,7 +21,7 @@
                                         href="https://www.instagram.com/tylermadisonconsulting/" target="_blank"
                                         rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
                                     <a class="btn btn-md-square rounded-circle me-0"
-                                        href="https://www.linkedin.com/in/tyler-madison-consulting-undefined-b39914365/"
+                                        href="https://www.linkedin.com/in/tyler-madison-consulting-b39914365/"
                                         target="_blank" rel="noopener noreferrer">
                                         <i class="fab fa-linkedin-in"></i>
                                     </a>
