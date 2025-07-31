@@ -25,7 +25,7 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
                             target="_blank" rel="noopener noreferrer"><i
                                 class="fab fa-instagram"></i></a>
                         <a class="btn p-0 text-primary me-0"
-                            href="https://www.linkedin.com/in/tyler-madison-consulting-undefined-b39914365/"
+                            href="https://www.linkedin.com/in/tyler-madison-consulting-b39914365/"
                             target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
