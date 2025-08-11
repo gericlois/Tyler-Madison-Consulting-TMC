@@ -2,8 +2,8 @@
 <html lang="en">
 <?php
 session_start();
-    include "includes/head.php";
-    include "includes/connection.php";
+include "includes/head.php";
+include "includes/connection.php";
 ?>
 
 <body>
@@ -45,7 +45,7 @@ session_start();
                         </div>
                         <div class="col-lg-5 animated fadeInRight">
                             <div class="calrousel-img" style="object-fit: cover;">
-                                <img src="../includes/../includes/img/carousel1.png" class="img-fluid w-100" alt="">
+                                <img src="../includes/../includes/img/carousel1.png" class="img-fluid w-100" alt="Tyler Madison Consulting delivering specialized staffing solutions for life sciences, manufacturing, and automation industries">
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@ session_start();
                     <div class="row gy-4 gy-lg-0 gx-0 gx-lg-5 align-items-center">
                         <div class="col-lg-5 animated fadeInLeft">
                             <div class="calrousel-img">
-                                <img src="../includes/img/carousel2.png" class="img-fluid w-100" alt="">
+                                <img src="../includes/img/carousel2.png" class="img-fluid w-100" alt="Tyler Madison Consulting delivering specialized staffing solutions for life sciences, manufacturing, and automation industries">
                             </div>
                         </div>
                         <div class="col-lg-7 animated fadeInRight">
@@ -100,21 +100,17 @@ session_start();
                     <div class="about-item-content bg-white rounded p-5 h-100">
                         <h4 class="text-primary">About Our Company</h4>
                         <h3 class="display-6 mb-4">Connecting Talent with Opportunity</h3>
-                        <p>At Tyler Madison Consulting, LLC, we specialize in providing expert technical consulting
-                            staffing solutions tailored to meet the unique needs of each client. Founded with a passion
-                            for delivering high-quality, results-driven services, our mission is to connect businesses
-                            with top-tier professionals who can help drive innovation, efficiency, and growth.
+                        <p>At Tyler Madison Consulting, LLC, we provide specialized technical consulting and staffing solutions designed to meet the unique workforce needs of each client. With a passion for delivering high-quality, results-driven hiring services, our mission is to connect life sciences, manufacturing, and automation companies with top-tier professionals who drive innovation, efficiency, and business growth.
                         </p>
-                        <p>At Tyler Madison Consulting, LLC, we don’t just fill positions—we help you build a strong,
-                            efficient, and forward-thinking workforce that drives success.
+                        <p>Unlike traditional staffing firms, we go beyond filling positions—we help you build a skilled, efficient, and future-ready workforce that delivers measurable success.
                         </p>
                         <hr>
-                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>We Connect You with Top Talent
+                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>We Connect You with Top Talent –<small>Access highly qualified candidates in validation, automation, engineering, and quality compliance.</small> 
                         </p>
-                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>We Help You Scale Efficiently
+                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>We Help You Scale Efficiently – <small>Flexible staffing models to match your project timelines and business demands.</small>
                         </p>
-                        <p class="text-dark mb-4"><i class="fa fa-check text-primary me-3"></i>We Streamline Your Hiring
-                            Process</p>
+                        <p class="text-dark mb-4"><i class="fa fa-check text-primary me-3"></i>We Streamline Your Hiring Process – <small>Proven recruitment strategies that reduce time-to-hire while ensuring regulatory compliance.</small>
+                        </p>
                         <a class="btn btn-primary rounded-pill py-3 px-5" href="#">We Ensure the Perfect Fit </a>
                     </div>
                 </div>
@@ -123,7 +119,7 @@ session_start();
                         <div class="row g-4 justify-content-center">
                             <div class="col-12">
                                 <div class="rounded bg-light">
-                                    <img src="../includes/img/about-1.png" class="img-fluid rounded w-100" alt="">
+                                    <img src="../includes/img/about-1.png" class="img-fluid rounded w-100" alt="Professional staffing consultant meeting with client to discuss FDA compliance and validation needs">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -175,9 +171,8 @@ session_start();
         <div class="container py-5">
             <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
                 <h4 class="text-primary">Our Features</h4>
-                <h1 class="display-4 mb-4">Why Choose Tyler Madison Consulting?</h1>
-                <p class="mb-0">We go beyond staffing—we build strong, strategic workforce solutions that drive business
-                    success.
+                <h1 class="display-4 mb-4">Why Partner with Tyler Madison Consulting?</h1>
+                <p class="mb-0">We go beyond staffing — we deliver strategic workforce solutions that drive business growth, optimize operations, and ensure compliance with industry standards.
                 </p>
             </div>
             <div class="row g-4">
@@ -187,8 +182,7 @@ session_start();
                             <i class="fa fa-heartbeat fa-3x"></i>
                         </div>
                         <h4 class="mb-4"> Tailored Staffing Solutions </h4>
-                        <p class="mb-4">Whether you need temporary, project-based, or full-time hires, we provide the
-                            right talent to meet your unique business needs.
+                        <p class="mb-4">Whether you require temporary, project-based, or permanent hires, we provide the right professionals for your operational and regulatory needs. From validation engineers to automation specialists, our staffing solutions are designed to meet specific compliance and technical requirements.
                         </p>
                         <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Learn More</a>
                     </div>
@@ -199,8 +193,7 @@ session_start();
                             <i class="fa fa-plus-square fa-3x"></i>
                         </div>
                         <h4 class="mb-4"> Industry-Specific Expertise</h4>
-                        <p class="mb-4">Our consultants specialize in IT, engineering, cybersecurity, pharmaceuticals,
-                            and more, ensuring top-tier talent for every sector.
+                        <p class="mb-4">Our consultants bring proven experience in IT, engineering, pharmaceuticals, life sciences, manufacturing, and compliance-driven sectors. We understand the demands of FDA regulations, data integrity requirements, GAMP 5 methodologies, and 21 CFR Part 11 standards, ensuring we source the best talent for your industry.
                         </p>
                         <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Learn More</a>
                     </div>
@@ -211,8 +204,7 @@ session_start();
                             <i class="fa fa-stethoscope fa-3x"></i>
                         </div>
                         <h4 class="mb-4">Efficient & Cost-Effective Hiring </h4>
-                        <p class="mb-4">Save time and resources with our streamlined recruitment process, delivering
-                            qualified professionals quickly and efficiently.
+                        <p class="mb-4">Through our streamlined recruitment process, we save clients time and money while delivering highly qualified professionals — from control system engineers to quality assurance managers — who are ready to contribute immediately to your projects and operations.
                         </p>
                         <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Learn More</a>
                     </div>
@@ -223,8 +215,7 @@ session_start();
                             <i class="fa fa-medkit fa-3x"></i>
                         </div>
                         <h4 class="mb-4">Seamless Talent Integration</h4>
-                        <p class="mb-4">We don’t just fill positions—we ensure a perfect match for your company culture,
-                            goals, and long-term success.
+                        <p class="mb-4">We ensure every placement is a perfect fit for your culture, technical needs, and compliance goals. Whether building a specialized project team or enhancing your existing workforce, we focus on long-term retention and measurable success.
                         </p>
                         <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Learn More</a>
                     </div>
@@ -239,17 +230,15 @@ session_start();
         <div class="container py-5">
             <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
                 <h4 class="text-primary">Our Services</h4>
-                <h1 class="display-4 mb-4">Expert Staffing Solutions for Your Business</h1>
-                <p class="mb-0">At Tyler Madison Consulting, LLC, we provide specialized staffing solutions to help
-                    businesses find top-tier talent efficiently. Whether you need short-term expertise or long-term
-                    workforce solutions, we’ve got you covered.
+                <h1 class="display-4 mb-4">Expert Staffing & Workforce Solutions for Specialized Industries</h1>
+                <p class="mb-0">At Tyler Madison Consulting, LLC, we provide specialized staffing solutions to help businesses in life sciences, pharmaceuticals, manufacturing, automation, and technology find highly skilled professionals for critical roles. Whether you need short-term expertise, long-term consulting, or customized workforce strategies, we ensure you get the right talent to meet your operational, technical, and compliance requirements.
                 </p>
             </div>
             <div class="row g-4 justify-content-center">
                 <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
                     <div class="service-item">
                         <div class="service-img">
-                            <img src="../includes/img/1.png" class="img-fluid rounded-top w-100" alt="">
+                            <img src="../includes/img/1.png" class="img-fluid rounded-top w-100" alt="Validation engineer reviewing IQ, OQ, and PQ protocols for manufacturing compliance">
                             <div class="service-icon p-3">
                                 <i class="fa fa-users fa-2x"></i>
                             </div>
@@ -257,8 +246,7 @@ session_start();
                         <div class="service-content p-4">
                             <div class="service-content-inner">
                                 <a href="#" class="d-inline-block h4 mb-4">Temporary & Project-Based Staffing</a>
-                                <p class="mb-4">Need experts for a short-term project? We provide skilled professionals
-                                    to fill gaps and support your business without long-term commitments.</p>
+                                <p class="mb-4">When your business needs skilled experts for short-term projects or urgent assignments, we deliver specialized temporary staffing to fill crucial roles and maintain productivity. Ideal for Installation Qualification (IQ), Operational Qualification (OQ), and Performance Qualification (PQ) projects, as well as computer system validation and regulatory compliance tasks.</p>
                                 <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Read More</a>
                             </div>
                         </div>
@@ -267,7 +255,7 @@ session_start();
                 <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.4s">
                     <div class="service-item">
                         <div class="service-img">
-                            <img src="../includes/img/2.png" class="img-fluid rounded-top w-100" alt="">
+                            <img src="../includes/img/2.png" class="img-fluid rounded-top w-100" alt="Automation specialist integrating Rockwell Automation systems in a manufacturing facility">
                             <div class="service-icon p-3">
                                 <i class="fa fa-hospital fa-2x"></i>
                             </div>
@@ -275,8 +263,9 @@ session_start();
                         <div class="service-content p-4">
                             <div class="service-content-inner">
                                 <a href="#" class="d-inline-block h4 mb-4">Long-Term Consulting & Contract Staffing</a>
-                                <p class="mb-4">For businesses seeking dedicated professionals on a contract basis, we
-                                    offer highly qualified consultants who integrate seamlessly into your team.</p>
+                                <p class="mb-4">For organizations seeking dedicated professionals on a contract basis, we provide consultants with expertise in automation systems, integrated control systems (DeltaV, Rockwell Automation), GAMP 5 methodologies, and 21 CFR Part 11 compliance. Our specialists integrate seamlessly into your team, helping you achieve business goals while maintaining FDA data integrity requirements.
+
+                                </p>
                                 <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Read More</a>
                             </div>
                         </div>
@@ -285,7 +274,7 @@ session_start();
                 <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.6s">
                     <div class="service-item">
                         <div class="service-img">
-                            <img src="../includes/img/3.png" class="img-fluid rounded-top w-100" alt="">
+                            <img src="../includes/img/3.png" class="img-fluid rounded-top w-100" alt="Recruitment specialist interviewing candidate for quality management system (QMS) position">
                             <div class="service-icon p-3">
                                 <i class="fa fa-user-md fa-2x"></i>
                             </div>
@@ -293,9 +282,7 @@ session_start();
                         <div class="service-content p-4">
                             <div class="service-content-inner">
                                 <a href="#" class="d-inline-block h4 mb-4">Direct Hire & Permanent Placement</a>
-                                <p class="mb-4">Finding the right full-time employee can be challenging. Our direct hire
-                                    solutions ensure you get top talent that fits your company culture and long-term
-                                    goals.</p>
+                                <p class="mb-4">Finding the right full-time employee with technical and regulatory expertise can be challenging. Our direct hire recruitment connects you with top-tier candidates skilled in Quality Management Systems (QMS), validation efforts, and manufacturing optimization — ensuring both a cultural fit and long-term success.</p>
                                 <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Read More</a>
                             </div>
                         </div>
@@ -304,7 +291,7 @@ session_start();
                 <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
                     <div class="service-item">
                         <div class="service-img">
-                            <img src="../includes/img/4.png" class="img-fluid rounded-top w-100" alt="">
+                            <img src="../includes/img/4.png" class="img-fluid rounded-top w-100" alt="Engineering team performing clean-in-place (CIP) and steam-in-place (SIP) operations in a production plant">
                             <div class="service-icon p-3">
                                 <i class="fa fa-heart fa-2x"></i>
                             </div>
@@ -312,8 +299,7 @@ session_start();
                         <div class="service-content p-4">
                             <div class="service-content-inner">
                                 <a href="#" class="d-inline-block h4 mb-4">Custom Workforce Solutions</a>
-                                <p class="mb-4">Every business has unique needs. We create tailored staffing strategies
-                                    to provide flexible, scalable solutions that align with your business objectives.
+                                <p class="mb-4">We understand that every business has unique operational needs. That’s why we design flexible, scalable staffing strategies for specialized projects — from clean-in-place (CIP) and steam-in-place (SIP) operations to system documentation development and protocol execution. Our solutions align staffing capabilities with your objectives for maximum efficiency.
                                 </p>
                                 <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Read More</a>
                             </div>
@@ -393,7 +379,7 @@ session_start();
                     </div>
                 </div>
                 <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.4s">
-                    <img src="../includes/img/faq.png" class="img-fluid w-100" alt="">
+                    <img src="../includes/img/faq.png" class="img-fluid w-100" alt="Consulting team designing custom staffing strategies for specialized industries">
                 </div>
             </div>
         </div>
