@@ -45,7 +45,7 @@ session_start();
                             <div class="text-center pb-4">
                                 <h4 class="text-primary">Sign Up</h4>
                                 <h2 class="mb-3">Join Us Today!</h2>
-                                <p class="mb-4">Create your employee account to access company resources and manage your
+                                <p class="mb-4">Create your account to access company resources and manage your
                                     profile.</p>
                             </div>
                             <?php

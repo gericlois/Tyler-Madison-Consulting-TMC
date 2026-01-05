@@ -45,36 +45,26 @@
                 <div class="pt-5" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
                     <div class="row g-0">
                         <div class="col-12">
-                            <div class="row g-4">                                <div class="col-lg-6 col-xl-4">
+                            <div class="row g-4">
+                                <div class="col-lg-6 col-xl-6">
                                     <div class="d-flex">
                                         <div class="btn-sm-square bg-primary text-white rounded p-4 me-4">
                                             <i class="fas fa-map-marker-alt fa-2x"></i>
                                         </div>
                                         <div>
                                             <h4 class="text-white">Address</h4>
-                                            <p class="mb-0">4205 Park Brooke Trace, Suite 1 Alpharetta, GA 30022.</p>
+                                            <p class="mb-0">4205 Park Brooke Trace, Suite 1 Alpharetta, GA 30022</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-xl-4">
+                                <div class="col-lg-6 col-xl-6">
                                     <div class="d-flex">
                                         <div class="btn-sm-square bg-primary text-white rounded p-4 me-4">
                                             <i class="fas fa-envelope fa-2x"></i>
                                         </div>
                                         <div>
                                             <h4 class="text-white">Mail Us</h4>
-                                            <p class="mb-0">tylermadisonconsulting@gmail.com</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-xl-4">
-                                    <div class="d-flex">
-                                        <div class="btn-sm-square bg-primary text-white rounded p-4 me-4">
-                                            <i class="fa fa-phone-alt fa-2x"></i>
-                                        </div>
-                                        <div>
-                                            <h4 class="text-white">Telephone</h4>
-                                            <p class="mb-0"> +973-715-7312</p>
+                                            <p class="mb-0">cgray@tylermadisonconsulting.com</p>
                                         </div>
                                     </div>
                                 </div>
@@ -98,22 +88,6 @@
                             class="btn btn-primary rounded-pill position-absolute top-0 end-0 py-2 mt-2 me-2">
                             Sign Up
                         </button>
-                    </div>
-                    <div class="d-flex flex-shrink-0">
-                        <div class="footer-btn">
-                            <a href="tel:+01234567890"
-                                class="btn btn-lg-square rounded-circle position-relative wow tada"
-                                data-wow-delay=".9s">
-                                <i class="fa fa-phone-alt fa-2x"></i>
-                                <div class="position-absolute" style="top: 2px; right: 12px;">
-                                    <span><i class="fa fa-comment-dots text-secondary"></i></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="d-flex flex-column ms-3 flex-shrink-0">
-                            <span>Need Help? Call Our Experts</span>
-                            <a href="tel:+01234567890"><span class="text-white">Free: +973-715-7312</span></a>
-                        </div>
                     </div>
                 </div>
 

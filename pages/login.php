@@ -57,18 +57,18 @@ if ($role === 'employer') {
                     <p class="text-muted">Access your personalized dashboard now</p>
 
                     <?php if (isset($_GET['error'])): ?>
-                        <?php if ($_GET["error"] == "AccountNotFound"): ?>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <b>There is no account registered! First, create an account!
-                                    <a class="text-primary fw-bold" href="signup.php">SIGN UP NOW!</a></b>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        <?php elseif ($_GET["error"] == "IncorrectPassword"): ?>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <b>The password is incorrect. Before logging in, make sure your password is correct.</b>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        <?php endif; ?>
+                    <?php if ($_GET["error"] == "AccountNotFound"): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <b>There is no account registered! First, create an account!
+                            <a class="text-primary fw-bold" href="signup.php">SIGN UP NOW!</a></b>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php elseif ($_GET["error"] == "IncorrectPassword"): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <b>The password is incorrect. Before logging in, make sure your password is correct.</b>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php endif; ?>
                     <?php endif; ?>
 
                     <hr>
@@ -89,8 +89,14 @@ if ($role === 'employer') {
                         <button type="submit" class="btn btn-primary w-100 py-3"><?php echo $roleTitle; ?></button>
                     </form>
 
-                    <p class="mt-4"> Don't have an account yet? <a class="text-primary fw-bold" href="signup.php">SIGN
-                            UP NOW!</a></p>
+                    <p class="mt-4">
+                        Don't have an account yet?
+                        <?php if ($role === 'employer'): ?>
+                        <a class="text-primary fw-bold" href="signup_employer.php">SIGN UP NOW!</a>
+                        <?php else: ?>
+                        <a class="text-primary fw-bold" href="signup.php">SIGN UP NOW!</a>
+                        <?php endif; ?>
+                    </p>
                 </div>
             </div>
         </div>
