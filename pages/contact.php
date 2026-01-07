@@ -156,18 +156,18 @@
                                     </div>
                                     <div>
                                         <h4>Mail Us</h4>
-                                        <p class="mb-0">cgray@tylermadisonconsulting.com</p>
+                                        <p class="mb-0">info@tylermadisonconsulting.com</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.8s">
                                 <div class="contact-add-item">
                                     <div class="contact-icon text-primary mb-4">
-                                        <i class="fab fa-firefox-browser fa-2x"></i>
+                                        <i class="fas fa-phone fa-2x"></i>
                                     </div>
                                     <div>
-                                        <h4>Your Site</h4>
-                                        <p class="mb-0">http://tylermadisonconsulting.com/</p>
+                                        <h4>Telephone</h4>
+                                        <p class="mb-0">973 715-7312</p>
                                     </div>
                                 </div>
                             </div>

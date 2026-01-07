@@ -13,7 +13,7 @@ $user_id = $_SESSION['user_id']; // The logged-in user
 // Fetch employee details using JOIN
 $sql = "SELECT e.employee_id, u.first_name, u.last_name, u.email, u.phone, u.address, 
                e.position, e.cover_letter, e.link_facebook, e.link_linkedin, e.link_instagram, 
-               e.status, e.created_at, e.profile_picture, e.resume_path
+               e.status, e.created_at, e.profile_picture, e.resume_path, e.cover_letter_path
         FROM employees e
         LEFT JOIN users u ON e.user_id = u.user_id
         WHERE e.user_id = ?";
@@ -37,7 +37,8 @@ $stmt->bind_result(
     $status,
     $created_at,
     $profile_picture,
-    $resume_path
+    $resume_path,
+    $cover_letter_path
 );
 
 if ($stmt->fetch()) {
@@ -90,6 +91,14 @@ $stmt->close();
                                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                         </div>';
                 }
+                if ($_GET["success"] == "cover_letter_uploaded") {
+                    echo '
+                                                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                                        <strong>Success!</strong> Your cover letter has been uploaded successfully.  
+                                                        You can now review your updated resume when you apply for jobs.  
+                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </div>';
+                }
                 if ($_GET["success"] == "IncorrectPassword") {
                     echo '
                                                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -113,7 +122,7 @@ $stmt->close();
                             <!-- Upload Profile Picture Form -->
                             <form action="includes/scripts/upload_profile.php" method="POST" enctype="multipart/form-data"
                                 class="row justify-content-center">
-                                <div class="col-3">
+                                <div class="col-7">
                                     <input type="file" name="profile_picture" accept="image/*" required
                                         class="form-control">
                                 </div>
@@ -124,7 +133,7 @@ $stmt->close();
                             <hr>
                         <?php endif; ?>
 
-                        <h2 class="card-title"><?php echo htmlspecialchars($first_name . " " . $last_name); ?>
+                        <h2 class="card-title"><?php echo htmlspecialchars($first_name . " " . $last_name); ?><br>
                             <a href="profile-edit.php?user_id=<?php echo htmlspecialchars($user_id); ?>"
                                 class="btn-sm btn-warning rounded-pill py-2 px-4 ms-3 flex-shrink-0">
                                 Edit Profile
@@ -145,87 +154,132 @@ $stmt->close();
             <div class="col-lg-8 mb-4">
                 <div class="card shadow-lg">
                     <div class="card-body text-left">
-                        <p><strong>Cover Letter:</strong></p>
+                        <p><strong>Cover Letter:</strong>
 
-                        <?php if (!empty($cover_letter)): ?>
-                            <p><?php echo nl2br(htmlspecialchars($cover_letter)); ?></p>
-                        <?php else: ?>
-                            <form action="includes/scripts/upload_cover_letter.php" method="POST">
-                                <div class="mb-3">
-                                    <textarea name="cover_letter" class="form-control"
-                                        placeholder="Write your cover letter here..." required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-success">Save Cover Letter</button>
-                            </form>
-                        <?php endif; ?>
-
-                        <hr>
-
-                        <!-- Resume Upload / View -->
-                        <p><strong>Resume:</strong>
-
-                            <?php if (!empty($resume_path)): ?>
+                            <!-- Cover Letter Upload / View -->
+                            <?php if (!empty($cover_letter_path)): ?>
                                 <!-- Button to Open Modal -->
                                 <button type="button" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0"
-                                    data-bs-toggle="modal" data-bs-target="#resumeModal">
-                                    View Resume
+                                    data-bs-toggle="modal" data-bs-target="#coverLetterModal">
+                                    View Cover Letter
                                 </button>
 
-                                <!-- Button to Change Resume -->
+                                <!-- Button to Change Cover Letter -->
                                 <button type="button" class="btn btn-warning rounded-pill py-2 px-4 ms-2"
-                                    id="changeResumeBtn">
-                                    Change Resume
+                                    id="changeCoverLetterBtn">
+                                    Change Cover Letter
                                 </button>
-
-                                <!-- Resume Modal -->
-                            <div class="modal fade" id="resumeModal" tabindex="-1" aria-labelledby="resumeModalLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="resumeModalLabel">Resume Preview</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
-                                            <iframe src="includes/scripts/<?php echo htmlspecialchars($resume_path); ?>"
-                                                width="100%" height="1000px" style="border: none;"></iframe>
-                                        </div>
+                        </p>
+                        <!-- Cover Letter Modal -->
+                        <div class="modal fade" id="coverLetterModal" tabindex="-1" aria-labelledby="coverLetterModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="coverLetterModalLabel">Cover Letter Preview</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+                                        <iframe src="includes/scripts/<?php echo htmlspecialchars($cover_letter_path); ?>"
+                                            width="100%" height="1000px" style="border: none;"></iframe>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Hidden Resume Upload Form (Initially Hidden) -->
-                            <form action="includes/scripts/upload_resume.php" method="POST" enctype="multipart/form-data"
-                                class="row justify-content-center mt-3" id="resumeUploadForm" style="display: none;">
-                                <div class="col-5">
-                                    <input type="file" name="resume" accept=".pdf" required class="form-control">
-                                </div>
-                                <div class="col-3">
-                                    <button type="submit" class="btn btn-success">Upload</button>
-                                </div>
-                            </form>
+                        <!-- Hidden Cover Letter Upload Form (Initially Hidden) -->
+                        <form action="includes/scripts/upload_cover_letter.php" method="POST" enctype="multipart/form-data"
+                            class="row justify-content-center mt-3" id="coverLetterUploadForm" style="display: none;">
+                            <div class="col-5">
+                                <input type="file" name="cover_letter" accept=".pdf" required class="form-control">
+                            </div>
+                            <div class="col-3">
+                                <button type="submit" class="btn btn-success">Upload</button>
+                            </div>
+                        </form>
 
-                        <?php else: ?>
-                            <!-- Resume Upload Form (Default) -->
-                            <form action="includes/scripts/upload_resume.php" method="POST" enctype="multipart/form-data"
-                                class="row justify-content-center">
-                                <div class="col-5">
-                                    <input type="file" name="resume" accept=".pdf" required class="form-control">
+                    <?php else: ?>
+                        <!-- Cover Letter Upload Form (Default) -->
+                        <form action="includes/scripts/upload_cover_letter.php" method="POST" enctype="multipart/form-data"
+                            class="row justify-content-center">
+                            <div class="col-5">
+                                <input type="file" name="cover_letter" accept=".pdf" required class="form-control">
+                            </div>
+                            <div class="col-3">
+                                <button type="submit" class="btn btn-success">Upload</button>
+                            </div>
+                        </form>
+                    <?php endif; ?>
+
+
+                    <hr>
+
+                    <!-- Resume Upload / View -->
+                    <p><strong>Resume:</strong>
+
+                        <?php if (!empty($resume_path)): ?>
+                            <!-- Button to Open Modal -->
+                            <button type="button" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0"
+                                data-bs-toggle="modal" data-bs-target="#resumeModal">
+                                View Resume
+                            </button>
+
+                            <!-- Button to Change Resume -->
+                            <button type="button" class="btn btn-warning rounded-pill py-2 px-4 ms-2"
+                                id="changeResumeBtn">
+                                Change Resume
+                            </button>
+
+                            <!-- Resume Modal -->
+                    <div class="modal fade" id="resumeModal" tabindex="-1" aria-labelledby="resumeModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="resumeModalLabel">Resume Preview</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
-                                <div class="col-3">
-                                    <button type="submit" class="btn btn-success">Upload</button>
+                                <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+                                    <iframe src="includes/scripts/<?php echo htmlspecialchars($resume_path); ?>"
+                                        width="100%" height="1000px" style="border: none;"></iframe>
                                 </div>
-                            </form>
-                        <?php endif; ?>
-                        </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Resume Upload Form (Initially Hidden) -->
+                    <form action="includes/scripts/upload_resume.php" method="POST" enctype="multipart/form-data"
+                        class="row justify-content-center mt-3" id="resumeUploadForm" style="display: none;">
+                        <div class="col-5">
+                            <input type="file" name="resume" accept=".pdf" required class="form-control">
+                        </div>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-success">Upload</button>
+                        </div>
+                    </form>
+
+                <?php else: ?>
+                    <!-- Resume Upload Form (Default) -->
+                    <form action="includes/scripts/upload_resume.php" method="POST" enctype="multipart/form-data"
+                        class="row justify-content-center">
+                        <div class="col-5">
+                            <input type="file" name="resume" accept=".pdf" required class="form-control">
+                        </div>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-success">Upload</button>
+                        </div>
+                    </form>
+                <?php endif; ?>
+                </p>
                     </div>
                 </div>
             </div>
 
             <!-- JavaScript to Show Resume Upload Form -->
             <script>
-                document.getElementById('changeResumeBtn')?.addEventListener('click', function () {
+                document.getElementById('changeResumeBtn')?.addEventListener('click', function() {
                     document.getElementById('resumeUploadForm').style.display = 'flex';
                 });
             </script>
@@ -362,7 +416,7 @@ $stmt->close();
 
             <!-- JavaScript for Search Function -->
             <script>
-                document.getElementById('searchInput').addEventListener('keyup', function () {
+                document.getElementById('searchInput').addEventListener('keyup', function() {
                     let filter = this.value.toLowerCase();
                     let rows = document.querySelectorAll('#jobsTable tbody tr');
 

@@ -70,8 +70,8 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
                                         Login
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="login.php?role=employee">Login as Employee</a></li>
-                                        <li><a class="dropdown-item" href="login.php?role=employer">Login as Employer</a></li>
+                                        <li><a class="dropdown-item" href="login.php?role=employee">Login as Applicant</a></li>
+                                        <li><a class="dropdown-item" href="../domain/pages/login_employer.php">Login as Employer</a></li>
                                     </ul>
                                 </div>
                             <?php endif; ?>

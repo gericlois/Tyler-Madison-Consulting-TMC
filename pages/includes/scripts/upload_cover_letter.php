@@ -5,46 +5,41 @@ include "../connection.php";
 if (!isset($_SESSION["user_id"])) {
     header("Location: ../../login.php");
     exit();
-  }
-  $user_id = $_SESSION["user_id"];
+}
 
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      if (!empty($_POST["cover_letter"])) {
-          $cover_letter = trim($_POST["cover_letter"]);
-  
-          // Prevent SQL injection & XSS
-          $cover_letter = htmlspecialchars($cover_letter, ENT_QUOTES, 'UTF-8');
-  
-          // Check if user already has a cover letter
-          $check_query = "SELECT cover_letter FROM employees WHERE user_id = ?";
-          $stmt = $conn->prepare($check_query);
-          $stmt->bind_param("i", $user_id);
-          $stmt->execute();
-          $stmt->store_result();
-  
-          if ($stmt->num_rows > 0) {
-              // Update existing cover letter
-              $update_query = "UPDATE employees SET cover_letter = ? WHERE user_id = ?";
-              $stmt = $conn->prepare($update_query);
-              $stmt->bind_param("si", $cover_letter, $user_id);
-          } else {
-              // Insert new cover letter (if somehow the user does not exist in employees)
-              $insert_query = "INSERT INTO employees (user_id, cover_letter) VALUES (?, ?)";
-              $stmt = $conn->prepare($insert_query);
-              $stmt->bind_param("is", $user_id, $cover_letter);
-          }
-  
-          if ($stmt->execute()) {
-              header("Location: ../../profile.php?uploadcoverletter_success");
-          } else {
-              header("Location: ../../profile.php?uploadcoverletter_error");
-          }
-  
-          $stmt->close();
-      } else {
-          header("Location: ../../profile.php?uploadcoverletter_empty");
-      }
-  }
-  
-  $conn->close();
-  exit();
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["cover_letter"])) {
+    $upload_dir = "uploads/cover_letters/";  // Use correct relative path from script location
+
+    // Create directory if it doesn't exist
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
+    }
+
+    // File name: cover_letter_userid_timestamp.pdf
+    $file_name = "cover_letter_" . time() . "_" . $_SESSION['user_id'] . ".pdf";
+    $target_file = $upload_dir . $file_name;    
+
+    // Debugging
+    if (!is_writable($upload_dir)) {
+        die("Upload directory is not writable.");
+    }
+    if (!file_exists($_FILES["cover_letter"]["tmp_name"])) {
+        die("File upload failed. Temp file missing.");
+    }
+
+    // Move uploaded file
+    if (move_uploaded_file($_FILES["cover_letter"]["tmp_name"], $target_file)) {
+        $db_target_path = "uploads/cover_letters/" . $file_name; // Save relative path in the database
+
+        $sql = "UPDATE employees SET cover_letter_path = ? WHERE user_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("si", $db_target_path, $_SESSION['user_id']);
+        $stmt->execute();
+        $stmt->close();
+
+        header("Location: ../../profile.php?success=cover_letter_uploaded");
+    } else {
+        header("Location: ../../profile.php?error=upload_failed");
+    }
+}
+?>

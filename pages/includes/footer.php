@@ -53,7 +53,7 @@
                                         </div>
                                         <div>
                                             <h4 class="text-white">Address</h4>
-                                            <p class="mb-0">4205 Park Brooke Trace, Suite 1 Alpharetta, GA 30022</p>
+                                            <p class="mb-0">4205 Park Brooke Trace, Suite 1 <br>Alpharetta, GA 30022</p>
                                         </div>
                                     </div>
                                 </div>
@@ -64,7 +64,7 @@
                                         </div>
                                         <div>
                                             <h4 class="text-white">Mail Us</h4>
-                                            <p class="mb-0">cgray@tylermadisonconsulting.com</p>
+                                            <p class="mb-0">info@tylermadisonconsulting.com</p>
                                         </div>
                                     </div>
                                 </div>
@@ -82,12 +82,12 @@
                         Subscribe today and never miss an update!
                     </p>
                     <div class="position-relative rounded-pill mb-4">
-                        <input class="form-control rounded-pill w-100 py-3 ps-4 pe-5" type="text"
-                            placeholder="Enter your email">
-                        <button type="button"
-                            class="btn btn-primary rounded-pill position-absolute top-0 end-0 py-2 mt-2 me-2">
-                            Sign Up
-                        </button>
+                        <div class="d-flex">
+                            <div>
+                                <p class="mb-0">Need Help? Call Our Experts</p>
+                                <p class="mb-0">973 715-7312</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
