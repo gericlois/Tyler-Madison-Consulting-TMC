@@ -82,75 +82,163 @@ $stmt->close();
     <div class="container my-5">
         <div class="row justify-content-center">
             <?php
+            // Success Messages
             if (isset($_GET['success'])) {
                 if ($_GET["success"] == "resume_uploaded") {
                     echo '
-                                                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                                                        <strong>Success!</strong> Your resume has been uploaded successfully.  
-                                                        You can now review your updated resume when you apply for jobs.  
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>';
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> Your resume has been uploaded successfully.  
+                        You can now review your updated resume when you apply for jobs.  
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
                 }
                 if ($_GET["success"] == "cover_letter_uploaded") {
                     echo '
-                                                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                                                        <strong>Success!</strong> Your cover letter has been uploaded successfully.  
-                                                        You can now review your updated resume when you apply for jobs.  
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>';
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> Your cover letter has been uploaded successfully.  
+                        You can now review your updated cover letter when you apply for jobs.  
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
                 }
-                if ($_GET["success"] == "IncorrectPassword") {
+                if ($_GET["success"] == "profile_updated") {
                     echo '
-                                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                        <b>The password is incorrect. Before logging in, make sure your password is correct.</b>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>';
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> Your profile has been updated successfully.  
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+                }
+            }
+
+            // Error Messages
+            if (isset($_GET['error'])) {
+                if ($_GET["error"] == "invalid_file_type") {
+                    echo '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> Invalid file type. Please upload PDF, DOC, DOCX, or image files (JPG, JPEG, PNG, GIF).
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+                }
+                if ($_GET["error"] == "file_too_large") {
+                    echo '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> File is too large. Maximum file size is 5MB.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+                }
+                if ($_GET["error"] == "upload_failed") {
+                    echo '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> File upload failed. Please try again.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+                }
+                if ($_GET["error"] == "invalid_mime_type") {
+                    echo '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> Invalid file format detected. Please upload a valid document or image file.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+                }
+                if ($_GET["error"] == "directory_not_writable") {
+                    echo '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> Server configuration error. Please contact the administrator.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+                }
+                if ($_GET["error"] == "database_update_failed") {
+                    echo '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> Failed to update database. Please try again.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+                }
+                if ($_GET["error"] == "IncorrectPassword") {
+                    echo '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <b>The password is incorrect. Before logging in, make sure your password is correct.</b>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
                 }
             }
             ?>
             <!-- Profile Section -->
             <div class="col-lg-4 mb-4">
                 <div class="card shadow-lg">
-                    <div class="card-body text-left">
+                    <div class="card-body text-center">
                         <?php if (!empty($profile_picture)): ?>
                             <!-- Show Profile Picture -->
-                            <img src="<?php echo htmlspecialchars($profile_picture); ?>" alt="Profile Picture"
-                                class="rounded-circle img-fluid my-3" width="150" height="150">
+                            <div class="mb-3">
+                                <img src="<?php echo htmlspecialchars($profile_picture); ?>"
+                                    alt="Profile Picture"
+                                    class="rounded-circle img-fluid shadow"
+                                    style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #007bff;">
+                            </div>
+
+                            <!-- Button to Change Profile Picture -->
+                            <button type="button" class="btn btn-sm btn-warning mb-3" id="changeProfilePictureBtn">
+                                Change Picture
+                            </button>
+
+                            <!-- Hidden Profile Picture Upload Form -->
+                            <form action="includes/scripts/upload_profile.php" method="POST" enctype="multipart/form-data"
+                                class="row justify-content-center" id="profilePictureUploadForm" style="display: none;">
+                                <div class="col-8">
+                                    <input type="file" name="profile_picture" accept="image/*" required class="form-control">
+                                    <small class="form-text text-muted">Max 2MB (JPG, PNG, GIF)</small>
+                                </div>
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-success btn-sm">Upload</button>
+                                </div>
+                            </form>
+
                         <?php else: ?>
-                            <!-- Default Profile Picture & Upload Form -->
-                            <p>No Profile Picture</p>
+                            <!-- Default Avatar / Upload Form -->
+                            <div class="mb-3">
+                                <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center"
+                                    style="width: 150px; height: 150px;">
+                                    <i class="fas fa-user fa-4x text-white"></i>
+                                </div>
+                            </div>
+                            <p class="text-muted">No Profile Picture</p>
+
                             <!-- Upload Profile Picture Form -->
                             <form action="includes/scripts/upload_profile.php" method="POST" enctype="multipart/form-data"
                                 class="row justify-content-center">
-                                <div class="col-7">
-                                    <input type="file" name="profile_picture" accept="image/*" required
-                                        class="form-control">
+                                <div class="col-8">
+                                    <input type="file" name="profile_picture" accept="image/*" required class="form-control">
+                                    <small class="form-text text-muted">Max 2MB (JPG, PNG, GIF)</small>
                                 </div>
-                                <div class="col-1">
-                                    <button type="submit" class="btn btn-success">Upload</button>
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-success btn-sm">Upload</button>
                                 </div>
                             </form>
-                            <hr>
                         <?php endif; ?>
 
-                        <h2 class="card-title"><?php echo htmlspecialchars($first_name . " " . $last_name); ?><br>
+                        <hr>
+
+                        <h2 class="card-title text-start"><?php echo htmlspecialchars($first_name . " " . $last_name); ?></h2>
+                        <div class="text-start mb-3">
                             <a href="profile-edit.php?user_id=<?php echo htmlspecialchars($user_id); ?>"
-                                class="btn-sm btn-warning rounded-pill py-2 px-4 ms-3 flex-shrink-0">
+                                class="btn btn-warning rounded-pill py-2 px-4">
                                 Edit Profile
                             </a>
-                        </h2>
+                        </div>
 
                         <hr>
-                        <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
-                        <p><strong>Phone:</strong> <?php echo htmlspecialchars($phone); ?></p>
-                        <p><strong>Address:</strong> <?php echo htmlspecialchars($address); ?></p>
-                        <p><strong>Position:</strong> <?php echo htmlspecialchars($position); ?></p>
-                        <p><strong>Joined On:</strong> <?php echo htmlspecialchars($created_at); ?></p>
+                        <div class="text-start">
+                            <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
+                            <p><strong>Phone:</strong> <?php echo htmlspecialchars($phone); ?></p>
+                            <p><strong>Address:</strong> <?php echo htmlspecialchars($address); ?></p>
+                            <p><strong>Position:</strong> <?php echo htmlspecialchars($position); ?></p>
+                            <p><strong>Joined On:</strong> <?php echo htmlspecialchars($created_at); ?></p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Cover Letter Section -->
+
+            <!-- Cover Letter & Resume Section -->
             <div class="col-lg-8 mb-4">
                 <div class="card shadow-lg">
                     <div class="card-body text-left">
@@ -192,7 +280,10 @@ $stmt->close();
                         <form action="includes/scripts/upload_cover_letter.php" method="POST" enctype="multipart/form-data"
                             class="row justify-content-center mt-3" id="coverLetterUploadForm" style="display: none;">
                             <div class="col-5">
-                                <input type="file" name="cover_letter" accept=".pdf" required class="form-control">
+                                <input type="file" name="cover_letter" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif" required class="form-control">
+                                <small class="form-text text-muted">
+                                    Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG, GIF (Max 5MB)
+                                </small>
                             </div>
                             <div class="col-3">
                                 <button type="submit" class="btn btn-success">Upload</button>
@@ -204,7 +295,10 @@ $stmt->close();
                         <form action="includes/scripts/upload_cover_letter.php" method="POST" enctype="multipart/form-data"
                             class="row justify-content-center">
                             <div class="col-5">
-                                <input type="file" name="cover_letter" accept=".pdf" required class="form-control">
+                                <input type="file" name="cover_letter" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif" required class="form-control">
+                                <small class="form-text text-muted">
+                                    Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG, GIF (Max 5MB)
+                                </small>
                             </div>
                             <div class="col-3">
                                 <button type="submit" class="btn btn-success">Upload</button>
@@ -253,7 +347,10 @@ $stmt->close();
                     <form action="includes/scripts/upload_resume.php" method="POST" enctype="multipart/form-data"
                         class="row justify-content-center mt-3" id="resumeUploadForm" style="display: none;">
                         <div class="col-5">
-                            <input type="file" name="resume" accept=".pdf" required class="form-control">
+                            <input type="file" name="resume" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif" required class="form-control">
+                            <small class="form-text text-muted">
+                                Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG, GIF (Max 5MB)
+                            </small>
                         </div>
                         <div class="col-3">
                             <button type="submit" class="btn btn-success">Upload</button>
@@ -265,7 +362,10 @@ $stmt->close();
                     <form action="includes/scripts/upload_resume.php" method="POST" enctype="multipart/form-data"
                         class="row justify-content-center">
                         <div class="col-5">
-                            <input type="file" name="resume" accept=".pdf" required class="form-control">
+                            <input type="file" name="resume" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif" required class="form-control">
+                            <small class="form-text text-muted">
+                                Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG, GIF (Max 5MB)
+                            </small>
                         </div>
                         <div class="col-3">
                             <button type="submit" class="btn btn-success">Upload</button>
@@ -277,10 +377,14 @@ $stmt->close();
                 </div>
             </div>
 
-            <!-- JavaScript to Show Resume Upload Form -->
+            <!-- JavaScript to Show Upload Forms -->
             <script>
                 document.getElementById('changeResumeBtn')?.addEventListener('click', function() {
                     document.getElementById('resumeUploadForm').style.display = 'flex';
+                });
+
+                document.getElementById('changeCoverLetterBtn')?.addEventListener('click', function() {
+                    document.getElementById('coverLetterUploadForm').style.display = 'flex';
                 });
             </script>
 
@@ -424,6 +528,12 @@ $stmt->close();
                         let text = row.innerText.toLowerCase();
                         row.style.display = text.includes(filter) ? '' : 'none';
                     });
+                });
+            </script>
+            <script>
+                document.getElementById('changeProfilePictureBtn')?.addEventListener('click', function() {
+                    document.getElementById('profilePictureUploadForm').style.display = 'flex';
+                    this.style.display = 'none';
                 });
             </script>
         </div>

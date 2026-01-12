@@ -80,7 +80,7 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
                 </div>
 
                 <div class="d-none d-xl-flex flex-shrink-0 ps-4">
-                    <a href="#" class="btn btn-light btn-lg-square rounded-circle position-relative wow tada"
+                    <a href="profile.php" class="btn btn-light btn-lg-square rounded-circle position-relative wow tada"
                         data-wow-delay=".9s">
                         <i class="fa fa-user fa-2x"></i>
                     </a>

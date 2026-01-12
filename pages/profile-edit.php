@@ -13,14 +13,14 @@ if (isset($_GET['user_id']) && is_numeric($_GET['user_id'])) {
 
     // Fetch employee data
     $query = "SELECT e.employee_id, u.first_name, u.last_name, u.email, u.phone, u.address, 
-                     e.position, e.cover_letter, e.link_facebook, e.link_linkedin, e.link_instagram, 
+                     e.position, e.link_facebook, e.link_linkedin, e.link_instagram, 
                      e.status, e.created_at, e.profile_picture, e.resume_path
               FROM employees e
               LEFT JOIN users u ON e.user_id = u.user_id
-              WHERE e.user_id = ?";  // Fixed WHERE clause
+              WHERE e.user_id = ?";
 
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $user_id); // Fixed variable name
+    $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $employee = $result->fetch_assoc();
@@ -73,7 +73,7 @@ if (isset($_GET['user_id']) && is_numeric($_GET['user_id'])) {
                     <div class="card-body text-left">
                         <h2>Edit Profile</h2>
                         <hr>
-                        <form action="update_profile.php" method="POST" enctype="multipart/form-data">
+                        <form action="includes/scripts/update_profile.php" method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="employee_id"
                                 value="<?php echo htmlspecialchars($employee['employee_id']); ?>">
 
@@ -119,16 +119,10 @@ if (isset($_GET['user_id']) && is_numeric($_GET['user_id'])) {
                                 </div>
                             </div>
 
-                            <!-- Cover Letter -->
-                            <div class="mb-3">
-                                <label class="form-label">Cover Letter</label>
-                                <textarea name="cover_letter" class="form-control"
-                                    rows="4"><?php echo htmlspecialchars($employee['cover_letter']); ?></textarea>
-                            </div>
                             <!-- Submit Button -->
-                            <button type="submit" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Save Changes</button>
+                            <button type="submit" class="btn btn-primary rounded-pill py-2 px-4">Save Changes</button>
                             <a href="profile.php"
-                                class="btn btn-secondary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Cancel</a>
+                                class="btn btn-secondary rounded-pill py-2 px-4 ms-3">Cancel</a>
                         </form>
                     </div>
                 </div>
