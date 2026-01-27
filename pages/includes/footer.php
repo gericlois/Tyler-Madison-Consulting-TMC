@@ -84,6 +84,9 @@
                     <div class="position-relative rounded-pill mb-4">
                         <div class="d-flex">
                             <div>
+                                <div class="btn-sm-square bg-primary text-white rounded p-4 me-4">
+                                    <i class="fas fa-phone fa-2x"></i>
+                                </div>
                                 <p class="mb-0">Need Help? Call Our Experts</p>
                                 <p class="mb-0">973 715-7312</p>
                             </div>
