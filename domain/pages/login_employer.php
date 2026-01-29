@@ -3,9 +3,9 @@
 <?php
 
 session_start();
-  include "includes/head.php";
-  include "../../pages/includes/connection.php";
-  
+include "includes/head.php";
+include "../../pages/includes/connection.php";
+
 ?>
 
 <body>
@@ -34,24 +34,24 @@ session_start();
                                     </div>
 
                                     <?php if (isset($_GET['error'])): ?>
-                                    <div class="alert alert-danger">
-                                        <?php
-                                        switch ($_GET['error']) {
-                                            case 'empty_fields':
-                                                echo "Please fill in all fields.";
-                                                break;
-                                            case 'invalid_password':
-                                                echo "Incorrect password. Please try again.";
-                                                break;
-                                            case 'AccountNotFound':
-                                                echo "Admin user not found. Please check your credentials.";
-                                                break;
-                                            default:
-                                                echo "An unknown error occurred.";
-                                                break;
-                                        }
-                                        ?>
-                                    </div>
+                                        <div class="alert alert-danger">
+                                            <?php
+                                            switch ($_GET['error']) {
+                                                case 'empty_fields':
+                                                    echo "Please fill in all fields.";
+                                                    break;
+                                                case 'invalid_password':
+                                                    echo "Incorrect password. Please try again.";
+                                                    break;
+                                                case 'AccountNotFound':
+                                                    echo "Admin user not found. Please check your credentials.";
+                                                    break;
+                                                default:
+                                                    echo "An unknown error occurred.";
+                                                    break;
+                                            }
+                                            ?>
+                                        </div>
                                     <?php endif; ?>
 
                                     <form class="row g-3 needs-validation" action="scripts/login.php" method="POST">
@@ -83,6 +83,10 @@ session_start();
                                             <button class="btn btn-primary w-100" type="submit">Login</button>
                                         </div>
                                     </form>
+                                    <p class="mt-4">
+                                        Don't have an account yet?
+                                        <a class="text-primary fw-bold" href="../../pages/signup_employer.php">SIGN UP NOW!</a>
+                                    </p>
 
                                 </div>
                             </div>
