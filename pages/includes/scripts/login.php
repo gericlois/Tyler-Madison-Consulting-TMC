@@ -4,7 +4,7 @@ include "../connection.php";
 
 $username = $_POST['username'];
 $password = $_POST['password'];
-$role = $_POST['role'] ?? null; // 'employee' or 'employer'
+$role = $_GET['role'] ?? 'employee'; // 'employee' or 'employer'
 
 if (!$role) {
     header("Location: ../../login.php?error=MissingRole");
